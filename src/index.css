@@ -215,6 +215,42 @@
     stroke-linejoin: round;
   }
 
+  /* ---- Premium hero-detaljer ---- */
+  .text-shimmer {
+    background: linear-gradient(
+      100deg,
+      #e11d2a 0%,
+      #ff5b66 30%,
+      #ff9aa0 50%,
+      #ff5b66 70%,
+      #e11d2a 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: text-shimmer 4.5s linear infinite;
+  }
+  @keyframes text-shimmer {
+    to {
+      background-position: 200% center;
+    }
+  }
+  @keyframes float-y {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .float-y {
+    animation: float-y 5s ease-in-out infinite;
+  }
+  .float-y-slow {
+    animation: float-y 6.5s ease-in-out infinite;
+  }
 }
 
 /* ---- Reduceret bevægelse ---- */
@@ -235,5 +271,12 @@
     stroke-dasharray: none;
     stroke-dashoffset: 0;
     stroke-opacity: 0.5;
+  }
+  .text-shimmer {
+    animation: none;
+  }
+  .float-y,
+  .float-y-slow {
+    animation: none;
   }
 }

@@ -14,6 +14,8 @@ export function Hero({
       {/* Bløde, lyse glød for dybde */}
       <div className="pointer-events-none absolute -right-24 -top-32 h-[26rem] w-[26rem] rounded-full bg-brand/10 blur-[120px]" />
       <div className="pointer-events-none absolute -left-24 top-1/2 h-[24rem] w-[24rem] rounded-full bg-trust/10 blur-[120px]" />
+      {/* Subtil prik-tekstur for dybde */}
+      <div className="pointer-events-none absolute inset-0 [background-image:radial-gradient(circle,rgba(11,11,12,0.05)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_at_top,#000,transparent_70%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
@@ -30,10 +32,8 @@ export function Hero({
 
             <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
               Sælg din bil og{" "}
-              <span className="bg-gradient-to-r from-brand to-[#ff5b66] bg-clip-text text-transparent">
-                tjen mere
-              </span>
-              , fordi vi eksporterer den
+              <span className="text-shimmer whitespace-nowrap">tjen mere</span>,
+              fordi vi eksporterer den
             </h1>
             <p className="mt-5 max-w-xl text-lg text-ink/70">
               Vi køber din brugte bil og sender den ud af landet. Derfor kan vi
@@ -73,7 +73,7 @@ export function Hero({
             </div>
 
             {/* Flydende kort: udbetalt */}
-            <div className="absolute -bottom-5 -left-2 flex items-center gap-3 rounded-2xl border border-black/5 bg-white px-5 py-4 shadow-softlg sm:left-6">
+            <div className="float-y absolute -bottom-5 -left-2 flex items-center gap-3 rounded-2xl border border-black/5 bg-white px-5 py-4 shadow-softlg sm:left-6">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-tp/10">
                 <Banknote className="h-6 w-6 text-tp" />
               </div>
@@ -88,7 +88,7 @@ export function Hero({
             </div>
 
             {/* Flydende kort: dansk flag badge */}
-            <div className="absolute -top-3 -right-2 flex items-center gap-2 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-softlg sm:right-4">
+            <div className="float-y-slow absolute -top-3 -right-2 flex items-center gap-2 rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-softlg sm:right-4">
               <DanishFlag className="h-5 w-7 rounded-sm" />
               <span className="text-xs font-semibold text-ink">
                 Hele Danmark
