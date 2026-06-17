@@ -41,7 +41,7 @@ const Logos3 = ({
 }: Logos3Props) => {
   return (
     <div className="w-full">
-      <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.25em] text-ink/45">
+      <p className="mb-6 text-center text-xs font-semibold uppercase tracking-[0.25em] text-white/45">
         {heading}
       </p>
       <div className="relative mx-auto flex items-center justify-center">
@@ -63,15 +63,15 @@ const Logos3 = ({
                 key={brand.id}
                 className="flex basis-1/3 justify-center pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
               >
-                <span className="whitespace-nowrap px-2 text-lg font-bold tracking-wide text-ink/40 transition-colors hover:text-ink lg:text-xl">
+                <span className="whitespace-nowrap px-2 text-lg font-bold tracking-wide text-white/40 transition-colors hover:text-white lg:text-xl">
                   {brand.name}
                 </span>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-offwhite to-transparent"></div>
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-offwhite to-transparent"></div>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ink to-transparent"></div>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink to-transparent"></div>
       </div>
     </div>
   );
