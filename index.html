@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BilEksport Danmark | Sælg din bil og tjen mere fordi vi eksporterer</title>
+  <meta name="description" content="Vi opkøber og eksporterer din brugte bil og betaler dig mere end det danske marked. Gratis afhentning i hele Danmark, uforpligtende tilbud inden for få timer." />
+
+  <!-- ============================================================ -->
+  <!-- GOOGLE FONTS: Plus Jakarta Sans                              -->
+  <!-- ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- ============================================================ -->
+  <!-- TAILWIND VIA CDN + KONFIGURATION                             -->
+  <!-- ============================================================ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0B0B0C',      // sort
+            brand: '#E11D2A',    // rød (primær CTA)
+            trust: '#1D4ED8',    // blå (sekundær/tillid)
+            offwhite: '#F7F7F8', // off-white
+            tp: '#00B67A',       // Trustpilot grøn
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            soft: '0 10px 40px -12px rgba(11,11,12,0.18)',
+            softlg: '0 24px 60px -18px rgba(11,11,12,0.28)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- ============================================================ -->
+  <!-- CSS: animationer, plade-styling, scrollbar, hjælpeklasser    -->
+  <!-- ============================================================ -->
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; color: #0B0B0C; }
+
+    /* ---- Scroll-animationer (Intersection Observer) ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Stagger styres via inline transition-delay sat i JS */
+
+    /* ---- Dansk nummerplade-styling ---- */
+    .plate {
+      display: flex;
+      align-items: stretch;
+      border: 2px solid #0B0B0C;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 6px 18px -8px rgba(11,11,12,0.35);
+    }
+    .plate__eu {
+      background: #003399; /* EU-blå */
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      min-width: 42px;
+    }
+    .plate__stars {
+      font-size: 9px;
+      line-height: 1;
+      color: #FFCC00; /* EU-gul */
+      letter-spacing: 1px;
+    }
+    .plate__dk {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+    .plate__input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: #fff;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 0 16px;
+      color: #0B0B0C;
+    }
+    .plate__input::placeholder { color: #c7c7cc; letter-spacing: 3px; }
+    .plate.is-invalid { border-color: #E11D2A; }
+
+    /* ---- FAQ accordion ---- */
+    .faq-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .faq-item.open .faq-panel { max-height: 320px; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-icon { transition: transform 0.3s ease; }
+
+    /* ---- Hover-zoom på galleri ---- */
+    .zoom-img { transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+    .zoom-wrap:hover .zoom-img { transform: scale(1.07); }
+
+    /* ---- Subtil knap-hover ---- */
+    .btn-cta { transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease; }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(225,29,42,0.55); }
+
+    /* ---- Map-prikker puls ---- */
+    @keyframes pulse-dot {
+      0% { transform: scale(1); opacity: 1; }
+      70% { transform: scale(2.6); opacity: 0; }
+      100% { opacity: 0; }
+    }
+    .map-pulse { transform-box: fill-box; transform-origin: center; animation: pulse-dot 2.4s ease-out infinite; }
+
+    /* Reduceret bevægelse */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+      .map-pulse { animation: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-white antialiased">
+
+  <!-- ============================================================ -->
+  <!-- 1. STICKY HEADER                                             -->
+  <!-- ============================================================ -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-black/5">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+
+        <!-- SWAP: rigtigt logo ind her (i dag rent tekst-wordmark) -->
+        <a href="#top" class="flex items-center gap-2 select-none">
+          <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-ink">Bil<span class="text-brand">Eksport</span></span>
+          <span class="hidden sm:inline-block text-[10px] font-semibold uppercase tracking-[0.2em] text-trust border border-trust/30 rounded-full px-2 py-0.5">Danmark</span>
+        </a>
+
+        <!-- Højre side: Trustpilot-badge, telefon, CTA -->
+        <div class="flex items-center gap-3 sm:gap-5">
+
+          <!-- Lille Trustpilot-badge -->
+          <a href="#anmeldelser" class="hidden md:flex items-center gap-2">
+            <div class="flex items-center gap-0.5" aria-label="Trustpilot 5 ud af 5 stjerner">
+              <!-- 5 grønne Trustpilot-stjerner -->
+              <span class="tp-stars flex"></span>
+            </div>
+            <span class="text-xs text-ink/70"><strong class="text-ink">4,8</strong> · 1.247 anmeldelser</span>
+          </a>
+
+          <a href="tel:+4570605040" class="hidden sm:flex items-center gap-2 text-sm font-semibold text-ink hover:text-brand transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <!-- SWAP: rigtigt telefonnummer -->
+            70 60 50 40
+          </a>
+
+          <a href="#tilbud" class="btn-cta inline-flex items-center gap-2 bg-brand text-white text-sm font-bold rounded-xl px-4 sm:px-5 py-2.5 shadow-soft">
+            Få tilbud
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+  <!-- ============================================================ -->
+  <!-- 2. HERO                                                      -->
+  <!-- ============================================================ -->
+  <section class="relative overflow-hidden bg-offwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+      <div class="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+
+        <!-- Venstre: tekst + formular -->
+        <div class="reveal">
+          <!-- Dansk flag + lille label -->
+          <div class="flex items-center gap-3 mb-5">
+            <span class="inline-flex items-center gap-2 bg-white rounded-full pl-1.5 pr-3 py-1.5 shadow-soft">
+              <!-- Dansk flag SVG -->
+              <svg class="w-6 h-4 rounded-sm" viewBox="0 0 37 28" aria-label="Dansk flag">
+                <rect width="37" height="28" fill="#C8102E"/>
+                <rect x="12" width="4" height="28" fill="#fff"/>
+                <rect y="12" width="37" height="4" fill="#fff"/>
+              </svg>
+              <span class="text-xs font-semibold text-ink/80">Dansk virksomhed siden 2014</span>
+            </span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.08] tracking-tight text-ink">
+            Sælg din bil og <span class="text-brand">tjen mere</span>, fordi vi eksporterer den
+          </h1>
+          <p class="mt-5 text-lg text-ink/70 max-w-xl">
+            Vi køber din brugte bil og sender den ud af landet. Derfor kan vi betale dig mere end det danske marked. Indtast din nummerplade og få et uforpligtende tilbud inden for få timer.
+          </p>
+
+          <!-- Lead-formular (hero) -->
+          <!-- GHL: her kobles formularen til GoHighLevel via embed eller webhook -->
+          <form class="lead-form mt-7 max-w-lg" novalidate>
+            <label class="block text-sm font-semibold text-ink mb-2">Indtast din nummerplade</label>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <div class="plate flex-1">
+                <div class="plate__eu">
+                  <span class="plate__stars">★★★<br>★★</span>
+                  <span class="plate__dk">DK</span>
+                </div>
+                <input
+                  type="text"
+                  name="nummerplade"
+                  class="plate__input"
+                  placeholder="AB 12 345"
+                  maxlength="8"
+                  autocomplete="off"
+                  aria-label="Nummerplade"
+                  required />
+              </div>
+              <button type="submit" class="btn-cta whitespace-nowrap bg-brand text-white font-bold rounded-xl px-6 py-4 shadow-soft">
+                Få mit tilbud
+              </button>
+            </div>
+            <!-- Skjulte felter (vises i tak-flow) men indsendes til GHL -->
+            <div class="extra-fields hidden mt-3 grid sm:grid-cols-3 gap-3">
+              <input type="text" name="navn" placeholder="Dit navn" class="rounded-xl border border-black/15 px-4 py-3 text-sm focus:border-trust focus:ring-2 focus:ring-trust/20 outline-none" />
+              <input type="tel" name="telefon" placeholder="Telefon" class="rounded-xl border border-black/15 px-4 py-3 text-sm focus:border-trust focus:ring-2 focus:ring-trust/20 outline-none" />
+              <input type="email" name="email" placeholder="Email" class="rounded-xl border border-black/15 px-4 py-3 text-sm focus:border-trust focus:ring-2 focus:ring-trust/20 outline-none" />
+            </div>
+            <p class="form-error hidden mt-2 text-sm text-brand font-medium"></p>
+
+            <!-- Tre trust-punkter -->
+            <ul class="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/70">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Gratis afhentning</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Uforpligtende</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Svar inden for få timer</li>
+            </ul>
+          </form>
+
+          <!-- Trustpilot under formular -->
+          <div class="mt-6 flex items-center gap-3">
+            <span class="tp-stars flex"></span>
+            <span class="text-sm text-ink/70"><strong class="text-ink">Fremragende</strong> · 4,8 ud af 5 på <strong class="text-tp">Trustpilot</strong> · 1.247 anmeldelser</span>
+          </div>
+        </div>
+
+        <!-- Højre: hero-billede -->
+        <div class="reveal relative" style="transition-delay:120ms">
+          <div class="relative rounded-3xl overflow-hidden shadow-softlg">
+            <!-- SWAP: rigtigt hero-billede -->
+            <img
+              src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"
+              alt="Glad bilsælger med nøgler til sin bil"
+              class="w-full h-[340px] sm:h-[440px] lg:h-[520px] object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent"></div>
+          </div>
+
+          <!-- Flydende kort: udbetalt -->
+          <div class="absolute -bottom-5 -left-2 sm:left-6 bg-white rounded-2xl shadow-softlg px-5 py-4 flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-tp/10 flex items-center justify-center">
+              <svg class="w-6 h-6 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+              <p class="text-xs text-ink/60 leading-tight">Udbetalt til sælgere</p>
+              <p class="text-lg font-extrabold text-ink leading-tight"><span class="counter" data-target="184">0</span> mio. kr</p>
+            </div>
+          </div>
+
+          <!-- Flydende kort: dansk flag badge -->
+          <div class="absolute -top-3 -right-2 sm:right-4 bg-white rounded-2xl shadow-softlg px-4 py-3 flex items-center gap-2">
+            <svg class="w-7 h-5 rounded-sm" viewBox="0 0 37 28"><rect width="37" height="28" fill="#C8102E"/><rect x="12" width="4" height="28" fill="#fff"/><rect y="12" width="37" height="4" fill="#fff"/></svg>
+            <span class="text-xs font-semibold text-ink">Hele Danmark</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 3. USP-BAR                                                   -->
+  <!-- ============================================================ -->
+  <section class="bg-ink text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- USP 1 -->
+        <div class="reveal flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7zM5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg>
+          </div>
+          <p class="text-sm font-semibold leading-tight">Gratis afhentning i hele Danmark</p>
+        </div>
+        <!-- USP 2 -->
+        <div class="reveal flex items-center gap-3" style="transition-delay:80ms">
+          <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <p class="text-sm font-semibold leading-tight">Tilbud inden for få timer</p>
+        </div>
+        <!-- USP 3 -->
+        <div class="reveal flex items-center gap-3" style="transition-delay:160ms">
+          <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </div>
+          <p class="text-sm font-semibold leading-tight">Betaling samme dag</p>
+        </div>
+        <!-- USP 4 -->
+        <div class="reveal flex items-center gap-3" style="transition-delay:240ms">
+          <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.91.37 4.15 1.02"/></svg>
+          </div>
+          <p class="text-sm font-semibold leading-tight">Helt uforpligtende</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 4. SÅDAN FUNGERER DET (4 TRIN)                               -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-2xl mx-auto text-center mb-12">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-brand mb-3">Nemt og hurtigt</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Sådan fungerer det</h2>
+        <p class="mt-4 text-ink/70">Fire enkle trin fra nummerplade til penge på kontoen.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Trin 1 -->
+        <div class="reveal relative bg-offwhite rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow">
+          <span class="absolute top-5 right-5 text-5xl font-extrabold text-black/5">01</span>
+          <div class="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
+          </div>
+          <h3 class="font-bold text-lg text-ink mb-2">Indtast nummerplade</h3>
+          <p class="text-sm text-ink/70">Skriv din nummerplade og få straks fat. Det tager under et minut.</p>
+        </div>
+        <!-- Trin 2 -->
+        <div class="reveal relative bg-offwhite rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style="transition-delay:90ms">
+          <span class="absolute top-5 right-5 text-5xl font-extrabold text-black/5">02</span>
+          <div class="w-12 h-12 rounded-xl bg-trust/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-trust" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.17L4 17.17z"/><path d="M8 9h8M8 12h5"/></svg>
+          </div>
+          <h3 class="font-bold text-lg text-ink mb-2">Få et tilbud</h3>
+          <p class="text-sm text-ink/70">Vi vurderer bilen og sender dig et konkret tilbud inden for få timer.</p>
+        </div>
+        <!-- Trin 3 -->
+        <div class="reveal relative bg-offwhite rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style="transition-delay:180ms">
+          <span class="absolute top-5 right-5 text-5xl font-extrabold text-black/5">03</span>
+          <div class="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7zM5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg>
+          </div>
+          <h3 class="font-bold text-lg text-ink mb-2">Vi afhenter gratis</h3>
+          <p class="text-sm text-ink/70">Uanset hvor i landet bilen står, henter vi den uden beregning.</p>
+        </div>
+        <!-- Trin 4 -->
+        <div class="reveal relative bg-offwhite rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style="transition-delay:270ms">
+          <span class="absolute top-5 right-5 text-5xl font-extrabold text-black/5">04</span>
+          <div class="w-12 h-12 rounded-xl bg-tp/10 flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3 class="font-bold text-lg text-ink mb-2">Du får pengene</h3>
+          <p class="text-sm text-ink/70">Beløbet overføres til din konto, typisk samme dag som afhentningen.</p>
+        </div>
+      </div>
+
+      <div class="reveal text-center mt-10">
+        <a href="#tilbud" class="btn-cta inline-flex items-center gap-2 bg-brand text-white font-bold rounded-xl px-7 py-4 shadow-soft">
+          Start med din nummerplade
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 5. DIFFERENTIATOR: DU TJENER MERE FORDI VI EKSPORTERER       -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-offwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-2xl mb-12">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-trust mb-3">Derfor får du mere</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Du tjener mere, fordi vi eksporterer</h2>
+        <p class="mt-4 text-ink/70 text-lg">
+          På flere bilmodeller er efterspørgslen højere i udlandet end i Danmark. Vi sælger bilen videre på de markeder, hvor den er mest værd, og den fortjeneste deler vi med dig. Derfor lander vores tilbud ofte højere end det, du får ved et almindeligt dansk salg.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Case 1 -->
+        <!-- SWAP: rigtige case-tal -->
+        <div class="reveal bg-white rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-ink/5 flex items-center justify-center">
+              <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13M5 13h14v4H5zM7 17v2M17 17v2"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-ink leading-tight">VW Passat 2.0 TDI</p>
+              <p class="text-xs text-ink/60">2017 · 168.000 km</p>
+            </div>
+          </div>
+          <dl class="space-y-2 text-sm">
+            <div class="flex justify-between"><dt class="text-ink/60">Dansk markedspris</dt><dd class="font-semibold text-ink/70 line-through">112.000 kr</dd></div>
+            <div class="flex justify-between"><dt class="text-ink/60">Dit tilbud hos os</dt><dd class="font-bold text-ink">131.000 kr</dd></div>
+          </dl>
+          <div class="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
+            <span class="text-lg font-extrabold text-tp">+19.000 kr</span>
+            <span class="block text-xs text-ink/60">mere til dig</span>
+          </div>
+        </div>
+
+        <!-- Case 2 -->
+        <div class="reveal bg-white rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style="transition-delay:90ms">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-ink/5 flex items-center justify-center">
+              <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13M5 13h14v4H5zM7 17v2M17 17v2"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-ink leading-tight">BMW 320d Touring</p>
+              <p class="text-xs text-ink/60">2019 · 121.000 km</p>
+            </div>
+          </div>
+          <dl class="space-y-2 text-sm">
+            <div class="flex justify-between"><dt class="text-ink/60">Dansk markedspris</dt><dd class="font-semibold text-ink/70 line-through">198.000 kr</dd></div>
+            <div class="flex justify-between"><dt class="text-ink/60">Dit tilbud hos os</dt><dd class="font-bold text-ink">226.500 kr</dd></div>
+          </dl>
+          <div class="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
+            <span class="text-lg font-extrabold text-tp">+28.500 kr</span>
+            <span class="block text-xs text-ink/60">mere til dig</span>
+          </div>
+        </div>
+
+        <!-- Case 3 -->
+        <div class="reveal bg-white rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style="transition-delay:180ms">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-ink/5 flex items-center justify-center">
+              <svg class="w-6 h-6 text-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13M5 13h14v4H5zM7 17v2M17 17v2"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-ink leading-tight">Mercedes Vito 114</p>
+              <p class="text-xs text-ink/60">2018 · 204.000 km</p>
+            </div>
+          </div>
+          <dl class="space-y-2 text-sm">
+            <div class="flex justify-between"><dt class="text-ink/60">Dansk markedspris</dt><dd class="font-semibold text-ink/70 line-through">94.000 kr</dd></div>
+            <div class="flex justify-between"><dt class="text-ink/60">Dit tilbud hos os</dt><dd class="font-bold text-ink">109.000 kr</dd></div>
+          </dl>
+          <div class="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
+            <span class="text-lg font-extrabold text-tp">+15.000 kr</span>
+            <span class="block text-xs text-ink/60">mere til dig</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="reveal mt-6 text-xs text-ink/50">Tallene er eksempler og afhænger af bilens stand, model, kilometerstand og udstyr. Dit konkrete tilbud beregnes individuelt.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 6. SOCIAL PROOF: TRUSTPILOT-ANMELDELSER                      -->
+  <!-- ============================================================ -->
+  <section id="anmeldelser" class="py-16 sm:py-24 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal flex flex-col items-center text-center mb-12">
+        <!-- Trustpilot-logo (inline SVG) + score -->
+        <div class="flex items-center gap-2 mb-3">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.9 7.6H23l-6.6 4.9 2.6 7.6L12 16.7 5 21.1l2.6-7.6L1 8.6h8.1z" fill="#00B67A"/></svg>
+          <span class="text-xl font-extrabold text-ink">Trustpilot</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="tp-stars tp-stars--lg flex"></span>
+          <span class="text-sm text-ink/70"><strong class="text-ink">4,8</strong> ud af 5 · 1.247 anmeldelser</span>
+        </div>
+        <h2 class="mt-6 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Det siger vores sælgere</h2>
+      </div>
+
+      <!-- SWAP: rigtige kundeanmeldelser ind her -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Anmeldelse 1 -->
+        <div class="reveal bg-offwhite rounded-2xl p-6 shadow-soft">
+          <span class="tp-stars flex mb-4"></span>
+          <h3 class="font-bold text-ink mb-2">Fik 22.000 mere end forventet</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">Jeg havde fået bud fra to forhandlere i forvejen, men tilbuddet her var markant højere. Bilen blev hentet to dage efter, og pengene stod på kontoen samme aften. Kan klart anbefales.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-trust/10 text-trust font-bold flex items-center justify-center text-sm">MK</div>
+            <div><p class="text-sm font-semibold text-ink leading-tight">Martin Kjær</p><p class="text-xs text-ink/55">Aarhus</p></div>
+          </div>
+        </div>
+
+        <!-- Anmeldelse 2 -->
+        <div class="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style="transition-delay:80ms">
+          <span class="tp-stars flex mb-4"></span>
+          <h3 class="font-bold text-ink mb-2">Nemt fra start til slut</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">Skrev nummerpladen ind om formiddagen og havde et tilbud før frokost. Alt foregik gnidningsfrit, og chaufføren der hentede bilen var flink og professionel.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-sm">LN</div>
+            <div><p class="text-sm font-semibold text-ink leading-tight">Louise Nielsen</p><p class="text-xs text-ink/55">Odense</p></div>
+          </div>
+        </div>
+
+        <!-- Anmeldelse 3 -->
+        <div class="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style="transition-delay:160ms">
+          <span class="tp-stars flex mb-4"></span>
+          <h3 class="font-bold text-ink mb-2">Skeptisk, men blev positivt overrasket</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">Jeg var lidt skeptisk over for at sælge til en eksportør, men det viste sig at være den bedste beslutning. De var ærlige om processen hele vejen, og prisen holdt det de lovede. Ingen overraskelser.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-trust/10 text-trust font-bold flex items-center justify-center text-sm">PA</div>
+            <div><p class="text-sm font-semibold text-ink leading-tight">Peter Andersen</p><p class="text-xs text-ink/55">Aalborg</p></div>
+          </div>
+        </div>
+
+        <!-- Anmeldelse 4 -->
+        <div class="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style="transition-delay:40ms">
+          <span class="tp-stars flex mb-4"></span>
+          <h3 class="font-bold text-ink mb-2">Hurtig afhentning helt ude på landet</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">Vi bor et godt stykke uden for Esbjerg og havde regnet med besvær. Men de kom hele vejen ud uden ekstra omkostninger. Super service.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-sm">HT</div>
+            <div><p class="text-sm font-semibold text-ink leading-tight">Hanne Thomsen</p><p class="text-xs text-ink/55">Esbjerg</p></div>
+          </div>
+        </div>
+
+        <!-- Anmeldelse 5 -->
+        <div class="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style="transition-delay:120ms">
+          <span class="tp-stars flex mb-4"></span>
+          <h3 class="font-bold text-ink mb-2">Solgte min varebil på en dag</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">Havde en ældre Transporter stående efter jeg lukkede mit firma. De gav et fair bud med det samme, og hele handlen var afsluttet inden for 24 timer. Anbefales til andre håndværkere.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-trust/10 text-trust font-bold flex items-center justify-center text-sm">SØ</div>
+            <div><p class="text-sm font-semibold text-ink leading-tight">Søren Østergaard</p><p class="text-xs text-ink/55">Vejle</p></div>
+          </div>
+        </div>
+
+        <!-- Anmeldelse 6 -->
+        <div class="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style="transition-delay:200ms">
+          <span class="tp-stars flex mb-4"></span>
+          <h3 class="font-bold text-ink mb-2">God kommunikation hele vejen</h3>
+          <p class="text-sm text-ink/70 leading-relaxed">Det jeg satte mest pris på var, at jeg altid vidste hvad der skete. Jeg fik besked på sms både før og efter afhentning. Tryg oplevelse, og en pris jeg ikke kunne finde andre steder.</p>
+          <div class="mt-5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-sm">CB</div>
+            <div><p class="text-sm font-semibold text-ink leading-tight">Camilla Bach</p><p class="text-xs text-ink/55">København</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 7. VIDEO-ANMELDELSER                                         -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-ink text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-2xl mb-12">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-brand mb-3">Hør det fra dem selv</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Videoanmeldelser fra rigtige sælgere</h2>
+      </div>
+
+      <!-- SWAP: rigtige videoanmeldelser (thumbnail + videolink) -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Video 1 -->
+        <figure class="reveal group">
+          <div class="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer" data-video>
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Jakob" class="zoom-img w-full h-64 object-cover" />
+            <div class="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
+              <span class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
+                <svg class="w-7 h-7 text-brand ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </div>
+            <span class="absolute bottom-3 right-3 text-xs font-semibold bg-ink/70 rounded-md px-2 py-1">1:24</span>
+          </div>
+          <figcaption class="mt-3"><p class="font-semibold">Jakob Mortensen</p><p class="text-sm text-white/60">Roskilde</p></figcaption>
+        </figure>
+
+        <!-- Video 2 -->
+        <figure class="reveal group" style="transition-delay:90ms">
+          <div class="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer" data-video>
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Mette" class="zoom-img w-full h-64 object-cover" />
+            <div class="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
+              <span class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
+                <svg class="w-7 h-7 text-brand ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </div>
+            <span class="absolute bottom-3 right-3 text-xs font-semibold bg-ink/70 rounded-md px-2 py-1">0:58</span>
+          </div>
+          <figcaption class="mt-3"><p class="font-semibold">Mette Sørensen</p><p class="text-sm text-white/60">Aarhus</p></figcaption>
+        </figure>
+
+        <!-- Video 3 -->
+        <figure class="reveal group" style="transition-delay:180ms">
+          <div class="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer" data-video>
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Anders" class="zoom-img w-full h-64 object-cover" />
+            <div class="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
+              <span class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
+                <svg class="w-7 h-7 text-brand ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </div>
+            <span class="absolute bottom-3 right-3 text-xs font-semibold bg-ink/70 rounded-md px-2 py-1">1:47</span>
+          </div>
+          <figcaption class="mt-3"><p class="font-semibold">Anders Holm</p><p class="text-sm text-white/60">Kolding</p></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 8. BILER VI HAR KØBT                                         -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-2xl mb-12">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-trust mb-3">Udvalg fra de seneste uger</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Biler vi har købt</h2>
+      </div>
+
+      <!-- SWAP: rigtige billeder af opkøbte biler -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Bil 1 -->
+        <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite">
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80" alt="Audi A4" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Audi A4 Avant</p><span class="text-sm text-ink/55">8000 Aarhus C</span></div>
+        </div>
+        <!-- Bil 2 -->
+        <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:70ms">
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80" alt="BMW 5-serie" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">BMW 520d</p><span class="text-sm text-ink/55">2100 København Ø</span></div>
+        </div>
+        <!-- Bil 3 -->
+        <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:140ms">
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=700&q=80" alt="Mercedes C-klasse" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Mercedes C 220 d</p><span class="text-sm text-ink/55">5000 Odense C</span></div>
+        </div>
+        <!-- Bil 4 -->
+        <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:40ms">
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="VW Golf" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">VW Golf 1.6 TDI</p><span class="text-sm text-ink/55">9000 Aalborg</span></div>
+        </div>
+        <!-- Bil 5 -->
+        <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:110ms">
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=700&q=80" alt="Skoda Octavia" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Skoda Octavia Combi</p><span class="text-sm text-ink/55">6700 Esbjerg</span></div>
+        </div>
+        <!-- Bil 6 -->
+        <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:180ms">
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=700&q=80" alt="Ford Transit" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Ford Transit Custom</p><span class="text-sm text-ink/55">7100 Vejle</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 9. DÆKNING I HELE DANMARK                                    -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-offwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+        <!-- Tekst -->
+        <div class="reveal">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-7 h-5 rounded-sm" viewBox="0 0 37 28"><rect width="37" height="28" fill="#C8102E"/><rect x="12" width="4" height="28" fill="#fff"/><rect y="12" width="37" height="4" fill="#fff"/></svg>
+            <span class="text-sm font-semibold text-trust uppercase tracking-[0.15em]">Hele landet</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Vi henter din bil gratis, uanset hvor du bor</h2>
+          <p class="mt-4 text-ink/70 text-lg">Fra Skagen til Gedser. Vi dækker hele Danmark, og afhentningen koster aldrig noget. Vores chauffører kører ud til både byer og landområder.</p>
+
+          <ul class="mt-6 grid grid-cols-2 gap-3">
+            <li class="flex items-center gap-2 text-sm font-semibold text-ink"><span class="w-2 h-2 rounded-full bg-brand"></span> København</li>
+            <li class="flex items-center gap-2 text-sm font-semibold text-ink"><span class="w-2 h-2 rounded-full bg-brand"></span> Aarhus</li>
+            <li class="flex items-center gap-2 text-sm font-semibold text-ink"><span class="w-2 h-2 rounded-full bg-brand"></span> Odense</li>
+            <li class="flex items-center gap-2 text-sm font-semibold text-ink"><span class="w-2 h-2 rounded-full bg-brand"></span> Aalborg</li>
+            <li class="flex items-center gap-2 text-sm font-semibold text-ink"><span class="w-2 h-2 rounded-full bg-brand"></span> Esbjerg</li>
+            <li class="flex items-center gap-2 text-sm font-semibold text-ink/60"><span class="w-2 h-2 rounded-full bg-trust"></span> og alt derimellem</li>
+          </ul>
+
+          <a href="#tilbud" class="btn-cta inline-flex items-center gap-2 mt-8 bg-brand text-white font-bold rounded-xl px-6 py-3.5 shadow-soft">
+            Få mit tilbud
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <!-- Danmarkskort som inline SVG -->
+        <div class="reveal" style="transition-delay:120ms">
+          <div class="bg-white rounded-3xl p-6 shadow-softlg">
+            <svg viewBox="0 0 400 360" class="w-full h-auto" role="img" aria-label="Kort over Danmark med de fem største byer markeret">
+              <!-- Stiliseret kort over Danmark (Jylland, Fyn, Sjælland) -->
+              <!-- Jylland -->
+              <path d="M150 30 C160 25 175 35 178 55 L185 90 C188 110 182 130 188 150 L195 185 C198 205 190 225 180 240 C172 252 160 258 150 250 C142 244 140 230 135 220 C128 205 118 200 112 185 C105 168 110 150 105 132 C100 112 95 95 105 78 C115 60 130 40 150 30 Z"
+                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
+              <!-- Fyn -->
+              <path d="M210 195 C225 188 245 195 250 212 C254 228 245 245 228 248 C212 250 200 240 198 225 C196 210 200 200 210 195 Z"
+                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
+              <!-- Sjælland -->
+              <path d="M285 175 C305 168 330 175 340 195 C350 215 345 240 325 252 C308 262 285 260 272 245 C260 230 262 205 272 190 C276 183 280 178 285 175 Z"
+                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
+              <!-- Lolland-Falster -->
+              <path d="M300 270 C315 266 332 270 336 282 C339 292 330 300 316 300 C302 300 294 292 294 282 C294 276 296 272 300 270 Z"
+                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
+              <!-- Bornholm -->
+              <circle cx="378" cy="250" r="9" fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
+
+              <!-- Bymarkører med puls -->
+              <!-- København -->
+              <g>
+                <circle class="map-pulse" cx="330" cy="205" r="5" fill="#E11D2A"/>
+                <circle cx="330" cy="205" r="5" fill="#E11D2A"/>
+                <text x="338" y="202" font-size="12" font-weight="700" fill="#0B0B0C">København</text>
+              </g>
+              <!-- Aarhus -->
+              <g>
+                <circle class="map-pulse" cx="150" cy="130" r="5" fill="#E11D2A"/>
+                <circle cx="150" cy="130" r="5" fill="#E11D2A"/>
+                <text x="158" y="127" font-size="12" font-weight="700" fill="#0B0B0C">Aarhus</text>
+              </g>
+              <!-- Odense -->
+              <g>
+                <circle class="map-pulse" cx="224" cy="220" r="5" fill="#E11D2A"/>
+                <circle cx="224" cy="220" r="5" fill="#E11D2A"/>
+                <text x="200" y="240" font-size="12" font-weight="700" fill="#0B0B0C">Odense</text>
+              </g>
+              <!-- Aalborg -->
+              <g>
+                <circle class="map-pulse" cx="150" cy="60" r="5" fill="#E11D2A"/>
+                <circle cx="150" cy="60" r="5" fill="#E11D2A"/>
+                <text x="158" y="57" font-size="12" font-weight="700" fill="#0B0B0C">Aalborg</text>
+              </g>
+              <!-- Esbjerg -->
+              <g>
+                <circle class="map-pulse" cx="112" cy="180" r="5" fill="#E11D2A"/>
+                <circle cx="112" cy="180" r="5" fill="#E11D2A"/>
+                <text x="40" y="184" font-size="12" font-weight="700" fill="#0B0B0C">Esbjerg</text>
+              </g>
+            </svg>
+            <p class="text-center text-sm text-ink/55 mt-2">Gratis afhentning i alle postnumre</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 10. PERSON- OG VAREBILER                                     -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-2xl mx-auto text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Vi køber både person- og varebiler</h2>
+        <p class="mt-4 text-ink/70">Uanset om du sælger familiens bil eller firmaets transporter, giver vi et konkurrencedygtigt tilbud.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Personbil -->
+        <div class="reveal relative overflow-hidden rounded-3xl shadow-softlg group">
+          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80" alt="Personbil" class="zoom-img w-full h-72 object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-7">
+            <h3 class="text-2xl font-extrabold text-white">Sælg din personbil</h3>
+            <p class="text-white/80 text-sm mt-2 max-w-sm">Fra små bybiler til stationcars og SUV'er. Vi vurderer alle mærker og årgange.</p>
+            <a href="#tilbud" class="btn-cta inline-flex items-center gap-2 mt-4 bg-brand text-white text-sm font-bold rounded-xl px-5 py-3">
+              Få tilbud på personbil
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Varebil -->
+        <div class="reveal relative overflow-hidden rounded-3xl shadow-softlg group" style="transition-delay:90ms">
+          <img src="https://images.unsplash.com/photo-1597766353939-3f5fd8c34d3c?auto=format&fit=crop&w=900&q=80" alt="Varebil" class="zoom-img w-full h-72 object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-7">
+            <h3 class="text-2xl font-extrabold text-white">Sælg din varebil</h3>
+            <p class="text-white/80 text-sm mt-2 max-w-sm">Håndværkerbiler, kassevogne og pickups. Også selvom de har mange kilometer på.</p>
+            <a href="#tilbud" class="btn-cta inline-flex items-center gap-2 mt-4 bg-trust text-white text-sm font-bold rounded-xl px-5 py-3">
+              Få tilbud på varebil
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 11. MØD TEAMET                                               -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-offwhite">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal max-w-2xl mb-12">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-brand mb-3">Mennesker, ikke maskiner</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Mød teamet</h2>
+        <p class="mt-4 text-ink/70">Et dansk hold der står klar til at hjælpe dig fra første kontakt til pengene er overført.</p>
+      </div>
+
+      <!-- SWAP: rigtige team-portrætter og navne -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Medlem 1 -->
+        <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft">
+          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="Thomas Lund" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <p class="font-bold text-ink">Thomas Lund</p>
+          <p class="text-sm text-brand font-semibold">Salg</p>
+        </div>
+        <!-- Medlem 2 -->
+        <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft" style="transition-delay:80ms">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="Sofie Hansen" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <p class="font-bold text-ink">Sofie Hansen</p>
+          <p class="text-sm text-trust font-semibold">Support</p>
+        </div>
+        <!-- Medlem 3 -->
+        <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft" style="transition-delay:160ms">
+          <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=400&q=80" alt="Mikkel Berg" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <p class="font-bold text-ink">Mikkel Berg</p>
+          <p class="text-sm text-brand font-semibold">Eksport</p>
+        </div>
+        <!-- Medlem 4 -->
+        <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft" style="transition-delay:240ms">
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="Anne Pedersen" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <p class="font-bold text-ink">Anne Pedersen</p>
+          <p class="text-sm text-trust font-semibold">Vurdering</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 12. FAQ                                                      -->
+  <!-- ============================================================ -->
+  <section class="py-16 sm:py-24 bg-white">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Ofte stillede spørgsmål</h2>
+      </div>
+
+      <div class="space-y-3">
+        <!-- FAQ 1 -->
+        <div class="faq-item reveal bg-offwhite rounded-2xl overflow-hidden">
+          <button class="faq-trigger w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+            <span class="font-bold text-ink">Hvorfor får jeg en bedre pris hos jer?</span>
+            <svg class="faq-icon w-5 h-5 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-panel"><p class="px-6 pb-5 text-ink/70 text-sm leading-relaxed">Fordi vi eksporterer bilerne til markeder, hvor de er mere værd end i Danmark. Vores fortjeneste ligger i eksporten, og derfor kan vi tilbyde dig en højere pris end et almindeligt dansk videresalg.</p></div>
+        </div>
+        <!-- FAQ 2 -->
+        <div class="faq-item reveal bg-offwhite rounded-2xl overflow-hidden" style="transition-delay:60ms">
+          <button class="faq-trigger w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+            <span class="font-bold text-ink">Hvor hurtigt får jeg et tilbud?</span>
+            <svg class="faq-icon w-5 h-5 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-panel"><p class="px-6 pb-5 text-ink/70 text-sm leading-relaxed">Som regel inden for få timer på hverdage. Du indtaster din nummerplade og dine kontaktoplysninger, og så vender vi tilbage med et konkret tilbud hurtigst muligt.</p></div>
+        </div>
+        <!-- FAQ 3 -->
+        <div class="faq-item reveal bg-offwhite rounded-2xl overflow-hidden" style="transition-delay:120ms">
+          <button class="faq-trigger w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+            <span class="font-bold text-ink">Koster afhentning noget?</span>
+            <svg class="faq-icon w-5 h-5 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-panel"><p class="px-6 pb-5 text-ink/70 text-sm leading-relaxed">Nej. Afhentning er gratis i hele Danmark, uanset om bilen står i en storby eller langt ude på landet. Der er ingen skjulte gebyrer.</p></div>
+        </div>
+        <!-- FAQ 4 -->
+        <div class="faq-item reveal bg-offwhite rounded-2xl overflow-hidden" style="transition-delay:180ms">
+          <button class="faq-trigger w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+            <span class="font-bold text-ink">Hvordan får jeg pengene?</span>
+            <svg class="faq-icon w-5 h-5 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-panel"><p class="px-6 pb-5 text-ink/70 text-sm leading-relaxed">Pengene overføres direkte til din bankkonto, typisk samme dag som vi henter bilen. Du modtager hele det aftalte beløb uden fradrag.</p></div>
+        </div>
+        <!-- FAQ 5 -->
+        <div class="faq-item reveal bg-offwhite rounded-2xl overflow-hidden" style="transition-delay:240ms">
+          <button class="faq-trigger w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+            <span class="font-bold text-ink">Hvilke biler køber I?</span>
+            <svg class="faq-icon w-5 h-5 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-panel"><p class="px-6 pb-5 text-ink/70 text-sm leading-relaxed">Vi køber både person- og varebiler af stort set alle mærker, årgange og kilometerstande. Også biler med fejl, høj kilometerstand eller manglende syn er velkomne. Indtast din nummerplade, så vurderer vi den.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 13. AFSLUTTENDE CTA (mørk/rød sektion med formular)          -->
+  <!-- ============================================================ -->
+  <section id="tilbud" class="py-16 sm:py-24 bg-ink relative overflow-hidden">
+    <!-- Dekorativ rød glød -->
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-brand/30 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-trust/20 rounded-full blur-3xl"></div>
+
+    <div class="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+      <div class="reveal">
+        <div class="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-5">
+          <svg class="w-5 h-3.5 rounded-sm" viewBox="0 0 37 28"><rect width="37" height="28" fill="#C8102E"/><rect x="12" width="4" height="28" fill="#fff"/><rect y="12" width="37" height="4" fill="#fff"/></svg>
+          <span class="text-xs font-semibold text-white">Gratis og uforpligtende</span>
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">Klar til at få mere for din bil?</h2>
+        <p class="mt-4 text-white/70 text-lg">Indtast din nummerplade og få et uforpligtende tilbud inden for få timer.</p>
+      </div>
+
+      <!-- Lead-formular (afsluttende CTA) -->
+      <!-- GHL: her kobles formularen til GoHighLevel via embed eller webhook -->
+      <form class="lead-form reveal mt-8 max-w-xl mx-auto text-left" novalidate style="transition-delay:80ms">
+        <div class="plate mb-3">
+          <div class="plate__eu">
+            <span class="plate__stars">★★★<br>★★</span>
+            <span class="plate__dk">DK</span>
+          </div>
+          <input type="text" name="nummerplade" class="plate__input" placeholder="AB 12 345" maxlength="8" autocomplete="off" aria-label="Nummerplade" required />
+        </div>
+        <div class="grid sm:grid-cols-3 gap-3">
+          <input type="text" name="navn" placeholder="Dit navn" class="rounded-xl bg-white/95 px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-brand" />
+          <input type="tel" name="telefon" placeholder="Telefon" class="rounded-xl bg-white/95 px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-brand" />
+          <input type="email" name="email" placeholder="Email" class="rounded-xl bg-white/95 px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-brand" />
+        </div>
+        <p class="form-error hidden mt-2 text-sm text-white font-medium bg-brand/80 rounded-lg px-3 py-2"></p>
+        <button type="submit" class="btn-cta w-full mt-4 bg-brand text-white font-bold rounded-xl px-6 py-4 shadow-soft text-lg">
+          Få mit tilbud nu
+        </button>
+        <p class="mt-3 text-center text-xs text-white/50">Ved at indsende accepterer du, at vi kontakter dig om dit tilbud. Helt uforpligtende.</p>
+      </form>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- 14. FOOTER                                                   -->
+  <!-- ============================================================ -->
+  <footer class="bg-ink text-white border-t border-white/10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-10">
+
+        <!-- Logo + kontakt -->
+        <div class="lg:col-span-2">
+          <!-- SWAP: rigtigt logo -->
+          <span class="text-2xl font-extrabold tracking-tight">Bil<span class="text-brand">Eksport</span></span>
+          <p class="mt-4 text-white/60 text-sm max-w-xs">Vi opkøber og eksporterer brugte biler i hele Danmark og betaler dig mere end det danske marked.</p>
+
+          <div class="mt-6 space-y-2 text-sm">
+            <p class="text-white/50 uppercase tracking-wider text-xs font-semibold mb-2">Kundeservice</p>
+            <!-- SWAP: rigtig kontaktinfo -->
+            <a href="tel:+4570605040" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              70 60 50 40
+            </a>
+            <a href="mailto:kontakt@bileksport.dk" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+              kontakt@bileksport.dk
+            </a>
+          </div>
+
+          <!-- Sociale ikoner -->
+          <div class="mt-6 flex items-center gap-3">
+            <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 transition-colors flex items-center justify-center">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 17V10.5H6.2V17h2.14zM7.27 9.43a1.24 1.24 0 1 0 0-2.48 1.24 1.24 0 0 0 0 2.48zM18 17v-3.57c0-1.91-1.02-2.8-2.38-2.8-1.1 0-1.59.6-1.86 1.03V10.5h-2.14V17h2.14v-3.36c0-.18.01-.36.07-.49.15-.36.47-.73 1.03-.73.73 0 1.02.55 1.02 1.36V17H18z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Link-kolonner -->
+        <div>
+          <p class="text-white/50 uppercase tracking-wider text-xs font-semibold mb-4">Sælg din bil</p>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li><a href="#tilbud" class="hover:text-white transition-colors">Personbil</a></li>
+            <li><a href="#tilbud" class="hover:text-white transition-colors">Varebil</a></li>
+            <li><a href="#anmeldelser" class="hover:text-white transition-colors">Anmeldelser</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white/50 uppercase tracking-wider text-xs font-semibold mb-4">Virksomhed</p>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li><a href="#" class="hover:text-white transition-colors">Om os</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kontakt</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Karriere</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="text-white/50 uppercase tracking-wider text-xs font-semibold mb-4">Juridisk</p>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li><a href="#" class="hover:text-white transition-colors">Cookiepolitik</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Privatlivspolitik</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Handelsbetingelser</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-white/50">© 2026 BilEksport Danmark. Alle rettigheder forbeholdes.</p>
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-4 rounded-sm" viewBox="0 0 37 28"><rect width="37" height="28" fill="#C8102E"/><rect x="12" width="4" height="28" fill="#fff"/><rect y="12" width="37" height="4" fill="#fff"/></svg>
+          <span class="text-sm text-white/50">Dansk virksomhed</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================ -->
+  <!-- TAK-MODAL (vises efter formular-submit)                      -->
+  <!-- ============================================================ -->
+  <div id="thanks-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" data-close></div>
+    <div class="relative bg-white rounded-3xl shadow-softlg max-w-md w-full p-8 text-center">
+      <div class="w-16 h-16 rounded-full bg-tp/10 flex items-center justify-center mx-auto mb-5">
+        <svg class="w-8 h-8 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h3 class="text-2xl font-extrabold text-ink">Tak for din henvendelse</h3>
+      <p class="mt-3 text-ink/70">Vi har modtaget din nummerplade <strong id="thanks-plate" class="text-ink"></strong> og vender tilbage med dit uforpligtende tilbud inden for få timer.</p>
+      <button data-close class="btn-cta mt-6 bg-brand text-white font-bold rounded-xl px-6 py-3.5 w-full shadow-soft">Luk</button>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- JAVASCRIPT: animationer, plade, formular, FAQ, tæller        -->
+  <!-- ============================================================ -->
+  <script>
+    /* ---------- 0. Trustpilot-stjerner som inline SVG ---------- */
+    // Genererer 5 grønne stjerner i hvert .tp-stars element
+    (function renderStars() {
+      const starSvg = (size) =>
+        `<svg class="${size}" viewBox="0 0 24 24" aria-hidden="true" style="margin-right:2px">
+           <rect width="24" height="24" rx="3" fill="#00B67A"/>
+           <path d="M12 4l2.06 5.4 5.77.3-4.5 3.62 1.5 5.58L12 15.9 6.67 18.9l1.5-5.58-4.5-3.62 5.77-.3z" fill="#fff"/>
+         </svg>`;
+      document.querySelectorAll('.tp-stars').forEach((el) => {
+        const big = el.classList.contains('tp-stars--lg');
+        const cls = big ? 'w-7 h-7' : 'w-5 h-5';
+        el.innerHTML = Array.from({ length: 5 }).map(() => starSvg(cls)).join('');
+      });
+    })();
+
+    /* ---------- 1. Scroll-reveal med Intersection Observer ---------- */
+    (function scrollReveal() {
+      const els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('is-visible'));
+        return;
+      }
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      els.forEach((el) => obs.observe(el));
+    })();
+
+    /* ---------- 2. Tæller-animation på nøgletal ---------- */
+    (function counters() {
+      const counters = document.querySelectorAll('.counter');
+      const animate = (el) => {
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1600;
+        const start = performance.now();
+        const step = (now) => {
+          const p = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+          el.textContent = Math.round(eased * target).toLocaleString('da-DK');
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      if (!('IntersectionObserver' in window)) {
+        counters.forEach(animate);
+        return;
+      }
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.6 });
+      counters.forEach((el) => obs.observe(el));
+    })();
+
+    /* ---------- 3. Nummerplade: auto-format + validering ---------- */
+    // Dansk plade: typisk 2 bogstaver + 5 cifre (fx AB 12 345)
+    function formatPlate(value) {
+      return value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 7);
+    }
+    function isValidPlate(value) {
+      const clean = value.replace(/\s/g, '').toUpperCase();
+      // 2 bogstaver efterfulgt af 4-5 cifre dækker langt de fleste danske plader
+      return /^[A-Z]{2}[0-9]{4,5}$/.test(clean);
+    }
+    function isValidEmail(value) {
+      if (!value) return true; // email er valgfri i dette udkast indtil tak-flow
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    document.querySelectorAll('.plate__input').forEach((input) => {
+      input.addEventListener('input', (e) => {
+        e.target.value = formatPlate(e.target.value);
+        e.target.closest('.plate').classList.remove('is-invalid');
+      });
+    });
+
+    /* ---------- 4. Lead-formular submit (tak-besked uden reload) ---------- */
+    const modal = document.getElementById('thanks-modal');
+    const thanksPlate = document.getElementById('thanks-plate');
+
+    function openModal(plate) {
+      thanksPlate.textContent = plate;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+    modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    document.querySelectorAll('.lead-form').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const plateInput = form.querySelector('input[name="nummerplade"]');
+        const emailInput = form.querySelector('input[name="email"]');
+        const errorEl = form.querySelector('.form-error');
+        const plateWrap = form.querySelector('.plate');
+
+        // Nulstil fejl
+        if (errorEl) { errorEl.classList.add('hidden'); errorEl.textContent = ''; }
+        plateWrap && plateWrap.classList.remove('is-invalid');
+
+        // Valider nummerplade
+        if (!isValidPlate(plateInput.value)) {
+          plateWrap && plateWrap.classList.add('is-invalid');
+          if (errorEl) {
+            errorEl.textContent = 'Indtast en gyldig dansk nummerplade, fx AB 12 345.';
+            errorEl.classList.remove('hidden');
+          }
+          plateInput.focus();
+          return;
+        }
+
+        // Valider email (hvis feltet findes og er udfyldt)
+        if (emailInput && !isValidEmail(emailInput.value)) {
+          if (errorEl) {
+            errorEl.textContent = 'Indtast en gyldig emailadresse.';
+            errorEl.classList.remove('hidden');
+          }
+          emailInput.focus();
+          return;
+        }
+
+        // GHL: her sendes data til GoHighLevel (webhook/embed). I dette udkast vises kun tak-besked.
+        openModal(plateInput.value.replace(/\s/g, ''));
+        form.reset();
+      });
+    });
+
+    /* ---------- 5. FAQ accordion ---------- */
+    document.querySelectorAll('.faq-trigger').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        // Luk alle
+        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
+        // Åbn den klikkede hvis den var lukket
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    /* ---------- 6. Videoanmeldelser: klik (placeholder for rigtig player) ---------- */
+    // SWAP: kobl rigtige videoer på her (fx lightbox/embed)
+    document.querySelectorAll('[data-video]').forEach((el) => {
+      el.addEventListener('click', () => {
+        // I udkastet gør play-knappen ingenting ud over en lille feedback-effekt
+        el.style.transition = 'transform 0.15s ease';
+        el.style.transform = 'scale(0.98)';
+        setTimeout(() => { el.style.transform = ''; }, 160);
+      });
+    });
+  </script>
+</body>
+</html>
