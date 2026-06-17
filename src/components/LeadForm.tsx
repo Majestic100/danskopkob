@@ -83,7 +83,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
   if (variant === "hero") {
     return (
       <form className="w-full" noValidate onSubmit={handleSubmit}>
-        <label className="mb-2 block text-sm font-semibold text-white">
+        <label className="mb-2 block text-sm font-semibold text-ink">
           Indtast din nummerplade
         </label>
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -98,7 +98,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
         {error && (
           <p className="mt-2 text-sm font-medium text-brand">{error}</p>
         )}
-        <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
+        <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/70">
           <li className="flex items-center gap-2">
             <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Gratis
             afhentning

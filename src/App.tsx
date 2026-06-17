@@ -15,6 +15,9 @@ import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
 import { ThanksModal } from "@/components/ThanksModal";
+import { ScrollProgress } from "@/components/ScrollProgress";
+import { MobileCtaBar } from "@/components/MobileCtaBar";
+import { SocialProofToasts } from "@/components/SocialProofToasts";
 
 export default function App() {
   const [thanksPlate, setThanksPlate] = useState<string | null>(null);
@@ -43,6 +46,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollProgress />
       <Header />
       <main id="top">
         <Hero onLeadSuccess={setThanksPlate} />
@@ -60,6 +64,8 @@ export default function App() {
       </main>
       <Footer />
       <ThanksModal plate={thanksPlate} onClose={() => setThanksPlate(null)} />
+      <MobileCtaBar />
+      <SocialProofToasts />
     </>
   );
 }

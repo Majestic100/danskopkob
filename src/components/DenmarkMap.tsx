@@ -12,7 +12,7 @@ export function DenmarkMap() {
     >
       <g
         className="dk-dots"
-        fill="#3b82f6"
+        fill="#1D4ED8"
         aria-hidden="true"
         dangerouslySetInnerHTML={{ __html: dkDots }}
       />
