@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BilEksport Danmark | Sælg din bil og tjen mere fordi vi eksporterer</title>
   <meta name="description" content="Vi opkøber og eksporterer din brugte bil og betaler dig mere end det danske marked. Gratis afhentning i hele Danmark, uforpligtende tilbud inden for få timer." />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- Favicon (inline SVG – ingen ekstra netværkskald) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23E11D2A'/><text x='16' y='23' font-family='Arial,Helvetica,sans-serif' font-size='19' font-weight='bold' fill='%23ffffff' text-anchor='middle'>B</text></svg>" />
 
   <!-- ============================================================ -->
   <!-- GOOGLE FONTS: Plus Jakarta Sans                              -->
@@ -12,6 +17,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Hurtigere hentning af billeder fra Unsplash -->
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
 
   <!-- ============================================================ -->
   <!-- TAILWIND VIA CDN + KONFIGURATION                             -->
@@ -114,7 +121,7 @@
       overflow: hidden;
       transition: max-height 0.4s ease;
     }
-    .faq-item.open .faq-panel { max-height: 320px; }
+    .faq-item.open .faq-panel { max-height: 500px; }
     .faq-item.open .faq-icon { transform: rotate(45deg); }
     .faq-icon { transition: transform 0.3s ease; }
 
@@ -134,11 +141,36 @@
     }
     .map-pulse { transform-box: fill-box; transform-origin: center; animation: pulse-dot 2.4s ease-out infinite; }
 
+    /* ---- Prikkort over Danmark: ruter + flydende forbindelser ---- */
+    .dk-dots { opacity: 0.4; }
+    .dk-route { fill: none; stroke: #E11D2A; stroke-opacity: 0.3; stroke-width: 0.25; stroke-linecap: round; }
+    .dk-flow {
+      fill: none; stroke: #E11D2A; stroke-width: 0.55; stroke-linecap: round;
+      stroke-dasharray: 0.18 0.82; stroke-dashoffset: 1;
+      animation: dk-flow 3.4s linear infinite;
+    }
+    @keyframes dk-flow { to { stroke-dashoffset: 0; } }
+    .dk-city-label {
+      font-size: 1.9px; font-weight: 700; fill: #0B0B0C;
+      paint-order: stroke; stroke: #ffffff; stroke-width: 0.7px; stroke-linejoin: round;
+    }
+
+    /* ---- Sticky-header offset, så anker-links ikke gemmer overskriften ---- */
+    #top, #anmeldelser, #tilbud { scroll-margin-top: 96px; }
+
+    /* ---- Tydeligt tastatur-fokus (tilgængelighed) ---- */
+    a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+      outline: 3px solid #1D4ED8;
+      outline-offset: 2px;
+      border-radius: 8px;
+    }
+
     /* Reduceret bevægelse */
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
       html { scroll-behavior: auto; }
       .map-pulse { animation: none; }
+      .dk-flow { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; stroke-opacity: 0.5; }
     }
   </style>
 </head>
@@ -231,7 +263,7 @@
                   name="nummerplade"
                   class="plate__input"
                   placeholder="AB 12 345"
-                  maxlength="8"
+                  maxlength="7"
                   autocomplete="off"
                   aria-label="Nummerplade"
                   required />
@@ -270,6 +302,7 @@
             <img
               src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80"
               alt="Glad bilsælger med nøgler til sin bil"
+              width="1200" height="800" loading="eager" fetchpriority="high" decoding="async"
               class="w-full h-[340px] sm:h-[440px] lg:h-[520px] object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent"></div>
           </div>
@@ -352,7 +385,7 @@
             <svg class="w-6 h-6 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
           </div>
           <h3 class="font-bold text-lg text-ink mb-2">Indtast nummerplade</h3>
-          <p class="text-sm text-ink/70">Skriv din nummerplade og få straks fat. Det tager under et minut.</p>
+          <p class="text-sm text-ink/70">Skriv din nummerplade, så går vi straks i gang. Det tager under et minut.</p>
         </div>
         <!-- Trin 2 -->
         <div class="reveal relative bg-offwhite rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style="transition-delay:90ms">
@@ -581,7 +614,7 @@
         <!-- Video 1 -->
         <figure class="reveal group">
           <div class="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer" data-video>
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Jakob" class="zoom-img w-full h-64 object-cover" />
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Jakob" loading="lazy" decoding="async" class="zoom-img w-full h-64 object-cover" />
             <div class="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
               <span class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
                 <svg class="w-7 h-7 text-brand ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -595,7 +628,7 @@
         <!-- Video 2 -->
         <figure class="reveal group" style="transition-delay:90ms">
           <div class="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer" data-video>
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Mette" class="zoom-img w-full h-64 object-cover" />
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Mette" loading="lazy" decoding="async" class="zoom-img w-full h-64 object-cover" />
             <div class="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
               <span class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
                 <svg class="w-7 h-7 text-brand ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -609,7 +642,7 @@
         <!-- Video 3 -->
         <figure class="reveal group" style="transition-delay:180ms">
           <div class="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer" data-video>
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Anders" class="zoom-img w-full h-64 object-cover" />
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Anders" loading="lazy" decoding="async" class="zoom-img w-full h-64 object-cover" />
             <div class="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
               <span class="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
                 <svg class="w-7 h-7 text-brand ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -638,32 +671,32 @@
 
         <!-- Bil 1 -->
         <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite">
-          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80" alt="Audi A4" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80" alt="Audi A4" loading="lazy" decoding="async" class="zoom-img w-full h-56 object-cover" /></div>
           <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Audi A4 Avant</p><span class="text-sm text-ink/55">8000 Aarhus C</span></div>
         </div>
         <!-- Bil 2 -->
         <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:70ms">
-          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80" alt="BMW 5-serie" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80" alt="BMW 5-serie" loading="lazy" decoding="async" class="zoom-img w-full h-56 object-cover" /></div>
           <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">BMW 520d</p><span class="text-sm text-ink/55">2100 København Ø</span></div>
         </div>
         <!-- Bil 3 -->
         <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:140ms">
-          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=700&q=80" alt="Mercedes C-klasse" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=700&q=80" alt="Mercedes C-klasse" loading="lazy" decoding="async" class="zoom-img w-full h-56 object-cover" /></div>
           <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Mercedes C 220 d</p><span class="text-sm text-ink/55">5000 Odense C</span></div>
         </div>
         <!-- Bil 4 -->
         <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:40ms">
-          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="VW Golf" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="VW Golf" loading="lazy" decoding="async" class="zoom-img w-full h-56 object-cover" /></div>
           <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">VW Golf 1.6 TDI</p><span class="text-sm text-ink/55">9000 Aalborg</span></div>
         </div>
         <!-- Bil 5 -->
         <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:110ms">
-          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=700&q=80" alt="Skoda Octavia" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=700&q=80" alt="Skoda Octavia" loading="lazy" decoding="async" class="zoom-img w-full h-56 object-cover" /></div>
           <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Skoda Octavia Combi</p><span class="text-sm text-ink/55">6700 Esbjerg</span></div>
         </div>
         <!-- Bil 6 -->
         <div class="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style="transition-delay:180ms">
-          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=700&q=80" alt="Ford Transit" class="zoom-img w-full h-56 object-cover" /></div>
+          <div class="overflow-hidden"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=700&q=80" alt="Ford Transit" loading="lazy" decoding="async" class="zoom-img w-full h-56 object-cover" /></div>
           <div class="p-5 flex items-center justify-between"><p class="font-bold text-ink">Ford Transit Custom</p><span class="text-sm text-ink/55">7100 Vejle</span></div>
         </div>
       </div>
@@ -704,55 +737,7 @@
         <!-- Danmarkskort som inline SVG -->
         <div class="reveal" style="transition-delay:120ms">
           <div class="bg-white rounded-3xl p-6 shadow-softlg">
-            <svg viewBox="0 0 400 360" class="w-full h-auto" role="img" aria-label="Kort over Danmark med de fem største byer markeret">
-              <!-- Stiliseret kort over Danmark (Jylland, Fyn, Sjælland) -->
-              <!-- Jylland -->
-              <path d="M150 30 C160 25 175 35 178 55 L185 90 C188 110 182 130 188 150 L195 185 C198 205 190 225 180 240 C172 252 160 258 150 250 C142 244 140 230 135 220 C128 205 118 200 112 185 C105 168 110 150 105 132 C100 112 95 95 105 78 C115 60 130 40 150 30 Z"
-                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
-              <!-- Fyn -->
-              <path d="M210 195 C225 188 245 195 250 212 C254 228 245 245 228 248 C212 250 200 240 198 225 C196 210 200 200 210 195 Z"
-                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
-              <!-- Sjælland -->
-              <path d="M285 175 C305 168 330 175 340 195 C350 215 345 240 325 252 C308 262 285 260 272 245 C260 230 262 205 272 190 C276 183 280 178 285 175 Z"
-                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
-              <!-- Lolland-Falster -->
-              <path d="M300 270 C315 266 332 270 336 282 C339 292 330 300 316 300 C302 300 294 292 294 282 C294 276 296 272 300 270 Z"
-                    fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
-              <!-- Bornholm -->
-              <circle cx="378" cy="250" r="9" fill="#1D4ED8" fill-opacity="0.12" stroke="#1D4ED8" stroke-width="1.5"/>
-
-              <!-- Bymarkører med puls -->
-              <!-- København -->
-              <g>
-                <circle class="map-pulse" cx="330" cy="205" r="5" fill="#E11D2A"/>
-                <circle cx="330" cy="205" r="5" fill="#E11D2A"/>
-                <text x="338" y="202" font-size="12" font-weight="700" fill="#0B0B0C">København</text>
-              </g>
-              <!-- Aarhus -->
-              <g>
-                <circle class="map-pulse" cx="150" cy="130" r="5" fill="#E11D2A"/>
-                <circle cx="150" cy="130" r="5" fill="#E11D2A"/>
-                <text x="158" y="127" font-size="12" font-weight="700" fill="#0B0B0C">Aarhus</text>
-              </g>
-              <!-- Odense -->
-              <g>
-                <circle class="map-pulse" cx="224" cy="220" r="5" fill="#E11D2A"/>
-                <circle cx="224" cy="220" r="5" fill="#E11D2A"/>
-                <text x="200" y="240" font-size="12" font-weight="700" fill="#0B0B0C">Odense</text>
-              </g>
-              <!-- Aalborg -->
-              <g>
-                <circle class="map-pulse" cx="150" cy="60" r="5" fill="#E11D2A"/>
-                <circle cx="150" cy="60" r="5" fill="#E11D2A"/>
-                <text x="158" y="57" font-size="12" font-weight="700" fill="#0B0B0C">Aalborg</text>
-              </g>
-              <!-- Esbjerg -->
-              <g>
-                <circle class="map-pulse" cx="112" cy="180" r="5" fill="#E11D2A"/>
-                <circle cx="112" cy="180" r="5" fill="#E11D2A"/>
-                <text x="40" y="184" font-size="12" font-weight="700" fill="#0B0B0C">Esbjerg</text>
-              </g>
-            </svg>
+            <svg viewBox="-6 -4 56 58" class="w-full h-auto" role="img" aria-label="Prikkort over Danmark med animerede forbindelser mellem de fem største byer: København, Aarhus, Odense, Aalborg og Esbjerg"><g class="dk-dots" fill="#1D4ED8" aria-hidden="true"><circle cx="23.00" cy="0.87" r="0.32"/><circle cx="21.50" cy="1.73" r="0.32"/><circle cx="22.50" cy="1.73" r="0.32"/><circle cx="23.50" cy="1.73" r="0.32"/><circle cx="20.00" cy="2.60" r="0.32"/><circle cx="21.00" cy="2.60" r="0.32"/><circle cx="22.00" cy="2.60" r="0.32"/><circle cx="23.00" cy="2.60" r="0.32"/><circle cx="18.50" cy="3.46" r="0.32"/><circle cx="19.50" cy="3.46" r="0.32"/><circle cx="20.50" cy="3.46" r="0.32"/><circle cx="21.50" cy="3.46" r="0.32"/><circle cx="22.50" cy="3.46" r="0.32"/><circle cx="23.50" cy="3.46" r="0.32"/><circle cx="18.00" cy="4.33" r="0.32"/><circle cx="19.00" cy="4.33" r="0.32"/><circle cx="20.00" cy="4.33" r="0.32"/><circle cx="21.00" cy="4.33" r="0.32"/><circle cx="22.00" cy="4.33" r="0.32"/><circle cx="23.00" cy="4.33" r="0.32"/><circle cx="16.50" cy="5.20" r="0.32"/><circle cx="17.50" cy="5.20" r="0.32"/><circle cx="18.50" cy="5.20" r="0.32"/><circle cx="19.50" cy="5.20" r="0.32"/><circle cx="20.50" cy="5.20" r="0.32"/><circle cx="21.50" cy="5.20" r="0.32"/><circle cx="22.50" cy="5.20" r="0.32"/><circle cx="23.50" cy="5.20" r="0.32"/><circle cx="16.00" cy="6.06" r="0.32"/><circle cx="17.00" cy="6.06" r="0.32"/><circle cx="18.00" cy="6.06" r="0.32"/><circle cx="19.00" cy="6.06" r="0.32"/><circle cx="20.00" cy="6.06" r="0.32"/><circle cx="21.00" cy="6.06" r="0.32"/><circle cx="22.00" cy="6.06" r="0.32"/><circle cx="23.00" cy="6.06" r="0.32"/><circle cx="15.50" cy="6.93" r="0.32"/><circle cx="16.50" cy="6.93" r="0.32"/><circle cx="17.50" cy="6.93" r="0.32"/><circle cx="18.50" cy="6.93" r="0.32"/><circle cx="19.50" cy="6.93" r="0.32"/><circle cx="20.50" cy="6.93" r="0.32"/><circle cx="21.50" cy="6.93" r="0.32"/><circle cx="22.50" cy="6.93" r="0.32"/><circle cx="23.50" cy="6.93" r="0.32"/><circle cx="15.00" cy="7.79" r="0.32"/><circle cx="16.00" cy="7.79" r="0.32"/><circle cx="17.00" cy="7.79" r="0.32"/><circle cx="18.00" cy="7.79" r="0.32"/><circle cx="19.00" cy="7.79" r="0.32"/><circle cx="20.00" cy="7.79" r="0.32"/><circle cx="21.00" cy="7.79" r="0.32"/><circle cx="22.00" cy="7.79" r="0.32"/><circle cx="23.00" cy="7.79" r="0.32"/><circle cx="14.50" cy="8.66" r="0.32"/><circle cx="15.50" cy="8.66" r="0.32"/><circle cx="16.50" cy="8.66" r="0.32"/><circle cx="17.50" cy="8.66" r="0.32"/><circle cx="18.50" cy="8.66" r="0.32"/><circle cx="19.50" cy="8.66" r="0.32"/><circle cx="20.50" cy="8.66" r="0.32"/><circle cx="21.50" cy="8.66" r="0.32"/><circle cx="22.50" cy="8.66" r="0.32"/><circle cx="23.50" cy="8.66" r="0.32"/><circle cx="13.00" cy="9.53" r="0.32"/><circle cx="14.00" cy="9.53" r="0.32"/><circle cx="15.00" cy="9.53" r="0.32"/><circle cx="16.00" cy="9.53" r="0.32"/><circle cx="17.00" cy="9.53" r="0.32"/><circle cx="18.00" cy="9.53" r="0.32"/><circle cx="19.00" cy="9.53" r="0.32"/><circle cx="20.00" cy="9.53" r="0.32"/><circle cx="21.00" cy="9.53" r="0.32"/><circle cx="22.00" cy="9.53" r="0.32"/><circle cx="23.00" cy="9.53" r="0.32"/><circle cx="8.50" cy="10.39" r="0.32"/><circle cx="9.50" cy="10.39" r="0.32"/><circle cx="10.50" cy="10.39" r="0.32"/><circle cx="11.50" cy="10.39" r="0.32"/><circle cx="12.50" cy="10.39" r="0.32"/><circle cx="13.50" cy="10.39" r="0.32"/><circle cx="14.50" cy="10.39" r="0.32"/><circle cx="15.50" cy="10.39" r="0.32"/><circle cx="16.50" cy="10.39" r="0.32"/><circle cx="17.50" cy="10.39" r="0.32"/><circle cx="18.50" cy="10.39" r="0.32"/><circle cx="19.50" cy="10.39" r="0.32"/><circle cx="20.50" cy="10.39" r="0.32"/><circle cx="21.50" cy="10.39" r="0.32"/><circle cx="22.50" cy="10.39" r="0.32"/><circle cx="5.00" cy="11.26" r="0.32"/><circle cx="6.00" cy="11.26" r="0.32"/><circle cx="7.00" cy="11.26" r="0.32"/><circle cx="8.00" cy="11.26" r="0.32"/><circle cx="9.00" cy="11.26" r="0.32"/><circle cx="10.00" cy="11.26" r="0.32"/><circle cx="11.00" cy="11.26" r="0.32"/><circle cx="12.00" cy="11.26" r="0.32"/><circle cx="13.00" cy="11.26" r="0.32"/><circle cx="14.00" cy="11.26" r="0.32"/><circle cx="15.00" cy="11.26" r="0.32"/><circle cx="16.00" cy="11.26" r="0.32"/><circle cx="17.00" cy="11.26" r="0.32"/><circle cx="18.00" cy="11.26" r="0.32"/><circle cx="19.00" cy="11.26" r="0.32"/><circle cx="20.00" cy="11.26" r="0.32"/><circle cx="21.00" cy="11.26" r="0.32"/><circle cx="22.00" cy="11.26" r="0.32"/><circle cx="4.50" cy="12.12" r="0.32"/><circle cx="5.50" cy="12.12" r="0.32"/><circle cx="6.50" cy="12.12" r="0.32"/><circle cx="7.50" cy="12.12" r="0.32"/><circle cx="8.50" cy="12.12" r="0.32"/><circle cx="9.50" cy="12.12" r="0.32"/><circle cx="10.50" cy="12.12" r="0.32"/><circle cx="11.50" cy="12.12" r="0.32"/><circle cx="12.50" cy="12.12" r="0.32"/><circle cx="13.50" cy="12.12" r="0.32"/><circle cx="14.50" cy="12.12" r="0.32"/><circle cx="15.50" cy="12.12" r="0.32"/><circle cx="16.50" cy="12.12" r="0.32"/><circle cx="17.50" cy="12.12" r="0.32"/><circle cx="18.50" cy="12.12" r="0.32"/><circle cx="19.50" cy="12.12" r="0.32"/><circle cx="20.50" cy="12.12" r="0.32"/><circle cx="21.50" cy="12.12" r="0.32"/><circle cx="4.00" cy="12.99" r="0.32"/><circle cx="5.00" cy="12.99" r="0.32"/><circle cx="6.00" cy="12.99" r="0.32"/><circle cx="7.00" cy="12.99" r="0.32"/><circle cx="8.00" cy="12.99" r="0.32"/><circle cx="9.00" cy="12.99" r="0.32"/><circle cx="10.00" cy="12.99" r="0.32"/><circle cx="11.00" cy="12.99" r="0.32"/><circle cx="12.00" cy="12.99" r="0.32"/><circle cx="13.00" cy="12.99" r="0.32"/><circle cx="14.00" cy="12.99" r="0.32"/><circle cx="15.00" cy="12.99" r="0.32"/><circle cx="16.00" cy="12.99" r="0.32"/><circle cx="17.00" cy="12.99" r="0.32"/><circle cx="18.00" cy="12.99" r="0.32"/><circle cx="19.00" cy="12.99" r="0.32"/><circle cx="20.00" cy="12.99" r="0.32"/><circle cx="21.00" cy="12.99" r="0.32"/><circle cx="3.50" cy="13.86" r="0.32"/><circle cx="4.50" cy="13.86" r="0.32"/><circle cx="5.50" cy="13.86" r="0.32"/><circle cx="6.50" cy="13.86" r="0.32"/><circle cx="7.50" cy="13.86" r="0.32"/><circle cx="8.50" cy="13.86" r="0.32"/><circle cx="9.50" cy="13.86" r="0.32"/><circle cx="10.50" cy="13.86" r="0.32"/><circle cx="11.50" cy="13.86" r="0.32"/><circle cx="12.50" cy="13.86" r="0.32"/><circle cx="13.50" cy="13.86" r="0.32"/><circle cx="14.50" cy="13.86" r="0.32"/><circle cx="15.50" cy="13.86" r="0.32"/><circle cx="16.50" cy="13.86" r="0.32"/><circle cx="17.50" cy="13.86" r="0.32"/><circle cx="18.50" cy="13.86" r="0.32"/><circle cx="19.50" cy="13.86" r="0.32"/><circle cx="20.50" cy="13.86" r="0.32"/><circle cx="3.00" cy="14.72" r="0.32"/><circle cx="4.00" cy="14.72" r="0.32"/><circle cx="5.00" cy="14.72" r="0.32"/><circle cx="6.00" cy="14.72" r="0.32"/><circle cx="7.00" cy="14.72" r="0.32"/><circle cx="8.00" cy="14.72" r="0.32"/><circle cx="9.00" cy="14.72" r="0.32"/><circle cx="10.00" cy="14.72" r="0.32"/><circle cx="11.00" cy="14.72" r="0.32"/><circle cx="12.00" cy="14.72" r="0.32"/><circle cx="13.00" cy="14.72" r="0.32"/><circle cx="14.00" cy="14.72" r="0.32"/><circle cx="15.00" cy="14.72" r="0.32"/><circle cx="16.00" cy="14.72" r="0.32"/><circle cx="17.00" cy="14.72" r="0.32"/><circle cx="18.00" cy="14.72" r="0.32"/><circle cx="19.00" cy="14.72" r="0.32"/><circle cx="20.00" cy="14.72" r="0.32"/><circle cx="2.50" cy="15.59" r="0.32"/><circle cx="3.50" cy="15.59" r="0.32"/><circle cx="4.50" cy="15.59" r="0.32"/><circle cx="5.50" cy="15.59" r="0.32"/><circle cx="6.50" cy="15.59" r="0.32"/><circle cx="7.50" cy="15.59" r="0.32"/><circle cx="8.50" cy="15.59" r="0.32"/><circle cx="9.50" cy="15.59" r="0.32"/><circle cx="10.50" cy="15.59" r="0.32"/><circle cx="11.50" cy="15.59" r="0.32"/><circle cx="12.50" cy="15.59" r="0.32"/><circle cx="13.50" cy="15.59" r="0.32"/><circle cx="14.50" cy="15.59" r="0.32"/><circle cx="15.50" cy="15.59" r="0.32"/><circle cx="16.50" cy="15.59" r="0.32"/><circle cx="17.50" cy="15.59" r="0.32"/><circle cx="18.50" cy="15.59" r="0.32"/><circle cx="19.50" cy="15.59" r="0.32"/><circle cx="20.50" cy="15.59" r="0.32"/><circle cx="2.00" cy="16.45" r="0.32"/><circle cx="3.00" cy="16.45" r="0.32"/><circle cx="4.00" cy="16.45" r="0.32"/><circle cx="5.00" cy="16.45" r="0.32"/><circle cx="6.00" cy="16.45" r="0.32"/><circle cx="7.00" cy="16.45" r="0.32"/><circle cx="8.00" cy="16.45" r="0.32"/><circle cx="9.00" cy="16.45" r="0.32"/><circle cx="10.00" cy="16.45" r="0.32"/><circle cx="11.00" cy="16.45" r="0.32"/><circle cx="12.00" cy="16.45" r="0.32"/><circle cx="13.00" cy="16.45" r="0.32"/><circle cx="14.00" cy="16.45" r="0.32"/><circle cx="15.00" cy="16.45" r="0.32"/><circle cx="16.00" cy="16.45" r="0.32"/><circle cx="17.00" cy="16.45" r="0.32"/><circle cx="18.00" cy="16.45" r="0.32"/><circle cx="19.00" cy="16.45" r="0.32"/><circle cx="20.00" cy="16.45" r="0.32"/><circle cx="21.00" cy="16.45" r="0.32"/><circle cx="1.50" cy="17.32" r="0.32"/><circle cx="2.50" cy="17.32" r="0.32"/><circle cx="3.50" cy="17.32" r="0.32"/><circle cx="4.50" cy="17.32" r="0.32"/><circle cx="5.50" cy="17.32" r="0.32"/><circle cx="6.50" cy="17.32" r="0.32"/><circle cx="7.50" cy="17.32" r="0.32"/><circle cx="8.50" cy="17.32" r="0.32"/><circle cx="9.50" cy="17.32" r="0.32"/><circle cx="10.50" cy="17.32" r="0.32"/><circle cx="11.50" cy="17.32" r="0.32"/><circle cx="12.50" cy="17.32" r="0.32"/><circle cx="13.50" cy="17.32" r="0.32"/><circle cx="14.50" cy="17.32" r="0.32"/><circle cx="15.50" cy="17.32" r="0.32"/><circle cx="16.50" cy="17.32" r="0.32"/><circle cx="17.50" cy="17.32" r="0.32"/><circle cx="18.50" cy="17.32" r="0.32"/><circle cx="19.50" cy="17.32" r="0.32"/><circle cx="20.50" cy="17.32" r="0.32"/><circle cx="1.00" cy="18.19" r="0.32"/><circle cx="2.00" cy="18.19" r="0.32"/><circle cx="3.00" cy="18.19" r="0.32"/><circle cx="4.00" cy="18.19" r="0.32"/><circle cx="5.00" cy="18.19" r="0.32"/><circle cx="6.00" cy="18.19" r="0.32"/><circle cx="7.00" cy="18.19" r="0.32"/><circle cx="8.00" cy="18.19" r="0.32"/><circle cx="9.00" cy="18.19" r="0.32"/><circle cx="10.00" cy="18.19" r="0.32"/><circle cx="11.00" cy="18.19" r="0.32"/><circle cx="12.00" cy="18.19" r="0.32"/><circle cx="13.00" cy="18.19" r="0.32"/><circle cx="14.00" cy="18.19" r="0.32"/><circle cx="15.00" cy="18.19" r="0.32"/><circle cx="16.00" cy="18.19" r="0.32"/><circle cx="17.00" cy="18.19" r="0.32"/><circle cx="18.00" cy="18.19" r="0.32"/><circle cx="19.00" cy="18.19" r="0.32"/><circle cx="20.00" cy="18.19" r="0.32"/><circle cx="21.00" cy="18.19" r="0.32"/><circle cx="1.50" cy="19.05" r="0.32"/><circle cx="2.50" cy="19.05" r="0.32"/><circle cx="3.50" cy="19.05" r="0.32"/><circle cx="4.50" cy="19.05" r="0.32"/><circle cx="5.50" cy="19.05" r="0.32"/><circle cx="6.50" cy="19.05" r="0.32"/><circle cx="7.50" cy="19.05" r="0.32"/><circle cx="8.50" cy="19.05" r="0.32"/><circle cx="9.50" cy="19.05" r="0.32"/><circle cx="10.50" cy="19.05" r="0.32"/><circle cx="11.50" cy="19.05" r="0.32"/><circle cx="12.50" cy="19.05" r="0.32"/><circle cx="13.50" cy="19.05" r="0.32"/><circle cx="14.50" cy="19.05" r="0.32"/><circle cx="15.50" cy="19.05" r="0.32"/><circle cx="16.50" cy="19.05" r="0.32"/><circle cx="17.50" cy="19.05" r="0.32"/><circle cx="18.50" cy="19.05" r="0.32"/><circle cx="19.50" cy="19.05" r="0.32"/><circle cx="20.50" cy="19.05" r="0.32"/><circle cx="21.50" cy="19.05" r="0.32"/><circle cx="1.00" cy="19.92" r="0.32"/><circle cx="2.00" cy="19.92" r="0.32"/><circle cx="3.00" cy="19.92" r="0.32"/><circle cx="4.00" cy="19.92" r="0.32"/><circle cx="5.00" cy="19.92" r="0.32"/><circle cx="6.00" cy="19.92" r="0.32"/><circle cx="7.00" cy="19.92" r="0.32"/><circle cx="8.00" cy="19.92" r="0.32"/><circle cx="9.00" cy="19.92" r="0.32"/><circle cx="10.00" cy="19.92" r="0.32"/><circle cx="11.00" cy="19.92" r="0.32"/><circle cx="12.00" cy="19.92" r="0.32"/><circle cx="13.00" cy="19.92" r="0.32"/><circle cx="14.00" cy="19.92" r="0.32"/><circle cx="15.00" cy="19.92" r="0.32"/><circle cx="16.00" cy="19.92" r="0.32"/><circle cx="17.00" cy="19.92" r="0.32"/><circle cx="18.00" cy="19.92" r="0.32"/><circle cx="19.00" cy="19.92" r="0.32"/><circle cx="20.00" cy="19.92" r="0.32"/><circle cx="21.00" cy="19.92" r="0.32"/><circle cx="22.00" cy="19.92" r="0.32"/><circle cx="0.50" cy="20.78" r="0.32"/><circle cx="1.50" cy="20.78" r="0.32"/><circle cx="2.50" cy="20.78" r="0.32"/><circle cx="3.50" cy="20.78" r="0.32"/><circle cx="4.50" cy="20.78" r="0.32"/><circle cx="5.50" cy="20.78" r="0.32"/><circle cx="6.50" cy="20.78" r="0.32"/><circle cx="7.50" cy="20.78" r="0.32"/><circle cx="8.50" cy="20.78" r="0.32"/><circle cx="9.50" cy="20.78" r="0.32"/><circle cx="10.50" cy="20.78" r="0.32"/><circle cx="11.50" cy="20.78" r="0.32"/><circle cx="12.50" cy="20.78" r="0.32"/><circle cx="13.50" cy="20.78" r="0.32"/><circle cx="14.50" cy="20.78" r="0.32"/><circle cx="15.50" cy="20.78" r="0.32"/><circle cx="16.50" cy="20.78" r="0.32"/><circle cx="17.50" cy="20.78" r="0.32"/><circle cx="18.50" cy="20.78" r="0.32"/><circle cx="19.50" cy="20.78" r="0.32"/><circle cx="20.50" cy="20.78" r="0.32"/><circle cx="21.50" cy="20.78" r="0.32"/><circle cx="22.50" cy="20.78" r="0.32"/><circle cx="23.50" cy="20.78" r="0.32"/><circle cx="1.00" cy="21.65" r="0.32"/><circle cx="2.00" cy="21.65" r="0.32"/><circle cx="3.00" cy="21.65" r="0.32"/><circle cx="4.00" cy="21.65" r="0.32"/><circle cx="5.00" cy="21.65" r="0.32"/><circle cx="6.00" cy="21.65" r="0.32"/><circle cx="7.00" cy="21.65" r="0.32"/><circle cx="8.00" cy="21.65" r="0.32"/><circle cx="9.00" cy="21.65" r="0.32"/><circle cx="10.00" cy="21.65" r="0.32"/><circle cx="11.00" cy="21.65" r="0.32"/><circle cx="12.00" cy="21.65" r="0.32"/><circle cx="13.00" cy="21.65" r="0.32"/><circle cx="14.00" cy="21.65" r="0.32"/><circle cx="15.00" cy="21.65" r="0.32"/><circle cx="16.00" cy="21.65" r="0.32"/><circle cx="17.00" cy="21.65" r="0.32"/><circle cx="18.00" cy="21.65" r="0.32"/><circle cx="19.00" cy="21.65" r="0.32"/><circle cx="20.00" cy="21.65" r="0.32"/><circle cx="21.00" cy="21.65" r="0.32"/><circle cx="22.00" cy="21.65" r="0.32"/><circle cx="23.00" cy="21.65" r="0.32"/><circle cx="24.00" cy="21.65" r="0.32"/><circle cx="25.00" cy="21.65" r="0.32"/><circle cx="0.50" cy="22.52" r="0.32"/><circle cx="1.50" cy="22.52" r="0.32"/><circle cx="2.50" cy="22.52" r="0.32"/><circle cx="3.50" cy="22.52" r="0.32"/><circle cx="4.50" cy="22.52" r="0.32"/><circle cx="5.50" cy="22.52" r="0.32"/><circle cx="6.50" cy="22.52" r="0.32"/><circle cx="7.50" cy="22.52" r="0.32"/><circle cx="8.50" cy="22.52" r="0.32"/><circle cx="9.50" cy="22.52" r="0.32"/><circle cx="10.50" cy="22.52" r="0.32"/><circle cx="11.50" cy="22.52" r="0.32"/><circle cx="12.50" cy="22.52" r="0.32"/><circle cx="13.50" cy="22.52" r="0.32"/><circle cx="14.50" cy="22.52" r="0.32"/><circle cx="15.50" cy="22.52" r="0.32"/><circle cx="16.50" cy="22.52" r="0.32"/><circle cx="17.50" cy="22.52" r="0.32"/><circle cx="18.50" cy="22.52" r="0.32"/><circle cx="19.50" cy="22.52" r="0.32"/><circle cx="20.50" cy="22.52" r="0.32"/><circle cx="21.50" cy="22.52" r="0.32"/><circle cx="22.50" cy="22.52" r="0.32"/><circle cx="23.50" cy="22.52" r="0.32"/><circle cx="24.50" cy="22.52" r="0.32"/><circle cx="25.50" cy="22.52" r="0.32"/><circle cx="26.50" cy="22.52" r="0.32"/><circle cx="1.00" cy="23.38" r="0.32"/><circle cx="2.00" cy="23.38" r="0.32"/><circle cx="3.00" cy="23.38" r="0.32"/><circle cx="4.00" cy="23.38" r="0.32"/><circle cx="5.00" cy="23.38" r="0.32"/><circle cx="6.00" cy="23.38" r="0.32"/><circle cx="7.00" cy="23.38" r="0.32"/><circle cx="8.00" cy="23.38" r="0.32"/><circle cx="9.00" cy="23.38" r="0.32"/><circle cx="10.00" cy="23.38" r="0.32"/><circle cx="11.00" cy="23.38" r="0.32"/><circle cx="12.00" cy="23.38" r="0.32"/><circle cx="13.00" cy="23.38" r="0.32"/><circle cx="14.00" cy="23.38" r="0.32"/><circle cx="15.00" cy="23.38" r="0.32"/><circle cx="16.00" cy="23.38" r="0.32"/><circle cx="17.00" cy="23.38" r="0.32"/><circle cx="18.00" cy="23.38" r="0.32"/><circle cx="19.00" cy="23.38" r="0.32"/><circle cx="20.00" cy="23.38" r="0.32"/><circle cx="21.00" cy="23.38" r="0.32"/><circle cx="22.00" cy="23.38" r="0.32"/><circle cx="23.00" cy="23.38" r="0.32"/><circle cx="24.00" cy="23.38" r="0.32"/><circle cx="25.00" cy="23.38" r="0.32"/><circle cx="26.00" cy="23.38" r="0.32"/><circle cx="0.50" cy="24.25" r="0.32"/><circle cx="1.50" cy="24.25" r="0.32"/><circle cx="2.50" cy="24.25" r="0.32"/><circle cx="3.50" cy="24.25" r="0.32"/><circle cx="4.50" cy="24.25" r="0.32"/><circle cx="5.50" cy="24.25" r="0.32"/><circle cx="6.50" cy="24.25" r="0.32"/><circle cx="7.50" cy="24.25" r="0.32"/><circle cx="8.50" cy="24.25" r="0.32"/><circle cx="9.50" cy="24.25" r="0.32"/><circle cx="10.50" cy="24.25" r="0.32"/><circle cx="11.50" cy="24.25" r="0.32"/><circle cx="12.50" cy="24.25" r="0.32"/><circle cx="13.50" cy="24.25" r="0.32"/><circle cx="14.50" cy="24.25" r="0.32"/><circle cx="15.50" cy="24.25" r="0.32"/><circle cx="16.50" cy="24.25" r="0.32"/><circle cx="17.50" cy="24.25" r="0.32"/><circle cx="18.50" cy="24.25" r="0.32"/><circle cx="19.50" cy="24.25" r="0.32"/><circle cx="20.50" cy="24.25" r="0.32"/><circle cx="21.50" cy="24.25" r="0.32"/><circle cx="22.50" cy="24.25" r="0.32"/><circle cx="23.50" cy="24.25" r="0.32"/><circle cx="24.50" cy="24.25" r="0.32"/><circle cx="25.50" cy="24.25" r="0.32"/><circle cx="1.00" cy="25.11" r="0.32"/><circle cx="2.00" cy="25.11" r="0.32"/><circle cx="3.00" cy="25.11" r="0.32"/><circle cx="4.00" cy="25.11" r="0.32"/><circle cx="5.00" cy="25.11" r="0.32"/><circle cx="6.00" cy="25.11" r="0.32"/><circle cx="7.00" cy="25.11" r="0.32"/><circle cx="8.00" cy="25.11" r="0.32"/><circle cx="9.00" cy="25.11" r="0.32"/><circle cx="10.00" cy="25.11" r="0.32"/><circle cx="11.00" cy="25.11" r="0.32"/><circle cx="12.00" cy="25.11" r="0.32"/><circle cx="13.00" cy="25.11" r="0.32"/><circle cx="14.00" cy="25.11" r="0.32"/><circle cx="15.00" cy="25.11" r="0.32"/><circle cx="16.00" cy="25.11" r="0.32"/><circle cx="17.00" cy="25.11" r="0.32"/><circle cx="18.00" cy="25.11" r="0.32"/><circle cx="19.00" cy="25.11" r="0.32"/><circle cx="20.00" cy="25.11" r="0.32"/><circle cx="21.00" cy="25.11" r="0.32"/><circle cx="22.00" cy="25.11" r="0.32"/><circle cx="23.00" cy="25.11" r="0.32"/><circle cx="24.00" cy="25.11" r="0.32"/><circle cx="25.00" cy="25.11" r="0.32"/><circle cx="0.50" cy="25.98" r="0.32"/><circle cx="1.50" cy="25.98" r="0.32"/><circle cx="2.50" cy="25.98" r="0.32"/><circle cx="3.50" cy="25.98" r="0.32"/><circle cx="4.50" cy="25.98" r="0.32"/><circle cx="5.50" cy="25.98" r="0.32"/><circle cx="6.50" cy="25.98" r="0.32"/><circle cx="7.50" cy="25.98" r="0.32"/><circle cx="8.50" cy="25.98" r="0.32"/><circle cx="9.50" cy="25.98" r="0.32"/><circle cx="10.50" cy="25.98" r="0.32"/><circle cx="11.50" cy="25.98" r="0.32"/><circle cx="12.50" cy="25.98" r="0.32"/><circle cx="13.50" cy="25.98" r="0.32"/><circle cx="14.50" cy="25.98" r="0.32"/><circle cx="15.50" cy="25.98" r="0.32"/><circle cx="16.50" cy="25.98" r="0.32"/><circle cx="17.50" cy="25.98" r="0.32"/><circle cx="18.50" cy="25.98" r="0.32"/><circle cx="19.50" cy="25.98" r="0.32"/><circle cx="20.50" cy="25.98" r="0.32"/><circle cx="21.50" cy="25.98" r="0.32"/><circle cx="22.50" cy="25.98" r="0.32"/><circle cx="23.50" cy="25.98" r="0.32"/><circle cx="24.50" cy="25.98" r="0.32"/><circle cx="25.50" cy="25.98" r="0.32"/><circle cx="1.00" cy="26.85" r="0.32"/><circle cx="2.00" cy="26.85" r="0.32"/><circle cx="3.00" cy="26.85" r="0.32"/><circle cx="4.00" cy="26.85" r="0.32"/><circle cx="5.00" cy="26.85" r="0.32"/><circle cx="6.00" cy="26.85" r="0.32"/><circle cx="7.00" cy="26.85" r="0.32"/><circle cx="8.00" cy="26.85" r="0.32"/><circle cx="9.00" cy="26.85" r="0.32"/><circle cx="10.00" cy="26.85" r="0.32"/><circle cx="11.00" cy="26.85" r="0.32"/><circle cx="12.00" cy="26.85" r="0.32"/><circle cx="13.00" cy="26.85" r="0.32"/><circle cx="14.00" cy="26.85" r="0.32"/><circle cx="15.00" cy="26.85" r="0.32"/><circle cx="16.00" cy="26.85" r="0.32"/><circle cx="17.00" cy="26.85" r="0.32"/><circle cx="18.00" cy="26.85" r="0.32"/><circle cx="19.00" cy="26.85" r="0.32"/><circle cx="20.00" cy="26.85" r="0.32"/><circle cx="21.00" cy="26.85" r="0.32"/><circle cx="22.00" cy="26.85" r="0.32"/><circle cx="23.00" cy="26.85" r="0.32"/><circle cx="24.00" cy="26.85" r="0.32"/><circle cx="25.00" cy="26.85" r="0.32"/><circle cx="0.50" cy="27.71" r="0.32"/><circle cx="1.50" cy="27.71" r="0.32"/><circle cx="2.50" cy="27.71" r="0.32"/><circle cx="3.50" cy="27.71" r="0.32"/><circle cx="4.50" cy="27.71" r="0.32"/><circle cx="5.50" cy="27.71" r="0.32"/><circle cx="6.50" cy="27.71" r="0.32"/><circle cx="7.50" cy="27.71" r="0.32"/><circle cx="8.50" cy="27.71" r="0.32"/><circle cx="9.50" cy="27.71" r="0.32"/><circle cx="10.50" cy="27.71" r="0.32"/><circle cx="11.50" cy="27.71" r="0.32"/><circle cx="12.50" cy="27.71" r="0.32"/><circle cx="13.50" cy="27.71" r="0.32"/><circle cx="14.50" cy="27.71" r="0.32"/><circle cx="15.50" cy="27.71" r="0.32"/><circle cx="16.50" cy="27.71" r="0.32"/><circle cx="17.50" cy="27.71" r="0.32"/><circle cx="18.50" cy="27.71" r="0.32"/><circle cx="19.50" cy="27.71" r="0.32"/><circle cx="20.50" cy="27.71" r="0.32"/><circle cx="23.50" cy="27.71" r="0.32"/><circle cx="24.50" cy="27.71" r="0.32"/><circle cx="1.00" cy="28.58" r="0.32"/><circle cx="2.00" cy="28.58" r="0.32"/><circle cx="3.00" cy="28.58" r="0.32"/><circle cx="4.00" cy="28.58" r="0.32"/><circle cx="5.00" cy="28.58" r="0.32"/><circle cx="6.00" cy="28.58" r="0.32"/><circle cx="7.00" cy="28.58" r="0.32"/><circle cx="8.00" cy="28.58" r="0.32"/><circle cx="9.00" cy="28.58" r="0.32"/><circle cx="10.00" cy="28.58" r="0.32"/><circle cx="11.00" cy="28.58" r="0.32"/><circle cx="12.00" cy="28.58" r="0.32"/><circle cx="13.00" cy="28.58" r="0.32"/><circle cx="14.00" cy="28.58" r="0.32"/><circle cx="15.00" cy="28.58" r="0.32"/><circle cx="16.00" cy="28.58" r="0.32"/><circle cx="17.00" cy="28.58" r="0.32"/><circle cx="18.00" cy="28.58" r="0.32"/><circle cx="19.00" cy="28.58" r="0.32"/><circle cx="20.00" cy="28.58" r="0.32"/><circle cx="40.00" cy="28.58" r="0.32"/><circle cx="41.00" cy="28.58" r="0.32"/><circle cx="0.50" cy="29.44" r="0.32"/><circle cx="1.50" cy="29.44" r="0.32"/><circle cx="2.50" cy="29.44" r="0.32"/><circle cx="3.50" cy="29.44" r="0.32"/><circle cx="4.50" cy="29.44" r="0.32"/><circle cx="5.50" cy="29.44" r="0.32"/><circle cx="6.50" cy="29.44" r="0.32"/><circle cx="7.50" cy="29.44" r="0.32"/><circle cx="8.50" cy="29.44" r="0.32"/><circle cx="9.50" cy="29.44" r="0.32"/><circle cx="10.50" cy="29.44" r="0.32"/><circle cx="11.50" cy="29.44" r="0.32"/><circle cx="12.50" cy="29.44" r="0.32"/><circle cx="13.50" cy="29.44" r="0.32"/><circle cx="14.50" cy="29.44" r="0.32"/><circle cx="15.50" cy="29.44" r="0.32"/><circle cx="16.50" cy="29.44" r="0.32"/><circle cx="17.50" cy="29.44" r="0.32"/><circle cx="18.50" cy="29.44" r="0.32"/><circle cx="19.50" cy="29.44" r="0.32"/><circle cx="38.50" cy="29.44" r="0.32"/><circle cx="39.50" cy="29.44" r="0.32"/><circle cx="40.50" cy="29.44" r="0.32"/><circle cx="1.00" cy="30.31" r="0.32"/><circle cx="2.00" cy="30.31" r="0.32"/><circle cx="3.00" cy="30.31" r="0.32"/><circle cx="4.00" cy="30.31" r="0.32"/><circle cx="5.00" cy="30.31" r="0.32"/><circle cx="6.00" cy="30.31" r="0.32"/><circle cx="7.00" cy="30.31" r="0.32"/><circle cx="8.00" cy="30.31" r="0.32"/><circle cx="9.00" cy="30.31" r="0.32"/><circle cx="10.00" cy="30.31" r="0.32"/><circle cx="11.00" cy="30.31" r="0.32"/><circle cx="12.00" cy="30.31" r="0.32"/><circle cx="13.00" cy="30.31" r="0.32"/><circle cx="14.00" cy="30.31" r="0.32"/><circle cx="15.00" cy="30.31" r="0.32"/><circle cx="16.00" cy="30.31" r="0.32"/><circle cx="17.00" cy="30.31" r="0.32"/><circle cx="18.00" cy="30.31" r="0.32"/><circle cx="19.00" cy="30.31" r="0.32"/><circle cx="36.00" cy="30.31" r="0.32"/><circle cx="37.00" cy="30.31" r="0.32"/><circle cx="38.00" cy="30.31" r="0.32"/><circle cx="39.00" cy="30.31" r="0.32"/><circle cx="40.00" cy="30.31" r="0.32"/><circle cx="41.00" cy="30.31" r="0.32"/><circle cx="0.50" cy="31.18" r="0.32"/><circle cx="1.50" cy="31.18" r="0.32"/><circle cx="2.50" cy="31.18" r="0.32"/><circle cx="3.50" cy="31.18" r="0.32"/><circle cx="4.50" cy="31.18" r="0.32"/><circle cx="5.50" cy="31.18" r="0.32"/><circle cx="6.50" cy="31.18" r="0.32"/><circle cx="7.50" cy="31.18" r="0.32"/><circle cx="8.50" cy="31.18" r="0.32"/><circle cx="9.50" cy="31.18" r="0.32"/><circle cx="10.50" cy="31.18" r="0.32"/><circle cx="11.50" cy="31.18" r="0.32"/><circle cx="12.50" cy="31.18" r="0.32"/><circle cx="13.50" cy="31.18" r="0.32"/><circle cx="14.50" cy="31.18" r="0.32"/><circle cx="15.50" cy="31.18" r="0.32"/><circle cx="16.50" cy="31.18" r="0.32"/><circle cx="17.50" cy="31.18" r="0.32"/><circle cx="18.50" cy="31.18" r="0.32"/><circle cx="33.50" cy="31.18" r="0.32"/><circle cx="34.50" cy="31.18" r="0.32"/><circle cx="35.50" cy="31.18" r="0.32"/><circle cx="36.50" cy="31.18" r="0.32"/><circle cx="37.50" cy="31.18" r="0.32"/><circle cx="38.50" cy="31.18" r="0.32"/><circle cx="39.50" cy="31.18" r="0.32"/><circle cx="40.50" cy="31.18" r="0.32"/><circle cx="41.50" cy="31.18" r="0.32"/><circle cx="1.00" cy="32.04" r="0.32"/><circle cx="2.00" cy="32.04" r="0.32"/><circle cx="3.00" cy="32.04" r="0.32"/><circle cx="4.00" cy="32.04" r="0.32"/><circle cx="5.00" cy="32.04" r="0.32"/><circle cx="6.00" cy="32.04" r="0.32"/><circle cx="7.00" cy="32.04" r="0.32"/><circle cx="8.00" cy="32.04" r="0.32"/><circle cx="9.00" cy="32.04" r="0.32"/><circle cx="10.00" cy="32.04" r="0.32"/><circle cx="11.00" cy="32.04" r="0.32"/><circle cx="12.00" cy="32.04" r="0.32"/><circle cx="13.00" cy="32.04" r="0.32"/><circle cx="14.00" cy="32.04" r="0.32"/><circle cx="15.00" cy="32.04" r="0.32"/><circle cx="16.00" cy="32.04" r="0.32"/><circle cx="17.00" cy="32.04" r="0.32"/><circle cx="18.00" cy="32.04" r="0.32"/><circle cx="32.00" cy="32.04" r="0.32"/><circle cx="33.00" cy="32.04" r="0.32"/><circle cx="34.00" cy="32.04" r="0.32"/><circle cx="35.00" cy="32.04" r="0.32"/><circle cx="36.00" cy="32.04" r="0.32"/><circle cx="37.00" cy="32.04" r="0.32"/><circle cx="38.00" cy="32.04" r="0.32"/><circle cx="39.00" cy="32.04" r="0.32"/><circle cx="40.00" cy="32.04" r="0.32"/><circle cx="41.00" cy="32.04" r="0.32"/><circle cx="42.00" cy="32.04" r="0.32"/><circle cx="0.50" cy="32.91" r="0.32"/><circle cx="1.50" cy="32.91" r="0.32"/><circle cx="2.50" cy="32.91" r="0.32"/><circle cx="3.50" cy="32.91" r="0.32"/><circle cx="4.50" cy="32.91" r="0.32"/><circle cx="5.50" cy="32.91" r="0.32"/><circle cx="6.50" cy="32.91" r="0.32"/><circle cx="7.50" cy="32.91" r="0.32"/><circle cx="8.50" cy="32.91" r="0.32"/><circle cx="9.50" cy="32.91" r="0.32"/><circle cx="10.50" cy="32.91" r="0.32"/><circle cx="11.50" cy="32.91" r="0.32"/><circle cx="12.50" cy="32.91" r="0.32"/><circle cx="13.50" cy="32.91" r="0.32"/><circle cx="14.50" cy="32.91" r="0.32"/><circle cx="15.50" cy="32.91" r="0.32"/><circle cx="16.50" cy="32.91" r="0.32"/><circle cx="17.50" cy="32.91" r="0.32"/><circle cx="29.50" cy="32.91" r="0.32"/><circle cx="30.50" cy="32.91" r="0.32"/><circle cx="31.50" cy="32.91" r="0.32"/><circle cx="32.50" cy="32.91" r="0.32"/><circle cx="33.50" cy="32.91" r="0.32"/><circle cx="34.50" cy="32.91" r="0.32"/><circle cx="35.50" cy="32.91" r="0.32"/><circle cx="36.50" cy="32.91" r="0.32"/><circle cx="37.50" cy="32.91" r="0.32"/><circle cx="38.50" cy="32.91" r="0.32"/><circle cx="39.50" cy="32.91" r="0.32"/><circle cx="40.50" cy="32.91" r="0.32"/><circle cx="41.50" cy="32.91" r="0.32"/><circle cx="42.50" cy="32.91" r="0.32"/><circle cx="1.00" cy="33.77" r="0.32"/><circle cx="2.00" cy="33.77" r="0.32"/><circle cx="3.00" cy="33.77" r="0.32"/><circle cx="4.00" cy="33.77" r="0.32"/><circle cx="5.00" cy="33.77" r="0.32"/><circle cx="6.00" cy="33.77" r="0.32"/><circle cx="7.00" cy="33.77" r="0.32"/><circle cx="8.00" cy="33.77" r="0.32"/><circle cx="9.00" cy="33.77" r="0.32"/><circle cx="10.00" cy="33.77" r="0.32"/><circle cx="11.00" cy="33.77" r="0.32"/><circle cx="12.00" cy="33.77" r="0.32"/><circle cx="13.00" cy="33.77" r="0.32"/><circle cx="14.00" cy="33.77" r="0.32"/><circle cx="15.00" cy="33.77" r="0.32"/><circle cx="16.00" cy="33.77" r="0.32"/><circle cx="17.00" cy="33.77" r="0.32"/><circle cx="27.00" cy="33.77" r="0.32"/><circle cx="28.00" cy="33.77" r="0.32"/><circle cx="29.00" cy="33.77" r="0.32"/><circle cx="30.00" cy="33.77" r="0.32"/><circle cx="31.00" cy="33.77" r="0.32"/><circle cx="32.00" cy="33.77" r="0.32"/><circle cx="33.00" cy="33.77" r="0.32"/><circle cx="34.00" cy="33.77" r="0.32"/><circle cx="35.00" cy="33.77" r="0.32"/><circle cx="36.00" cy="33.77" r="0.32"/><circle cx="37.00" cy="33.77" r="0.32"/><circle cx="38.00" cy="33.77" r="0.32"/><circle cx="39.00" cy="33.77" r="0.32"/><circle cx="40.00" cy="33.77" r="0.32"/><circle cx="41.00" cy="33.77" r="0.32"/><circle cx="42.00" cy="33.77" r="0.32"/><circle cx="0.50" cy="34.64" r="0.32"/><circle cx="1.50" cy="34.64" r="0.32"/><circle cx="2.50" cy="34.64" r="0.32"/><circle cx="3.50" cy="34.64" r="0.32"/><circle cx="4.50" cy="34.64" r="0.32"/><circle cx="5.50" cy="34.64" r="0.32"/><circle cx="6.50" cy="34.64" r="0.32"/><circle cx="7.50" cy="34.64" r="0.32"/><circle cx="8.50" cy="34.64" r="0.32"/><circle cx="9.50" cy="34.64" r="0.32"/><circle cx="10.50" cy="34.64" r="0.32"/><circle cx="11.50" cy="34.64" r="0.32"/><circle cx="12.50" cy="34.64" r="0.32"/><circle cx="13.50" cy="34.64" r="0.32"/><circle cx="14.50" cy="34.64" r="0.32"/><circle cx="15.50" cy="34.64" r="0.32"/><circle cx="16.50" cy="34.64" r="0.32"/><circle cx="27.50" cy="34.64" r="0.32"/><circle cx="28.50" cy="34.64" r="0.32"/><circle cx="29.50" cy="34.64" r="0.32"/><circle cx="30.50" cy="34.64" r="0.32"/><circle cx="31.50" cy="34.64" r="0.32"/><circle cx="32.50" cy="34.64" r="0.32"/><circle cx="33.50" cy="34.64" r="0.32"/><circle cx="34.50" cy="34.64" r="0.32"/><circle cx="35.50" cy="34.64" r="0.32"/><circle cx="36.50" cy="34.64" r="0.32"/><circle cx="37.50" cy="34.64" r="0.32"/><circle cx="38.50" cy="34.64" r="0.32"/><circle cx="39.50" cy="34.64" r="0.32"/><circle cx="40.50" cy="34.64" r="0.32"/><circle cx="41.50" cy="34.64" r="0.32"/><circle cx="42.50" cy="34.64" r="0.32"/><circle cx="1.00" cy="35.51" r="0.32"/><circle cx="2.00" cy="35.51" r="0.32"/><circle cx="3.00" cy="35.51" r="0.32"/><circle cx="4.00" cy="35.51" r="0.32"/><circle cx="5.00" cy="35.51" r="0.32"/><circle cx="6.00" cy="35.51" r="0.32"/><circle cx="7.00" cy="35.51" r="0.32"/><circle cx="8.00" cy="35.51" r="0.32"/><circle cx="9.00" cy="35.51" r="0.32"/><circle cx="10.00" cy="35.51" r="0.32"/><circle cx="11.00" cy="35.51" r="0.32"/><circle cx="12.00" cy="35.51" r="0.32"/><circle cx="13.00" cy="35.51" r="0.32"/><circle cx="14.00" cy="35.51" r="0.32"/><circle cx="15.00" cy="35.51" r="0.32"/><circle cx="16.00" cy="35.51" r="0.32"/><circle cx="28.00" cy="35.51" r="0.32"/><circle cx="29.00" cy="35.51" r="0.32"/><circle cx="30.00" cy="35.51" r="0.32"/><circle cx="31.00" cy="35.51" r="0.32"/><circle cx="32.00" cy="35.51" r="0.32"/><circle cx="33.00" cy="35.51" r="0.32"/><circle cx="34.00" cy="35.51" r="0.32"/><circle cx="35.00" cy="35.51" r="0.32"/><circle cx="36.00" cy="35.51" r="0.32"/><circle cx="37.00" cy="35.51" r="0.32"/><circle cx="38.00" cy="35.51" r="0.32"/><circle cx="39.00" cy="35.51" r="0.32"/><circle cx="40.00" cy="35.51" r="0.32"/><circle cx="41.00" cy="35.51" r="0.32"/><circle cx="42.00" cy="35.51" r="0.32"/><circle cx="43.00" cy="35.51" r="0.32"/><circle cx="0.50" cy="36.37" r="0.32"/><circle cx="1.50" cy="36.37" r="0.32"/><circle cx="2.50" cy="36.37" r="0.32"/><circle cx="3.50" cy="36.37" r="0.32"/><circle cx="4.50" cy="36.37" r="0.32"/><circle cx="5.50" cy="36.37" r="0.32"/><circle cx="6.50" cy="36.37" r="0.32"/><circle cx="7.50" cy="36.37" r="0.32"/><circle cx="8.50" cy="36.37" r="0.32"/><circle cx="9.50" cy="36.37" r="0.32"/><circle cx="10.50" cy="36.37" r="0.32"/><circle cx="11.50" cy="36.37" r="0.32"/><circle cx="12.50" cy="36.37" r="0.32"/><circle cx="13.50" cy="36.37" r="0.32"/><circle cx="14.50" cy="36.37" r="0.32"/><circle cx="15.50" cy="36.37" r="0.32"/><circle cx="27.50" cy="36.37" r="0.32"/><circle cx="28.50" cy="36.37" r="0.32"/><circle cx="29.50" cy="36.37" r="0.32"/><circle cx="30.50" cy="36.37" r="0.32"/><circle cx="31.50" cy="36.37" r="0.32"/><circle cx="32.50" cy="36.37" r="0.32"/><circle cx="33.50" cy="36.37" r="0.32"/><circle cx="34.50" cy="36.37" r="0.32"/><circle cx="35.50" cy="36.37" r="0.32"/><circle cx="36.50" cy="36.37" r="0.32"/><circle cx="37.50" cy="36.37" r="0.32"/><circle cx="38.50" cy="36.37" r="0.32"/><circle cx="39.50" cy="36.37" r="0.32"/><circle cx="40.50" cy="36.37" r="0.32"/><circle cx="41.50" cy="36.37" r="0.32"/><circle cx="42.50" cy="36.37" r="0.32"/><circle cx="43.50" cy="36.37" r="0.32"/><circle cx="1.00" cy="37.24" r="0.32"/><circle cx="2.00" cy="37.24" r="0.32"/><circle cx="3.00" cy="37.24" r="0.32"/><circle cx="4.00" cy="37.24" r="0.32"/><circle cx="5.00" cy="37.24" r="0.32"/><circle cx="6.00" cy="37.24" r="0.32"/><circle cx="7.00" cy="37.24" r="0.32"/><circle cx="8.00" cy="37.24" r="0.32"/><circle cx="9.00" cy="37.24" r="0.32"/><circle cx="10.00" cy="37.24" r="0.32"/><circle cx="11.00" cy="37.24" r="0.32"/><circle cx="12.00" cy="37.24" r="0.32"/><circle cx="13.00" cy="37.24" r="0.32"/><circle cx="14.00" cy="37.24" r="0.32"/><circle cx="15.00" cy="37.24" r="0.32"/><circle cx="28.00" cy="37.24" r="0.32"/><circle cx="29.00" cy="37.24" r="0.32"/><circle cx="30.00" cy="37.24" r="0.32"/><circle cx="31.00" cy="37.24" r="0.32"/><circle cx="32.00" cy="37.24" r="0.32"/><circle cx="33.00" cy="37.24" r="0.32"/><circle cx="34.00" cy="37.24" r="0.32"/><circle cx="35.00" cy="37.24" r="0.32"/><circle cx="36.00" cy="37.24" r="0.32"/><circle cx="37.00" cy="37.24" r="0.32"/><circle cx="38.00" cy="37.24" r="0.32"/><circle cx="39.00" cy="37.24" r="0.32"/><circle cx="40.00" cy="37.24" r="0.32"/><circle cx="41.00" cy="37.24" r="0.32"/><circle cx="42.00" cy="37.24" r="0.32"/><circle cx="43.00" cy="37.24" r="0.32"/><circle cx="0.50" cy="38.11" r="0.32"/><circle cx="1.50" cy="38.11" r="0.32"/><circle cx="2.50" cy="38.11" r="0.32"/><circle cx="3.50" cy="38.11" r="0.32"/><circle cx="4.50" cy="38.11" r="0.32"/><circle cx="5.50" cy="38.11" r="0.32"/><circle cx="6.50" cy="38.11" r="0.32"/><circle cx="7.50" cy="38.11" r="0.32"/><circle cx="8.50" cy="38.11" r="0.32"/><circle cx="9.50" cy="38.11" r="0.32"/><circle cx="10.50" cy="38.11" r="0.32"/><circle cx="11.50" cy="38.11" r="0.32"/><circle cx="12.50" cy="38.11" r="0.32"/><circle cx="13.50" cy="38.11" r="0.32"/><circle cx="14.50" cy="38.11" r="0.32"/><circle cx="28.50" cy="38.11" r="0.32"/><circle cx="29.50" cy="38.11" r="0.32"/><circle cx="30.50" cy="38.11" r="0.32"/><circle cx="31.50" cy="38.11" r="0.32"/><circle cx="32.50" cy="38.11" r="0.32"/><circle cx="33.50" cy="38.11" r="0.32"/><circle cx="34.50" cy="38.11" r="0.32"/><circle cx="35.50" cy="38.11" r="0.32"/><circle cx="36.50" cy="38.11" r="0.32"/><circle cx="37.50" cy="38.11" r="0.32"/><circle cx="38.50" cy="38.11" r="0.32"/><circle cx="39.50" cy="38.11" r="0.32"/><circle cx="40.50" cy="38.11" r="0.32"/><circle cx="41.50" cy="38.11" r="0.32"/><circle cx="42.50" cy="38.11" r="0.32"/><circle cx="1.00" cy="38.97" r="0.32"/><circle cx="2.00" cy="38.97" r="0.32"/><circle cx="3.00" cy="38.97" r="0.32"/><circle cx="4.00" cy="38.97" r="0.32"/><circle cx="5.00" cy="38.97" r="0.32"/><circle cx="6.00" cy="38.97" r="0.32"/><circle cx="7.00" cy="38.97" r="0.32"/><circle cx="8.00" cy="38.97" r="0.32"/><circle cx="9.00" cy="38.97" r="0.32"/><circle cx="10.00" cy="38.97" r="0.32"/><circle cx="11.00" cy="38.97" r="0.32"/><circle cx="12.00" cy="38.97" r="0.32"/><circle cx="13.00" cy="38.97" r="0.32"/><circle cx="14.00" cy="38.97" r="0.32"/><circle cx="28.00" cy="38.97" r="0.32"/><circle cx="29.00" cy="38.97" r="0.32"/><circle cx="30.00" cy="38.97" r="0.32"/><circle cx="31.00" cy="38.97" r="0.32"/><circle cx="32.00" cy="38.97" r="0.32"/><circle cx="33.00" cy="38.97" r="0.32"/><circle cx="34.00" cy="38.97" r="0.32"/><circle cx="35.00" cy="38.97" r="0.32"/><circle cx="36.00" cy="38.97" r="0.32"/><circle cx="37.00" cy="38.97" r="0.32"/><circle cx="38.00" cy="38.97" r="0.32"/><circle cx="39.00" cy="38.97" r="0.32"/><circle cx="40.00" cy="38.97" r="0.32"/><circle cx="41.00" cy="38.97" r="0.32"/><circle cx="42.00" cy="38.97" r="0.32"/><circle cx="1.50" cy="39.84" r="0.32"/><circle cx="2.50" cy="39.84" r="0.32"/><circle cx="3.50" cy="39.84" r="0.32"/><circle cx="4.50" cy="39.84" r="0.32"/><circle cx="5.50" cy="39.84" r="0.32"/><circle cx="6.50" cy="39.84" r="0.32"/><circle cx="7.50" cy="39.84" r="0.32"/><circle cx="8.50" cy="39.84" r="0.32"/><circle cx="9.50" cy="39.84" r="0.32"/><circle cx="10.50" cy="39.84" r="0.32"/><circle cx="11.50" cy="39.84" r="0.32"/><circle cx="12.50" cy="39.84" r="0.32"/><circle cx="13.50" cy="39.84" r="0.32"/><circle cx="14.50" cy="39.84" r="0.32"/><circle cx="28.50" cy="39.84" r="0.32"/><circle cx="29.50" cy="39.84" r="0.32"/><circle cx="30.50" cy="39.84" r="0.32"/><circle cx="31.50" cy="39.84" r="0.32"/><circle cx="32.50" cy="39.84" r="0.32"/><circle cx="33.50" cy="39.84" r="0.32"/><circle cx="34.50" cy="39.84" r="0.32"/><circle cx="35.50" cy="39.84" r="0.32"/><circle cx="36.50" cy="39.84" r="0.32"/><circle cx="37.50" cy="39.84" r="0.32"/><circle cx="38.50" cy="39.84" r="0.32"/><circle cx="39.50" cy="39.84" r="0.32"/><circle cx="40.50" cy="39.84" r="0.32"/><circle cx="41.50" cy="39.84" r="0.32"/><circle cx="42.50" cy="39.84" r="0.32"/><circle cx="2.00" cy="40.70" r="0.32"/><circle cx="3.00" cy="40.70" r="0.32"/><circle cx="4.00" cy="40.70" r="0.32"/><circle cx="5.00" cy="40.70" r="0.32"/><circle cx="6.00" cy="40.70" r="0.32"/><circle cx="7.00" cy="40.70" r="0.32"/><circle cx="8.00" cy="40.70" r="0.32"/><circle cx="9.00" cy="40.70" r="0.32"/><circle cx="10.00" cy="40.70" r="0.32"/><circle cx="11.00" cy="40.70" r="0.32"/><circle cx="12.00" cy="40.70" r="0.32"/><circle cx="13.00" cy="40.70" r="0.32"/><circle cx="14.00" cy="40.70" r="0.32"/><circle cx="15.00" cy="40.70" r="0.32"/><circle cx="29.00" cy="40.70" r="0.32"/><circle cx="30.00" cy="40.70" r="0.32"/><circle cx="31.00" cy="40.70" r="0.32"/><circle cx="32.00" cy="40.70" r="0.32"/><circle cx="33.00" cy="40.70" r="0.32"/><circle cx="34.00" cy="40.70" r="0.32"/><circle cx="35.00" cy="40.70" r="0.32"/><circle cx="36.00" cy="40.70" r="0.32"/><circle cx="37.00" cy="40.70" r="0.32"/><circle cx="38.00" cy="40.70" r="0.32"/><circle cx="39.00" cy="40.70" r="0.32"/><circle cx="40.00" cy="40.70" r="0.32"/><circle cx="41.00" cy="40.70" r="0.32"/><circle cx="42.00" cy="40.70" r="0.32"/><circle cx="2.50" cy="41.57" r="0.32"/><circle cx="3.50" cy="41.57" r="0.32"/><circle cx="4.50" cy="41.57" r="0.32"/><circle cx="5.50" cy="41.57" r="0.32"/><circle cx="6.50" cy="41.57" r="0.32"/><circle cx="7.50" cy="41.57" r="0.32"/><circle cx="8.50" cy="41.57" r="0.32"/><circle cx="9.50" cy="41.57" r="0.32"/><circle cx="10.50" cy="41.57" r="0.32"/><circle cx="11.50" cy="41.57" r="0.32"/><circle cx="12.50" cy="41.57" r="0.32"/><circle cx="13.50" cy="41.57" r="0.32"/><circle cx="14.50" cy="41.57" r="0.32"/><circle cx="15.50" cy="41.57" r="0.32"/><circle cx="29.50" cy="41.57" r="0.32"/><circle cx="30.50" cy="41.57" r="0.32"/><circle cx="31.50" cy="41.57" r="0.32"/><circle cx="32.50" cy="41.57" r="0.32"/><circle cx="33.50" cy="41.57" r="0.32"/><circle cx="34.50" cy="41.57" r="0.32"/><circle cx="35.50" cy="41.57" r="0.32"/><circle cx="36.50" cy="41.57" r="0.32"/><circle cx="37.50" cy="41.57" r="0.32"/><circle cx="38.50" cy="41.57" r="0.32"/><circle cx="39.50" cy="41.57" r="0.32"/><circle cx="40.50" cy="41.57" r="0.32"/><circle cx="41.50" cy="41.57" r="0.32"/><circle cx="3.00" cy="42.44" r="0.32"/><circle cx="4.00" cy="42.44" r="0.32"/><circle cx="5.00" cy="42.44" r="0.32"/><circle cx="6.00" cy="42.44" r="0.32"/><circle cx="7.00" cy="42.44" r="0.32"/><circle cx="8.00" cy="42.44" r="0.32"/><circle cx="9.00" cy="42.44" r="0.32"/><circle cx="10.00" cy="42.44" r="0.32"/><circle cx="11.00" cy="42.44" r="0.32"/><circle cx="12.00" cy="42.44" r="0.32"/><circle cx="13.00" cy="42.44" r="0.32"/><circle cx="14.00" cy="42.44" r="0.32"/><circle cx="15.00" cy="42.44" r="0.32"/><circle cx="16.00" cy="42.44" r="0.32"/><circle cx="31.00" cy="42.44" r="0.32"/><circle cx="32.00" cy="42.44" r="0.32"/><circle cx="33.00" cy="42.44" r="0.32"/><circle cx="34.00" cy="42.44" r="0.32"/><circle cx="35.00" cy="42.44" r="0.32"/><circle cx="36.00" cy="42.44" r="0.32"/><circle cx="37.00" cy="42.44" r="0.32"/><circle cx="38.00" cy="42.44" r="0.32"/><circle cx="39.00" cy="42.44" r="0.32"/><circle cx="40.00" cy="42.44" r="0.32"/><circle cx="41.00" cy="42.44" r="0.32"/><circle cx="2.50" cy="43.30" r="0.32"/><circle cx="3.50" cy="43.30" r="0.32"/><circle cx="4.50" cy="43.30" r="0.32"/><circle cx="5.50" cy="43.30" r="0.32"/><circle cx="6.50" cy="43.30" r="0.32"/><circle cx="7.50" cy="43.30" r="0.32"/><circle cx="8.50" cy="43.30" r="0.32"/><circle cx="9.50" cy="43.30" r="0.32"/><circle cx="10.50" cy="43.30" r="0.32"/><circle cx="11.50" cy="43.30" r="0.32"/><circle cx="12.50" cy="43.30" r="0.32"/><circle cx="13.50" cy="43.30" r="0.32"/><circle cx="14.50" cy="43.30" r="0.32"/><circle cx="15.50" cy="43.30" r="0.32"/><circle cx="31.50" cy="43.30" r="0.32"/><circle cx="32.50" cy="43.30" r="0.32"/><circle cx="33.50" cy="43.30" r="0.32"/><circle cx="34.50" cy="43.30" r="0.32"/><circle cx="35.50" cy="43.30" r="0.32"/><circle cx="36.50" cy="43.30" r="0.32"/><circle cx="37.50" cy="43.30" r="0.32"/><circle cx="38.50" cy="43.30" r="0.32"/><circle cx="39.50" cy="43.30" r="0.32"/><circle cx="40.50" cy="43.30" r="0.32"/><circle cx="3.00" cy="44.17" r="0.32"/><circle cx="4.00" cy="44.17" r="0.32"/><circle cx="5.00" cy="44.17" r="0.32"/><circle cx="6.00" cy="44.17" r="0.32"/><circle cx="7.00" cy="44.17" r="0.32"/><circle cx="8.00" cy="44.17" r="0.32"/><circle cx="9.00" cy="44.17" r="0.32"/><circle cx="10.00" cy="44.17" r="0.32"/><circle cx="11.00" cy="44.17" r="0.32"/><circle cx="12.00" cy="44.17" r="0.32"/><circle cx="13.00" cy="44.17" r="0.32"/><circle cx="14.00" cy="44.17" r="0.32"/><circle cx="15.00" cy="44.17" r="0.32"/><circle cx="16.00" cy="44.17" r="0.32"/><circle cx="32.00" cy="44.17" r="0.32"/><circle cx="33.00" cy="44.17" r="0.32"/><circle cx="34.00" cy="44.17" r="0.32"/><circle cx="35.00" cy="44.17" r="0.32"/><circle cx="36.00" cy="44.17" r="0.32"/><circle cx="37.00" cy="44.17" r="0.32"/><circle cx="38.00" cy="44.17" r="0.32"/><circle cx="39.00" cy="44.17" r="0.32"/><circle cx="40.00" cy="44.17" r="0.32"/><circle cx="3.50" cy="45.03" r="0.32"/><circle cx="4.50" cy="45.03" r="0.32"/><circle cx="5.50" cy="45.03" r="0.32"/><circle cx="6.50" cy="45.03" r="0.32"/><circle cx="7.50" cy="45.03" r="0.32"/><circle cx="8.50" cy="45.03" r="0.32"/><circle cx="9.50" cy="45.03" r="0.32"/><circle cx="10.50" cy="45.03" r="0.32"/><circle cx="11.50" cy="45.03" r="0.32"/><circle cx="12.50" cy="45.03" r="0.32"/><circle cx="13.50" cy="45.03" r="0.32"/><circle cx="14.50" cy="45.03" r="0.32"/><circle cx="15.50" cy="45.03" r="0.32"/><circle cx="16.50" cy="45.03" r="0.32"/><circle cx="33.50" cy="45.03" r="0.32"/><circle cx="34.50" cy="45.03" r="0.32"/><circle cx="35.50" cy="45.03" r="0.32"/><circle cx="36.50" cy="45.03" r="0.32"/><circle cx="37.50" cy="45.03" r="0.32"/><circle cx="38.50" cy="45.03" r="0.32"/><circle cx="39.50" cy="45.03" r="0.32"/><circle cx="4.00" cy="45.90" r="0.32"/><circle cx="5.00" cy="45.90" r="0.32"/><circle cx="6.00" cy="45.90" r="0.32"/><circle cx="7.00" cy="45.90" r="0.32"/><circle cx="8.00" cy="45.90" r="0.32"/><circle cx="9.00" cy="45.90" r="0.32"/><circle cx="10.00" cy="45.90" r="0.32"/><circle cx="11.00" cy="45.90" r="0.32"/><circle cx="12.00" cy="45.90" r="0.32"/><circle cx="13.00" cy="45.90" r="0.32"/><circle cx="14.00" cy="45.90" r="0.32"/><circle cx="15.00" cy="45.90" r="0.32"/><circle cx="16.00" cy="45.90" r="0.32"/><circle cx="17.00" cy="45.90" r="0.32"/><circle cx="34.00" cy="45.90" r="0.32"/><circle cx="35.00" cy="45.90" r="0.32"/><circle cx="36.00" cy="45.90" r="0.32"/><circle cx="37.00" cy="45.90" r="0.32"/><circle cx="38.00" cy="45.90" r="0.32"/><circle cx="39.00" cy="45.90" r="0.32"/><circle cx="40.00" cy="45.90" r="0.32"/><circle cx="4.50" cy="46.77" r="0.32"/><circle cx="5.50" cy="46.77" r="0.32"/><circle cx="6.50" cy="46.77" r="0.32"/><circle cx="7.50" cy="46.77" r="0.32"/><circle cx="8.50" cy="46.77" r="0.32"/><circle cx="9.50" cy="46.77" r="0.32"/><circle cx="10.50" cy="46.77" r="0.32"/><circle cx="11.50" cy="46.77" r="0.32"/><circle cx="12.50" cy="46.77" r="0.32"/><circle cx="13.50" cy="46.77" r="0.32"/><circle cx="14.50" cy="46.77" r="0.32"/><circle cx="15.50" cy="46.77" r="0.32"/><circle cx="16.50" cy="46.77" r="0.32"/><circle cx="35.50" cy="46.77" r="0.32"/><circle cx="36.50" cy="46.77" r="0.32"/><circle cx="37.50" cy="46.77" r="0.32"/><circle cx="38.50" cy="46.77" r="0.32"/><circle cx="39.50" cy="46.77" r="0.32"/><circle cx="6.00" cy="47.63" r="0.32"/><circle cx="7.00" cy="47.63" r="0.32"/><circle cx="8.00" cy="47.63" r="0.32"/><circle cx="9.00" cy="47.63" r="0.32"/><circle cx="10.00" cy="47.63" r="0.32"/><circle cx="11.00" cy="47.63" r="0.32"/><circle cx="12.00" cy="47.63" r="0.32"/><circle cx="13.00" cy="47.63" r="0.32"/><circle cx="14.00" cy="47.63" r="0.32"/><circle cx="15.00" cy="47.63" r="0.32"/><circle cx="36.00" cy="47.63" r="0.32"/><circle cx="37.00" cy="47.63" r="0.32"/><circle cx="38.00" cy="47.63" r="0.32"/><circle cx="39.00" cy="47.63" r="0.32"/><circle cx="8.50" cy="48.50" r="0.32"/><circle cx="9.50" cy="48.50" r="0.32"/><circle cx="10.50" cy="48.50" r="0.32"/><circle cx="11.50" cy="48.50" r="0.32"/><circle cx="12.50" cy="48.50" r="0.32"/><circle cx="13.50" cy="48.50" r="0.32"/><circle cx="37.50" cy="48.50" r="0.32"/><circle cx="38.50" cy="48.50" r="0.32"/><circle cx="11.00" cy="49.36" r="0.32"/><circle cx="38.00" cy="49.36" r="0.32"/></g><g class="dk-routes" aria-hidden="true"><path class="dk-route" d="M 17.5 12.12 Q 19.00 7.67 20.5 27.71"/><path class="dk-route" d="M 20.5 27.71 Q 11.75 21.88 3 38.97"/><path class="dk-route" d="M 3 38.97 Q 12.75 33.50 22.5 39.84"/><path class="dk-route" d="M 22.5 39.84 Q 32.75 29.64 43 35.51"/><path class="dk-route" d="M 20.5 27.71 Q 31.75 21.04 43 35.51"/><path class="dk-flow" pathLength="1" d="M 17.5 12.12 Q 19.00 7.67 20.5 27.71" style="animation-delay:0.00s"/><path class="dk-flow" pathLength="1" d="M 20.5 27.71 Q 11.75 21.88 3 38.97" style="animation-delay:0.55s"/><path class="dk-flow" pathLength="1" d="M 3 38.97 Q 12.75 33.50 22.5 39.84" style="animation-delay:1.10s"/><path class="dk-flow" pathLength="1" d="M 22.5 39.84 Q 32.75 29.64 43 35.51" style="animation-delay:1.65s"/><path class="dk-flow" pathLength="1" d="M 20.5 27.71 Q 31.75 21.04 43 35.51" style="animation-delay:2.20s"/></g><g class="dk-cities"><g><circle class="map-pulse" cx="17.5" cy="12.12" r="0.85" fill="#E11D2A"/><circle cx="17.5" cy="12.12" r="0.85" fill="#E11D2A" stroke="#ffffff" stroke-width="0.2"/><text class="dk-city-label" x="19.1" y="11.2" text-anchor="start">Aalborg</text></g><g><circle class="map-pulse" cx="20.5" cy="27.71" r="0.85" fill="#E11D2A"/><circle cx="20.5" cy="27.71" r="0.85" fill="#E11D2A" stroke="#ffffff" stroke-width="0.2"/><text class="dk-city-label" x="22" y="26.7" text-anchor="start">Aarhus</text></g><g><circle class="map-pulse" cx="3" cy="38.97" r="0.85" fill="#E11D2A"/><circle cx="3" cy="38.97" r="0.85" fill="#E11D2A" stroke="#ffffff" stroke-width="0.2"/><text class="dk-city-label" x="1.6" y="39.3" text-anchor="end">Esbjerg</text></g><g><circle class="map-pulse" cx="22.5" cy="39.84" r="0.85" fill="#E11D2A"/><circle cx="22.5" cy="39.84" r="0.85" fill="#E11D2A" stroke="#ffffff" stroke-width="0.2"/><text class="dk-city-label" x="24" y="41.8" text-anchor="start">Odense</text></g><g><circle class="map-pulse" cx="43" cy="35.51" r="0.85" fill="#E11D2A"/><circle cx="43" cy="35.51" r="0.85" fill="#E11D2A" stroke="#ffffff" stroke-width="0.2"/><text class="dk-city-label" x="41.2" y="34.6" text-anchor="end">København</text></g></g></svg>
             <p class="text-center text-sm text-ink/55 mt-2">Gratis afhentning i alle postnumre</p>
           </div>
         </div>
@@ -773,7 +758,7 @@
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Personbil -->
         <div class="reveal relative overflow-hidden rounded-3xl shadow-softlg group">
-          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80" alt="Personbil" class="zoom-img w-full h-72 object-cover" />
+          <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80" alt="Personbil" loading="lazy" decoding="async" class="zoom-img w-full h-72 object-cover" />
           <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent"></div>
           <div class="absolute bottom-0 left-0 p-7">
             <h3 class="text-2xl font-extrabold text-white">Sælg din personbil</h3>
@@ -787,7 +772,7 @@
 
         <!-- Varebil -->
         <div class="reveal relative overflow-hidden rounded-3xl shadow-softlg group" style="transition-delay:90ms">
-          <img src="https://images.unsplash.com/photo-1597766353939-3f5fd8c34d3c?auto=format&fit=crop&w=900&q=80" alt="Varebil" class="zoom-img w-full h-72 object-cover" />
+          <img src="https://images.unsplash.com/photo-1597766353939-3f5fd8c34d3c?auto=format&fit=crop&w=900&q=80" alt="Varebil" loading="lazy" decoding="async" class="zoom-img w-full h-72 object-cover" />
           <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent"></div>
           <div class="absolute bottom-0 left-0 p-7">
             <h3 class="text-2xl font-extrabold text-white">Sælg din varebil</h3>
@@ -817,25 +802,25 @@
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Medlem 1 -->
         <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft">
-          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="Thomas Lund" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="Thomas Lund" loading="lazy" decoding="async" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
           <p class="font-bold text-ink">Thomas Lund</p>
           <p class="text-sm text-brand font-semibold">Salg</p>
         </div>
         <!-- Medlem 2 -->
         <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft" style="transition-delay:80ms">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="Sofie Hansen" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="Sofie Hansen" loading="lazy" decoding="async" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
           <p class="font-bold text-ink">Sofie Hansen</p>
           <p class="text-sm text-trust font-semibold">Support</p>
         </div>
         <!-- Medlem 3 -->
         <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft" style="transition-delay:160ms">
-          <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=400&q=80" alt="Mikkel Berg" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=400&q=80" alt="Mikkel Berg" loading="lazy" decoding="async" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
           <p class="font-bold text-ink">Mikkel Berg</p>
           <p class="text-sm text-brand font-semibold">Eksport</p>
         </div>
         <!-- Medlem 4 -->
         <div class="reveal text-center bg-white rounded-2xl p-6 shadow-soft" style="transition-delay:240ms">
-          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="Anne Pedersen" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="Anne Pedersen" loading="lazy" decoding="async" class="w-24 h-24 rounded-full object-cover mx-auto mb-4 ring-4 ring-offwhite" />
           <p class="font-bold text-ink">Anne Pedersen</p>
           <p class="text-sm text-trust font-semibold">Vurdering</p>
         </div>
@@ -923,7 +908,7 @@
             <span class="plate__stars">★★★<br>★★</span>
             <span class="plate__dk">DK</span>
           </div>
-          <input type="text" name="nummerplade" class="plate__input" placeholder="AB 12 345" maxlength="8" autocomplete="off" aria-label="Nummerplade" required />
+          <input type="text" name="nummerplade" class="plate__input" placeholder="AB 12 345" maxlength="7" autocomplete="off" aria-label="Nummerplade" required />
         </div>
         <div class="grid sm:grid-cols-3 gap-3">
           <input type="text" name="navn" placeholder="Dit navn" class="rounded-xl bg-white/95 px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-brand" />
@@ -1021,13 +1006,13 @@
   <!-- ============================================================ -->
   <!-- TAK-MODAL (vises efter formular-submit)                      -->
   <!-- ============================================================ -->
-  <div id="thanks-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+  <div id="thanks-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="thanks-title" aria-hidden="true">
     <div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" data-close></div>
     <div class="relative bg-white rounded-3xl shadow-softlg max-w-md w-full p-8 text-center">
       <div class="w-16 h-16 rounded-full bg-tp/10 flex items-center justify-center mx-auto mb-5">
         <svg class="w-8 h-8 text-tp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
-      <h3 class="text-2xl font-extrabold text-ink">Tak for din henvendelse</h3>
+      <h3 id="thanks-title" class="text-2xl font-extrabold text-ink">Tak for din henvendelse</h3>
       <p class="mt-3 text-ink/70">Vi har modtaget din nummerplade <strong id="thanks-plate" class="text-ink"></strong> og vender tilbage med dit uforpligtende tilbud inden for få timer.</p>
       <button data-close class="btn-cta mt-6 bg-brand text-white font-bold rounded-xl px-6 py-3.5 w-full shadow-soft">Luk</button>
     </div>
@@ -1126,19 +1111,41 @@
     const modal = document.getElementById('thanks-modal');
     const thanksPlate = document.getElementById('thanks-plate');
 
+    let lastFocused = null;
+
     function openModal(plate) {
       thanksPlate.textContent = plate;
+      lastFocused = document.activeElement;
       modal.classList.remove('hidden');
       modal.classList.add('flex');
+      modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      // Flyt fokus ind i modalen
+      const closeBtn = modal.querySelector('button[data-close]');
+      if (closeBtn) closeBtn.focus();
     }
     function closeModal() {
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+      modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      // Giv fokus tilbage til det element der åbnede modalen
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
     }
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (modal.classList.contains('hidden')) return;
+      if (e.key === 'Escape') { closeModal(); return; }
+      // Simpel fokus-fælde: hold Tab inde i modalen
+      if (e.key === 'Tab') {
+        const focusables = modal.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])');
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
 
     document.querySelectorAll('.lead-form').forEach((form) => {
       form.addEventListener('submit', (e) => {
@@ -1179,17 +1186,33 @@
       });
     });
 
-    /* ---------- 5. FAQ accordion ---------- */
-    document.querySelectorAll('.faq-trigger').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const item = btn.closest('.faq-item');
-        const isOpen = item.classList.contains('open');
-        // Luk alle
-        document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
-        // Åbn den klikkede hvis den var lukket
-        if (!isOpen) item.classList.add('open');
+    /* ---------- 5. FAQ accordion (med ARIA) ---------- */
+    (function faqAccordion() {
+      const items = document.querySelectorAll('.faq-item');
+      items.forEach((item, i) => {
+        const btn = item.querySelector('.faq-trigger');
+        const panel = item.querySelector('.faq-panel');
+        const panelId = 'faq-panel-' + (i + 1);
+        panel.id = panelId;
+        panel.setAttribute('role', 'region');
+        btn.setAttribute('aria-controls', panelId);
+        btn.setAttribute('aria-expanded', 'false');
+
+        btn.addEventListener('click', () => {
+          const willOpen = !item.classList.contains('open');
+          // Luk alle
+          items.forEach((other) => {
+            other.classList.remove('open');
+            other.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+          });
+          // Åbn den klikkede hvis den var lukket
+          if (willOpen) {
+            item.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
       });
-    });
+    })();
 
     /* ---------- 6. Videoanmeldelser: klik (placeholder for rigtig player) ---------- */
     // SWAP: kobl rigtige videoer på her (fx lightbox/embed)
