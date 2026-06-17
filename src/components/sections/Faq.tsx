@@ -29,10 +29,10 @@ export function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="bg-white py-16 sm:py-24">
+    <section className="bg-[#0d0d10] py-16 sm:py-24">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mb-12 text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
             Ofte stillede spørgsmål
           </h2>
         </div>
@@ -44,7 +44,7 @@ export function Faq() {
               <div
                 key={i}
                 className={cn(
-                  "faq-item reveal overflow-hidden rounded-2xl bg-offwhite",
+                  "faq-item reveal overflow-hidden rounded-2xl bg-white/5 border border-white/10",
                   isOpen && "open",
                 )}
                 style={{ transitionDelay: `${i * 60}ms` }}
@@ -55,7 +55,7 @@ export function Faq() {
                   aria-controls={`faq-panel-${i + 1}`}
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                 >
-                  <span className="font-bold text-ink">{faq.q}</span>
+                  <span className="font-bold text-white">{faq.q}</span>
                   <Plus
                     className="faq-icon h-5 w-5 shrink-0 text-brand"
                     strokeWidth={2.2}
@@ -66,7 +66,7 @@ export function Faq() {
                   className="faq-panel"
                   role="region"
                 >
-                  <p className="px-6 pb-5 text-sm leading-relaxed text-ink/70">
+                  <p className="px-6 pb-5 text-sm leading-relaxed text-white/70">
                     {faq.a}
                   </p>
                 </div>

@@ -2,11 +2,11 @@ import { ArrowRight } from "lucide-react";
 
 export function CarTypes() {
   return (
-    <section className="py-16 sm:py-24 bg-white">
+    <section className="py-16 sm:py-24 bg-[#0d0d10]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="reveal max-w-2xl mx-auto text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Vi køber både person- og varebiler</h2>
-          <p className="mt-4 text-ink/70">Uanset om du sælger familiens bil eller firmaets transporter, giver vi et konkurrencedygtigt tilbud.</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">Vi køber både person- og varebiler</h2>
+          <p className="mt-4 text-white/70">Uanset om du sælger familiens bil eller firmaets transporter, giver vi et konkurrencedygtigt tilbud.</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
