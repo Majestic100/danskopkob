@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 6% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 6% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 5%;
+    --primary: 354 79% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 6% 10%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 6% 10%;
+    --destructive: 354 79% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 226 71% 48%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-ink antialiased;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  }
+
+  /* Sticky-header offset, så anker-links ikke gemmer overskriften */
+  #top,
+  #anmeldelser,
+  #tilbud {
+    scroll-margin-top: 96px;
+  }
+
+  /* Tydeligt tastatur-fokus (tilgængelighed) */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+}
+
+@layer components {
+  /* ---- Scroll-reveal ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- Dansk nummerplade-styling ---- */
+  .plate {
+    display: flex;
+    align-items: stretch;
+    border: 2px solid #0b0b0c;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 6px 18px -8px rgba(11, 11, 12, 0.35);
+  }
+  .plate__eu {
+    background: #003399;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    min-width: 42px;
+  }
+  .plate__stars {
+    font-size: 9px;
+    line-height: 1;
+    color: #ffcc00;
+    letter-spacing: 1px;
+  }
+  .plate__dk {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .plate__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: #fff;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0 16px;
+    color: #0b0b0c;
+  }
+  .plate__input::placeholder {
+    color: #c7c7cc;
+    letter-spacing: 3px;
+  }
+  .plate.is-invalid {
+    border-color: #e11d2a;
+  }
+
+  /* ---- FAQ accordion ---- */
+  .faq-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .faq-item.open .faq-panel {
+    max-height: 500px;
+  }
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+  }
+  .faq-icon {
+    transition: transform 0.3s ease;
+  }
+
+  /* ---- Hover-zoom på galleri ---- */
+  .zoom-img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .zoom-wrap:hover .zoom-img {
+    transform: scale(1.07);
+  }
+
+  /* ---- Subtil knap-hover ---- */
+  .btn-cta {
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease;
+  }
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px -10px rgba(225, 29, 42, 0.55);
+  }
+
+  /* ---- Map-prikker puls ---- */
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    70% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .map-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulse-dot 2.4s ease-out infinite;
+  }
+
+  /* ---- Prikkort over Danmark: ruter + flydende forbindelser ---- */
+  .dk-dots {
+    opacity: 0.4;
+  }
+  .dk-route {
+    fill: none;
+    stroke: #e11d2a;
+    stroke-opacity: 0.3;
+    stroke-width: 0.25;
+    stroke-linecap: round;
+  }
+  .dk-flow {
+    fill: none;
+    stroke: #e11d2a;
+    stroke-width: 0.55;
+    stroke-linecap: round;
+    stroke-dasharray: 0.18 0.82;
+    stroke-dashoffset: 1;
+    animation: dk-flow 3.4s linear infinite;
+  }
+  @keyframes dk-flow {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .dk-city-label {
+    font-size: 1.9px;
+    font-weight: 700;
+    fill: #0b0b0c;
+    paint-order: stroke;
+    stroke: #ffffff;
+    stroke-width: 0.7px;
+    stroke-linejoin: round;
+  }
+
+}
+
+/* ---- Reduceret bevægelse ---- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  .map-pulse {
+    animation: none;
+  }
+  .dk-flow {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    stroke-opacity: 0.5;
+  }
+}
