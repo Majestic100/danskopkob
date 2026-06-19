@@ -10,7 +10,7 @@ import { VideoReviews } from "@/components/sections/VideoReviews";
 import { Gallery } from "@/components/sections/Gallery";
 import { Coverage } from "@/components/sections/Coverage";
 import { CarTypes } from "@/components/sections/CarTypes";
-import { Team } from "@/components/sections/Team";
+import { SupportTeam } from "@/components/sections/SupportTeam";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
@@ -58,7 +58,7 @@ export default function App() {
         <Gallery />
         <Coverage />
         <CarTypes />
-        <Team />
+        <SupportTeam />
         <Faq />
         <FinalCta onLeadSuccess={setThanksPlate} />
       </main>
