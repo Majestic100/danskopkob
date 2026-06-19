@@ -1,8 +1,21 @@
+import { Fragment } from "react";
 import { Banknote } from "lucide-react";
 import { DanishFlag, TrustStars } from "@/components/icons";
 import { Counter } from "@/components/Counter";
 import { LeadForm } from "@/components/LeadForm";
 import { Logos3 } from "@/components/ui/logos3";
+
+const HEADLINE: { text: string; shimmer?: boolean; suffix?: string }[] = [
+  { text: "Sælg" },
+  { text: "din" },
+  { text: "bil" },
+  { text: "og" },
+  { text: "tjen mere", shimmer: true, suffix: "," },
+  { text: "fordi" },
+  { text: "vi" },
+  { text: "eksporterer" },
+  { text: "den" },
+];
 
 export function Hero({
   onLeadSuccess,
@@ -36,9 +49,23 @@ export function Hero({
             </div>
 
             <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Sælg din bil og{" "}
-              <span className="text-shimmer whitespace-nowrap">tjen mere</span>,
-              fordi vi eksporterer den
+              {HEADLINE.map((w, i) => (
+                <Fragment key={i}>
+                  <span
+                    className="hero-word"
+                    style={{ animationDelay: `${0.15 + i * 0.08}s` }}
+                  >
+                    {w.shimmer ? (
+                      <span className="text-shimmer whitespace-nowrap">
+                        {w.text}
+                      </span>
+                    ) : (
+                      w.text
+                    )}
+                    {w.suffix}
+                  </span>{" "}
+                </Fragment>
+              ))}
             </h1>
             <p className="mt-5 max-w-lg text-lg text-white/75">
               Vi køber din brugte bil og sender den ud af landet. Derfor kan vi

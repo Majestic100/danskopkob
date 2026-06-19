@@ -265,6 +265,24 @@
   .float-y-slow {
     animation: float-y 6.5s ease-in-out infinite;
   }
+  /* Ord-for-ord entré på hero-overskriften (blur + slide-up, forskudt) */
+  @keyframes word-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5em);
+      filter: blur(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+  .hero-word {
+    display: inline-block;
+    opacity: 0;
+    animation: word-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 }
 
 /* ---- Reduceret bevægelse ---- */
@@ -292,5 +310,11 @@
   .float-y,
   .float-y-slow {
     animation: none;
+  }
+  .hero-word {
+    opacity: 1;
+    animation: none;
+    transform: none;
+    filter: none;
   }
 }
