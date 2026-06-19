@@ -52,32 +52,43 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
     setEmail("");
   };
 
-  const plateField = (
-    <div className={cn("plate", variant === "hero" && "flex-1", invalid && "is-invalid")}>
-      <div className="plate__eu">
-        <span className="plate__stars">
-          ★★★
-          <br />
-          ★★
-        </span>
-        <span className="plate__dk">DK</span>
-      </div>
-      <input
-        type="text"
-        name="nummerplade"
-        className="plate__input"
-        placeholder="AB 12 345"
-        maxLength={7}
-        autoComplete="off"
-        aria-label="Nummerplade"
-        value={plate}
-        onChange={(e) => {
-          setPlate(formatPlate(e.target.value));
-          setInvalid(false);
-        }}
-        required
-      />
+  // EU-badge: blå plade med kreds af gule EU-stjerner + DK
+  const euBadge = (
+    <div className="plate__eu">
+      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true">
+        {Array.from({ length: 12 }).map((_, i) => {
+          const angle = (i / 12) * 2 * Math.PI - Math.PI / 2;
+          return (
+            <circle
+              key={i}
+              cx={12 + 7 * Math.cos(angle)}
+              cy={12 + 7 * Math.sin(angle)}
+              r={1.1}
+              fill="#FFCC00"
+            />
+          );
+        })}
+      </svg>
+      <span className="plate__dk">DK</span>
     </div>
+  );
+
+  const plateInput = (
+    <input
+      type="text"
+      name="nummerplade"
+      className="plate__input"
+      placeholder="AB 12 345"
+      maxLength={7}
+      autoComplete="off"
+      aria-label="Nummerplade"
+      value={plate}
+      onChange={(e) => {
+        setPlate(formatPlate(e.target.value));
+        setInvalid(false);
+      }}
+      required
+    />
   );
 
   if (variant === "hero") {
@@ -86,26 +97,22 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
         <label className="mb-2 block text-sm font-semibold text-ink">
           Indtast din nummerplade
         </label>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          {plateField}
-          <button
-            type="submit"
-            className="btn-cta whitespace-nowrap rounded-xl bg-brand px-6 py-4 font-bold text-white shadow-soft"
-          >
-            Få mit tilbud
+        {/* Integreret felt: EU-badge + input + knap i én rød-rammet pille */}
+        <div className={cn("plate", invalid && "is-invalid")}>
+          {euBadge}
+          {plateInput}
+          <button type="submit" className="plate__btn">
+            Få tilbud
           </button>
         </div>
-        {error && (
-          <p className="mt-2 text-sm font-medium text-brand">{error}</p>
-        )}
+        {error && <p className="mt-2 text-sm font-medium text-brand">{error}</p>}
         <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/70">
           <li className="flex items-center gap-2">
             <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Gratis
             afhentning
           </li>
           <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-tp" strokeWidth={2.5} />{" "}
-            Uforpligtende
+            <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Uforpligtende
           </li>
           <li className="flex items-center gap-2">
             <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Svar inden
@@ -122,7 +129,12 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
       noValidate
       onSubmit={handleSubmit}
     >
-      <div className="mb-3">{plateField}</div>
+      <div className="mb-3">
+        <div className={cn("plate", invalid && "is-invalid")}>
+          {euBadge}
+          {plateInput}
+        </div>
+      </div>
       <div className="grid gap-3 sm:grid-cols-3">
         <input
           type="text"
