@@ -317,4 +317,9 @@
     transform: none;
     filter: none;
   }
+  .animate-ping,
+  .animate-pulse,
+  .animate-bounce {
+    animation: none !important;
+  }
 }
