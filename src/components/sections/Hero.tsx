@@ -3,7 +3,6 @@ import { Banknote } from "lucide-react";
 import { DanishFlag, TrustStars } from "@/components/icons";
 import { Counter } from "@/components/Counter";
 import { LeadForm } from "@/components/LeadForm";
-import { Logos3 } from "@/components/ui/logos3";
 
 const HEADLINE: { text: string; shimmer?: boolean; suffix?: string }[] = [
   { text: "Sælg" },
@@ -108,13 +107,6 @@ export function Hero({
           </div>
         </div>
       </section>
-
-      {/* Logo-marquee: bilmærker vi opkøber (lys stribe under hero'en) */}
-      <div className="border-b border-black/5 bg-offwhite py-8">
-        <div className="reveal mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Logos3 />
-        </div>
-      </div>
     </>
   );
 }
