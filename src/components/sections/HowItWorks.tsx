@@ -75,7 +75,7 @@ const STEPS: Step[] = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-white py-16 sm:py-24">
+    <section id="saadan-virker-det" className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mx-auto mb-4 max-w-2xl text-center">
           <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-brand">

@@ -6,7 +6,7 @@ const CITIES = ["København", "Aarhus", "Odense", "Aalborg", "Esbjerg"];
 
 export function Coverage() {
   return (
-    <section className="bg-offwhite py-16 sm:py-24">
+    <section id="daekning" className="bg-offwhite py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Tekst */}

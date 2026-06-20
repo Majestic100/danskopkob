@@ -41,8 +41,7 @@
 
   /* Sticky-header offset, så anker-links ikke gemmer overskriften */
   #top,
-  #anmeldelser,
-  #tilbud {
+  section[id] {
     scroll-margin-top: 96px;
   }
 
