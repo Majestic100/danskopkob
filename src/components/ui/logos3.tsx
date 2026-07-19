@@ -22,47 +22,37 @@ interface Logos3Props {
   dark?: boolean;
 }
 
-// Viser mærkets uploadede logo (public/logos/…) hvis `logo` er sat — ellers
-// vises mærkets navn som tekst (så striben aldrig ser brudt ud).
-function BrandLogo({ brand, dark }: { brand: Brand; dark?: boolean }) {
-  const [loaded, setLoaded] = useState(false);
-  const label = (
-    <span
-      className={cn(
-        "whitespace-nowrap px-2 text-lg font-bold tracking-wide transition-colors lg:text-xl",
-        dark ? "text-white/40 hover:text-white" : "text-ink/40 hover:text-ink",
-      )}
-    >
-      {brand.name}
-    </span>
-  );
-
-  if (!brand.logo) return label;
+// Hvert mærke vises som en hvid "chip". Er der uploadet en logo-fil
+// (public/logos/…), vises logoet i sine naturlige farver — ellers vises
+// mærkets navn som tekst. Falder logoet fra (404), skiftes automatisk til
+// navnet, så striben aldrig ser brudt ud.
+function BrandLogo({ brand }: { brand: Brand }) {
+  const [failed, setFailed] = useState(false);
+  const showImg = Boolean(brand.logo) && !failed;
 
   return (
-    <>
-      <img
-        src={`${import.meta.env.BASE_URL}${brand.logo}`}
-        alt={brand.name}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={cn(
-          "h-7 w-auto object-contain transition lg:h-8",
-          loaded ? "block" : "hidden",
-          dark
-            ? "opacity-80 brightness-0 invert hover:opacity-100"
-            : "opacity-70 grayscale hover:opacity-100 hover:grayscale-0",
-        )}
-      />
-      {!loaded && label}
-    </>
+    <div className="flex h-14 min-w-[8.5rem] items-center justify-center rounded-xl bg-white px-6 shadow-sm ring-1 ring-black/5 transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md">
+      {showImg ? (
+        <img
+          src={`${import.meta.env.BASE_URL}${brand.logo}`}
+          alt={brand.name}
+          loading="lazy"
+          decoding="async"
+          onError={() => setFailed(true)}
+          className="h-8 w-auto max-w-[7rem] object-contain"
+        />
+      ) : (
+        <span className="whitespace-nowrap text-base font-bold tracking-wide text-ink/70">
+          {brand.name}
+        </span>
+      )}
+    </div>
   );
 }
 
 // Tilpasset shadcn-blokken "Logos3": i stedet for tech-logoer viser vi de
 // bilmærker vi opkøber. Beholder Carousel + embla AutoScroll-mekanikken.
-// `dark` skifter farver, så den kan ligge på mørk baggrund.
+// `dark` skifter tekst-/fade-farver, så den kan ligge på mørk baggrund.
 const Logos3 = ({
   heading = "Vi køber alle bilmærker — uanset model, årgang og stand",
   dark = false,
@@ -110,9 +100,9 @@ const Logos3 = ({
             {brands.map((brand) => (
               <CarouselItem
                 key={brand.id}
-                className="flex basis-1/3 items-center justify-center pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
+                className="flex basis-1/2 items-center justify-center py-2 pl-0 pr-3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
               >
-                <BrandLogo brand={brand} dark={dark} />
+                <BrandLogo brand={brand} />
               </CarouselItem>
             ))}
           </CarouselContent>
