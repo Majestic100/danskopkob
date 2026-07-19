@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import AutoScroll from "embla-carousel-auto-scroll";
 
 import {
@@ -18,6 +19,42 @@ interface Logos3Props {
   heading?: string;
   brands?: Brand[];
   dark?: boolean;
+}
+
+// Viser mærkets logo hvis filen findes i public/logos/<id>.svg — ellers
+// vises mærkets navn som tekst-fallback (så striben aldrig ser brudt ud).
+function BrandLogo({ brand, dark }: { brand: Brand; dark?: boolean }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <>
+      <img
+        src={`${import.meta.env.BASE_URL}logos/${brand.id}.svg`}
+        alt={brand.name}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        className={cn(
+          "h-7 w-auto object-contain transition lg:h-8",
+          loaded ? "block" : "hidden",
+          dark
+            ? "opacity-70 brightness-0 invert hover:opacity-100"
+            : "opacity-60 grayscale hover:opacity-100 hover:grayscale-0",
+        )}
+      />
+      {!loaded && (
+        <span
+          className={cn(
+            "whitespace-nowrap px-2 text-lg font-bold tracking-wide transition-colors lg:text-xl",
+            dark
+              ? "text-white/40 hover:text-white"
+              : "text-ink/40 hover:text-ink",
+          )}
+        >
+          {brand.name}
+        </span>
+      )}
+    </>
+  );
 }
 
 // Tilpasset shadcn-blokken "Logos3": i stedet for tech-logoer viser vi de
@@ -70,18 +107,9 @@ const Logos3 = ({
             {brands.map((brand) => (
               <CarouselItem
                 key={brand.id}
-                className="flex basis-1/3 justify-center pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
+                className="flex basis-1/3 items-center justify-center pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
               >
-                <span
-                  className={cn(
-                    "whitespace-nowrap px-2 text-lg font-bold tracking-wide transition-colors lg:text-xl",
-                    dark
-                      ? "text-white/40 hover:text-white"
-                      : "text-ink/40 hover:text-ink",
-                  )}
-                >
-                  {brand.name}
-                </span>
+                <BrandLogo brand={brand} dark={dark} />
               </CarouselItem>
             ))}
           </CarouselContent>
