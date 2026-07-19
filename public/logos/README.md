@@ -12,10 +12,14 @@ opel.svg      tesla.svg
 ```
 
 Så snart en fil ligger her, viser mærke-striben automatisk logoet i stedet for
-navnet. Mangler filen, vises mærkets navn som tekst (så striben aldrig ser
-brudt ud).
+navnet. Mangler filen — eller kan den ikke hentes — vises mærkets navn som
+tekst (så striben aldrig ser brudt ud).
 
-På det mørke trust-band vises logoerne som ensfarvet hvid (monokrom) for et
-ensartet, professionelt look — så en-farvede SVG'er fungerer bedst.
+Hvert mærke vises som en hvid "chip", og logoet vises i sine **naturlige
+farver** (klassisk logo-cloud). Derfor fungerer et logo med transparent
+baggrund bedst — gerne SVG (skarpt i alle størrelser) eller PNG/WebP med
+transparent baggrund.
 
-Filerne serveres fra `/<base>/logos/<navn>.svg` (base = `/danskopkob/`).
+Filerne serveres fra `/<base>/logos/<filnavn>` (base = `/danskopkob/`).
+Navnet behøver ikke matche mærkets `id` — stien sættes eksplicit på hvert
+mærke via feltet `logo:` i `src/components/ui/logos3.tsx`.
