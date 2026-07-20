@@ -97,36 +97,39 @@ export function Gallery() {
               className="reveal group flex flex-col rounded-2xl bg-white p-6 shadow-soft ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-softlg"
               style={{ transitionDelay: `${(i % 3) * 70}ms` }}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex h-12 w-16 items-center justify-center rounded-xl bg-offwhite ring-1 ring-black/5">
-                  <img
-                    src={`${BASE}${car.logo}`}
-                    alt={car.brand}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-7 w-auto max-w-[3rem] object-contain"
-                  />
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs text-ink/50">Udbetalt samme dag</p>
+                  <p className="text-2xl font-extrabold leading-tight text-ink">
+                    {car.price}
+                  </p>
                 </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-tp/10 px-3 py-1 text-xs font-bold text-tp">
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-tp/10 px-3 py-1 text-xs font-bold text-tp">
                   <BadgeCheck className="h-3.5 w-3.5" />
                   Købt {car.when}
                 </span>
               </div>
 
-              <h3 className="mt-4 text-lg font-extrabold tracking-tight text-ink">
-                {car.brand} {car.model}
-              </h3>
+              <div className="mt-4 flex items-center gap-2.5">
+                <img
+                  src={`${BASE}${car.logo}`}
+                  alt={car.brand}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-6 w-auto max-w-[2.25rem] object-contain"
+                />
+                <h3 className="text-lg font-extrabold tracking-tight text-ink">
+                  {car.brand} {car.model}
+                </h3>
+              </div>
               <p className="mt-0.5 text-sm text-ink/55">{car.meta}</p>
 
-              <div className="mt-5 flex items-end justify-between border-t border-black/5 pt-4">
-                <div>
-                  <p className="text-xs text-ink/50">Udbetalt samme dag</p>
-                  <p className="text-xl font-extrabold leading-tight text-ink">
-                    {car.price}
-                  </p>
-                </div>
+              <div className="mt-5 flex items-center justify-between border-t border-black/5 pt-4">
                 <span className="inline-flex items-center gap-1 text-sm text-ink/55">
                   <MapPin className="h-4 w-4" /> {car.city}
+                </span>
+                <span className="text-xs text-ink/45">
+                  Gratis afhentet på adressen
                 </span>
               </div>
             </article>
