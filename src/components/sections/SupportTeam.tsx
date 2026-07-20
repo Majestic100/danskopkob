@@ -107,7 +107,7 @@ export function SupportTeam() {
                   <span className="h-2 w-2 animate-pulse rounded-full bg-tp" />
                   Indgående opkald
                 </span>
-                <span className="text-white/40">BilEksport Danmark</span>
+                <span className="text-white/40">MinBilPris</span>
               </div>
 
               <div className="mt-8 flex flex-col items-center text-center">

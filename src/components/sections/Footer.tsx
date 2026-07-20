@@ -10,7 +10,7 @@ export function Footer() {
           {/* Logo + kontakt */}
           <div className="lg:col-span-2">
             {/* SWAP: rigtigt logo */}
-            <span className="text-2xl font-extrabold tracking-tight">Bil<span className="text-brand">Eksport</span></span>
+            <span className="text-2xl font-extrabold tracking-tight">MinBil<span className="text-brand">Pris</span></span>
             <p className="mt-4 text-white/60 text-sm max-w-xs">Vi opkøber og eksporterer brugte biler i hele Danmark og betaler dig mere end det danske marked.</p>
 
             <div className="mt-6 space-y-2 text-sm">
@@ -20,9 +20,9 @@ export function Footer() {
                 <Phone className="w-4 h-4" />
                 70 60 50 40
               </a>
-              <a href="mailto:kontakt@bileksport.dk" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+              <a href="mailto:kontakt@minbilpris.dk" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
                 <Mail className="w-4 h-4" />
-                kontakt@bileksport.dk
+                kontakt@minbilpris.dk
               </a>
             </div>
 
@@ -68,7 +68,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-white/50">© 2026 BilEksport Danmark. Alle rettigheder forbeholdes.</p>
+          <p className="text-sm text-white/50">© 2026 MinBilPris. Alle rettigheder forbeholdes.</p>
           <div className="flex items-center gap-2">
             <DanishFlag className="w-6 h-4 rounded-sm" />
             <span className="text-sm text-white/50">Dansk virksomhed</span>

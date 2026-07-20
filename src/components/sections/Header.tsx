@@ -19,7 +19,7 @@ export function Header() {
           {/* Logo */}
           <a href="#top" className="flex select-none items-center gap-2">
             <span className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
-              Bil<span className="text-brand">Eksport</span>
+              MinBil<span className="text-brand">Pris</span>
             </span>
             <span className="hidden rounded-full border border-trust/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-trust sm:inline-block">
               Danmark
