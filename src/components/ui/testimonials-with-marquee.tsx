@@ -29,7 +29,7 @@ function MarqueeRow({
 }) {
   return (
     <div
-      className="group flex flex-row overflow-hidden py-2 [--gap:1.25rem] [gap:var(--gap)]"
+      className="flex flex-row overflow-hidden py-2 [--gap:1.25rem] [gap:var(--gap)]"
       style={{ "--duration": duration } as CSSProperties}
     >
       {[0, 1].map((half) => (
@@ -37,7 +37,7 @@ function MarqueeRow({
           key={half}
           aria-hidden={half === 1}
           className={cn(
-            "flex shrink-0 flex-row justify-around [gap:var(--gap)] animate-marquee group-hover:[animation-play-state:paused]",
+            "flex shrink-0 flex-row justify-around [gap:var(--gap)] animate-marquee",
             reverse && "[animation-direction:reverse]",
           )}
         >
@@ -53,8 +53,8 @@ function MarqueeRow({
 }
 
 // Tilpasset "testimonials-with-marquee": to bånd, der ruller hver sin vej,
-// på en blød gradient-baggrund med farve-glød. Pause på hover; står stille
-// ved prefers-reduced-motion.
+// på en blød gradient-baggrund med farve-glød. Kører uafbrudt (ingen pause
+// ved hover/touch); står kun stille ved prefers-reduced-motion.
 export function TestimonialsSection({
   title,
   description,
