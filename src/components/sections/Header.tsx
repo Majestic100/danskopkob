@@ -50,9 +50,6 @@ export function Header() {
             <span className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
               MinBil<span className="text-brand">Pris</span>
             </span>
-            <span className="hidden rounded-full border border-trust/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-trust sm:inline-block">
-              Danmark
-            </span>
           </Link>
 
           {/* Desktop-navigation */}

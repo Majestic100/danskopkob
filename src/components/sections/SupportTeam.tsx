@@ -1,4 +1,5 @@
 import { Phone, PhoneOff, Check, ArrowRight } from "lucide-react";
+import { DanishFlag } from "@/components/icons";
 
 interface Caller {
   name: string;
@@ -50,8 +51,9 @@ export function SupportTeam() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Venstre: fortælling */}
           <div className="reveal">
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-brand">
-              Personlig service
+            <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-brand">
+              <DanishFlag className="h-3.5 w-5 rounded-[2px]" />
+              Dansk kundeservice
             </p>
             <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
               Et rigtigt menneske ringer dig op
@@ -107,7 +109,10 @@ export function SupportTeam() {
                   <span className="h-2 w-2 animate-pulse rounded-full bg-tp" />
                   Indgående opkald
                 </span>
-                <span className="text-white/40">MinBilPris</span>
+                <span className="inline-flex items-center gap-1.5 text-white/40">
+                  <DanishFlag className="h-2.5 w-4 rounded-[1px]" />
+                  MinBilPris
+                </span>
               </div>
 
               <div className="mt-8 flex flex-col items-center text-center">

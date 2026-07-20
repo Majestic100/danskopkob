@@ -1,4 +1,5 @@
 import { ArrowRight, BadgeCheck, MapPin } from "lucide-react";
+import { DanishFlag } from "@/components/icons";
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -68,8 +69,9 @@ export function Gallery() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="reveal mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-trust">
-              Seneste opkøb
+            <p className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.2em] text-trust">
+              <DanishFlag className="h-3.5 w-5 rounded-[2px]" />
+              Seneste opkøb i Danmark
             </p>
             <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
               Biler vi har købt de seneste uger
