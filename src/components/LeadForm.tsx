@@ -79,6 +79,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
       className="plate__input"
       placeholder="EF 11223"
       maxLength={7}
+      size={7}
       autoComplete="off"
       aria-label="Nummerplade"
       value={plate}

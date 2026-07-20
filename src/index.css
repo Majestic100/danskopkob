@@ -72,10 +72,12 @@
   }
 
   /* ---- Dansk nummerplade-styling ---- */
+  /* Mobil-først: kompakt nok til 375px inkl. den integrerede knap.
+     Fra sm og op vokser felt, skrift og knap til fuld størrelse. */
   .plate {
     display: flex;
     align-items: stretch;
-    min-height: 64px;
+    min-height: 60px;
     border: 3px solid #e11d2a;
     border-radius: 14px;
     overflow: hidden;
@@ -95,17 +97,30 @@
     align-items: center;
     justify-content: center;
     gap: 3px;
-    padding: 0 12px;
-    min-width: 56px;
+    padding: 0 8px;
+    min-width: 46px;
   }
   .plate__eu svg {
-    height: 1.1rem;
-    width: 1.1rem;
+    height: 1rem;
+    width: 1rem;
   }
   .plate__dk {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 1px;
+  }
+  @media (min-width: 640px) {
+    .plate__eu {
+      padding: 0 12px;
+      min-width: 56px;
+    }
+    .plate__eu svg {
+      height: 1.1rem;
+      width: 1.1rem;
+    }
+    .plate__dk {
+      font-size: 15px;
+    }
   }
   .plate__input {
     flex: 1;
@@ -114,21 +129,22 @@
     outline: none;
     background: #fff;
     font-weight: 700;
-    font-size: 26px;
-    letter-spacing: 4px;
+    font-size: 20px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 0 18px;
+    padding: 0 10px;
     color: #0b0b0c;
   }
   @media (min-width: 640px) {
     .plate__input {
       font-size: 30px;
+      letter-spacing: 4px;
       padding: 0 22px;
     }
   }
   .plate__input::placeholder {
     color: #b8bcc6;
-    letter-spacing: 4px;
+    letter-spacing: inherit;
   }
   .plate__btn {
     flex-shrink: 0;
@@ -140,9 +156,9 @@
     background: #ee7a1f;
     color: #fff;
     font-weight: 700;
-    font-size: 17px;
+    font-size: 15px;
     white-space: nowrap;
-    padding: 0 28px;
+    padding: 0 16px;
     transition: background-color 0.18s ease;
   }
   @media (min-width: 640px) {

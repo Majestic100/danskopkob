@@ -91,7 +91,7 @@ const Logos3 = ({
               playOnInit: true,
               speed: 0.8,
               stopOnInteraction: false,
-              stopOnMouseEnter: true,
+              stopOnMouseEnter: false,
             }),
           ]}
           className="w-full"
