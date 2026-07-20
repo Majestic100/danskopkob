@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { Header } from "@/components/sections/Header";
-import { Hero } from "@/components/sections/Hero";
-import { UspBar } from "@/components/sections/UspBar";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { ExportAdvantage } from "@/components/sections/ExportAdvantage";
-import { Reviews } from "@/components/sections/Reviews";
-import { VideoReviews } from "@/components/sections/VideoReviews";
-import { Gallery } from "@/components/sections/Gallery";
-import { Coverage } from "@/components/sections/Coverage";
-import { CarTypes } from "@/components/sections/CarTypes";
-import { SupportTeam } from "@/components/sections/SupportTeam";
-import { Faq } from "@/components/sections/Faq";
-import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
-import { ThanksModal } from "@/components/ThanksModal";
 import { ScrollProgress } from "@/components/ScrollProgress";
-import { MobileCtaBar } from "@/components/MobileCtaBar";
-import { SocialProofToasts } from "@/components/SocialProofToasts";
+import Home from "@/pages/Home";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 
 export default function App() {
-  const [thanksPlate, setThanksPlate] = useState<string | null>(null);
+  const { pathname, hash } = useLocation();
 
-  // Scroll-reveal via IntersectionObserver (samme adfærd som den oprindelige side).
+  // Ved sideskift: scroll til top (medmindre der navigeres til et anker).
+  useEffect(() => {
+    if (!hash) window.scrollTo(0, 0);
+  }, [pathname, hash]);
+
+  // Scroll-reveal via IntersectionObserver — genkøres pr. side, så nye
+  // .reveal-elementer på undersider også animeres ind.
   useEffect(() => {
     const els = document.querySelectorAll<HTMLElement>(".reveal");
     if (!("IntersectionObserver" in window)) {
@@ -42,30 +37,21 @@ export default function App() {
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [pathname]);
 
   return (
     <>
       <ScrollProgress />
       <Header />
       <main id="top">
-        <Hero onLeadSuccess={setThanksPlate} />
-        <UspBar />
-        <HowItWorks />
-        <ExportAdvantage />
-        <Reviews />
-        <VideoReviews />
-        <Gallery />
-        <Coverage />
-        <CarTypes />
-        <SupportTeam />
-        <Faq />
-        <FinalCta onLeadSuccess={setThanksPlate} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </main>
       <Footer />
-      <ThanksModal plate={thanksPlate} onClose={() => setThanksPlate(null)} />
-      <MobileCtaBar />
-      <SocialProofToasts />
     </>
   );
 }

@@ -1,13 +1,42 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight, Phone, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const NAV = [
-  { label: "Sådan virker det", href: "#saadan-virker-det" },
-  { label: "Anmeldelser", href: "#anmeldelser" },
-  { label: "Dækning", href: "#daekning" },
-  { label: "FAQ", href: "#faq" },
+const BASE = import.meta.env.BASE_URL;
+
+// Sektions-ankre peger på forsiden med fuld sti, så de også virker fra
+// undersider som /blog. Fra forsiden er det samme dokument → ren scroll.
+const NAV: { label: string; href?: string; to?: string }[] = [
+  { label: "Sådan virker det", href: `${BASE}#saadan-virker-det` },
+  { label: "Anmeldelser", href: `${BASE}#anmeldelser` },
+  { label: "Dækning", href: `${BASE}#daekning` },
+  { label: "Blog", to: "/blog" },
+  { label: "FAQ", href: `${BASE}#faq` },
 ];
+
+function NavItem({
+  item,
+  className,
+  onClick,
+}: {
+  item: (typeof NAV)[number];
+  className: string;
+  onClick?: () => void;
+}) {
+  if (item.to) {
+    return (
+      <Link to={item.to} onClick={onClick} className={className}>
+        {item.label}
+      </Link>
+    );
+  }
+  return (
+    <a href={item.href} onClick={onClick} className={className}>
+      {item.label}
+    </a>
+  );
+}
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -17,25 +46,23 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between sm:h-20">
           {/* Logo */}
-          <a href="#top" className="flex select-none items-center gap-2">
+          <Link to="/" className="flex select-none items-center gap-2">
             <span className="text-xl font-extrabold tracking-tight text-ink sm:text-2xl">
               MinBil<span className="text-brand">Pris</span>
             </span>
             <span className="hidden rounded-full border border-trust/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-trust sm:inline-block">
               Danmark
             </span>
-          </a>
+          </Link>
 
           {/* Desktop-navigation */}
           <nav className="hidden items-center gap-8 lg:flex">
             {NAV.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
+              <NavItem
+                key={item.label}
+                item={item}
                 className="text-sm font-semibold text-ink/70 transition-colors hover:text-ink"
-              >
-                {item.label}
-              </a>
+              />
             ))}
           </nav>
 
@@ -48,7 +75,7 @@ export function Header() {
               <Phone className="h-4 w-4" /> 70 60 50 40
             </a>
             <a
-              href="#tilbud"
+              href={`${BASE}#tilbud`}
               className="btn-cta hidden items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-soft sm:inline-flex"
             >
               Få tilbud
@@ -78,14 +105,12 @@ export function Header() {
       >
         <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">
           {NAV.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
+            <NavItem
+              key={item.label}
+              item={item}
               onClick={() => setOpen(false)}
               className="rounded-lg px-3 py-3 text-base font-semibold text-ink hover:bg-offwhite"
-            >
-              {item.label}
-            </a>
+            />
           ))}
           <a
             href="tel:+4570605040"
@@ -95,7 +120,7 @@ export function Header() {
             <Phone className="h-4 w-4" /> 70 60 50 40
           </a>
           <a
-            href="#tilbud"
+            href={`${BASE}#tilbud`}
             onClick={() => setOpen(false)}
             className="btn-cta mt-2 flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3.5 font-bold text-white shadow-soft"
           >
