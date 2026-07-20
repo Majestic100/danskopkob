@@ -26,8 +26,8 @@ export function Hero({
       <section className="relative overflow-hidden bg-[#c9d6e2]">
         {/* Fuldt baggrundsbillede: lyst dagslys — bil på åben vej */}
         <img
-          src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=2000&q=80"
-          alt="Bil på åben landevej i klart dagslys"
+          src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=2000&q=80"
+          alt="Kørende bil på landevej i dagslys"
           fetchPriority="high"
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-center"
