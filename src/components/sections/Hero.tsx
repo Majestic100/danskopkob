@@ -67,14 +67,28 @@ export function Hero({
               ))}
             </h1>
             <p className="mt-5 max-w-lg text-lg text-white/75">
-              Vi køber din brugte bil og sender den ud af landet. Derfor kan vi
-              betale dig mere end det danske marked. Indtast din nummerplade og
-              få et uforpligtende tilbud inden for få timer.
+              Vi køber din brugte bil og eksporterer den ud af landet — derfor
+              kan vi ofte betale dig mere end det danske marked.
             </p>
 
-            {/* Lead-formular i et rent hvidt kort, der popper på billedet */}
-            <div className="mt-7 max-w-lg rounded-2xl border border-white/10 bg-white p-5 shadow-softlg">
-              <LeadForm variant="hero" onSuccess={onLeadSuccess} />
+            {/* Lead-kort à la skitsen: mørkt kort med overskrift + plade-felt */}
+            <div className="mt-7 max-w-lg rounded-2xl border border-white/10 bg-[#16243d]/95 p-6 shadow-softlg backdrop-blur-sm sm:p-7">
+              <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-[26px]">
+                Hvad kan din bil{" "}
+                <span className="text-[#ee7a1f]">sælges</span> for?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-white/60">
+                Gør som{" "}
+                <strong className="font-semibold text-white/85">
+                  50.000 bilejere
+                </strong>{" "}
+                og indtast din nummerplade herunder for at få et gratis og
+                uforpligtende tilbud på din bil. Du får tilbuddet inden for 24
+                timer.
+              </p>
+              <div className="mt-5">
+                <LeadForm variant="hero" onSuccess={onLeadSuccess} />
+              </div>
             </div>
 
             <div className="mt-6 flex items-center gap-3">

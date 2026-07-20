@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function formatPlate(v: string) {
@@ -78,7 +77,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
       type="text"
       name="nummerplade"
       className="plate__input"
-      placeholder="AB 12 345"
+      placeholder="EF 11223"
       maxLength={7}
       autoComplete="off"
       aria-label="Nummerplade"
@@ -94,31 +93,17 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
   if (variant === "hero") {
     return (
       <form className="w-full" noValidate onSubmit={handleSubmit}>
-        <label className="mb-2 block text-sm font-semibold text-ink">
-          Indtast din nummerplade
-        </label>
         {/* Integreret felt: EU-badge + input + knap i én rød-rammet pille */}
         <div className={cn("plate", invalid && "is-invalid")}>
           {euBadge}
           {plateInput}
           <button type="submit" className="plate__btn">
-            Få tilbud
+            Fortsæt
           </button>
         </div>
-        {error && <p className="mt-2 text-sm font-medium text-brand">{error}</p>}
-        <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/70">
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Gratis
-            afhentning
-          </li>
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Uforpligtende
-          </li>
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-tp" strokeWidth={2.5} /> Svar inden
-            for få timer
-          </li>
-        </ul>
+        {error && (
+          <p className="mt-2 text-sm font-medium text-brand">{error}</p>
+        )}
       </form>
     );
   }
