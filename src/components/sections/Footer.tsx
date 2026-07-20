@@ -1,5 +1,8 @@
+import { Link } from "react-router-dom";
 import { DanishFlag } from "@/components/icons";
 import { Phone, Mail, Facebook, Instagram, Linkedin } from "lucide-react";
+
+const BASE = import.meta.env.BASE_URL;
 
 export function Footer() {
   return (
@@ -44,14 +47,15 @@ export function Footer() {
           <div>
             <p className="text-white/50 uppercase tracking-wider text-xs font-semibold mb-4">Sælg din bil</p>
             <ul className="space-y-2 text-sm text-white/70">
-              <li><a href="#tilbud" className="hover:text-white transition-colors">Personbil</a></li>
-              <li><a href="#tilbud" className="hover:text-white transition-colors">Varebil</a></li>
-              <li><a href="#anmeldelser" className="hover:text-white transition-colors">Anmeldelser</a></li>
+              <li><a href={`${BASE}#tilbud`} className="hover:text-white transition-colors">Personbil</a></li>
+              <li><a href={`${BASE}#tilbud`} className="hover:text-white transition-colors">Varebil</a></li>
+              <li><a href={`${BASE}#anmeldelser`} className="hover:text-white transition-colors">Anmeldelser</a></li>
             </ul>
           </div>
           <div>
             <p className="text-white/50 uppercase tracking-wider text-xs font-semibold mb-4">Virksomhed</p>
             <ul className="space-y-2 text-sm text-white/70">
+              <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               <li><a href="#" className="hover:text-white transition-colors">Om os</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Kontakt</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Karriere</a></li>

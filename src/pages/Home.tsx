@@ -1,0 +1,46 @@
+import { useEffect, useState } from "react";
+
+import { Hero } from "@/components/sections/Hero";
+import { UspBar } from "@/components/sections/UspBar";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import { ExportAdvantage } from "@/components/sections/ExportAdvantage";
+import { Reviews } from "@/components/sections/Reviews";
+import { VideoReviews } from "@/components/sections/VideoReviews";
+import { Gallery } from "@/components/sections/Gallery";
+import { Coverage } from "@/components/sections/Coverage";
+import { CarTypes } from "@/components/sections/CarTypes";
+import { SupportTeam } from "@/components/sections/SupportTeam";
+import { Faq } from "@/components/sections/Faq";
+import { FinalCta } from "@/components/sections/FinalCta";
+import { ThanksModal } from "@/components/ThanksModal";
+import { MobileCtaBar } from "@/components/MobileCtaBar";
+import { SocialProofToasts } from "@/components/SocialProofToasts";
+
+export default function Home() {
+  const [thanksPlate, setThanksPlate] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.title =
+      "MinBilPris | Sælg din bil og tjen mere fordi vi eksporterer";
+  }, []);
+
+  return (
+    <>
+      <Hero onLeadSuccess={setThanksPlate} />
+      <UspBar />
+      <HowItWorks />
+      <ExportAdvantage />
+      <Reviews />
+      <VideoReviews />
+      <Gallery />
+      <Coverage />
+      <CarTypes />
+      <SupportTeam />
+      <Faq />
+      <FinalCta onLeadSuccess={setThanksPlate} />
+      <ThanksModal plate={thanksPlate} onClose={() => setThanksPlate(null)} />
+      <MobileCtaBar />
+      <SocialProofToasts />
+    </>
+  );
+}
