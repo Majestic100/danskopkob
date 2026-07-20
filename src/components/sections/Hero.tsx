@@ -37,7 +37,7 @@ export function Hero({
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/40" />
 
         <div className="relative mx-auto flex min-h-[600px] max-w-7xl items-center px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[700px] lg:px-8 lg:py-32">
-          <div className="reveal max-w-xl">
+          <div className="reveal max-w-2xl">
             <div className="mb-5 flex items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 py-1.5 pl-1.5 pr-3 backdrop-blur">
                 <DanishFlag className="h-4 w-6 rounded-sm" />
@@ -66,13 +66,13 @@ export function Hero({
                 </Fragment>
               ))}
             </h1>
-            <p className="mt-5 max-w-lg text-lg text-white/75">
+            <p className="mt-5 max-w-xl text-lg text-white/75">
               Vi køber din brugte bil og eksporterer den ud af landet — derfor
               kan vi ofte betale dig mere end det danske marked.
             </p>
 
             {/* Lead-kort à la skitsen: mørkt kort med overskrift + plade-felt */}
-            <div className="mt-7 max-w-lg rounded-2xl border border-white/10 bg-[#16243d]/95 p-6 shadow-softlg backdrop-blur-sm sm:p-7">
+            <div className="mt-7 rounded-2xl border border-white/10 bg-[#16243d]/95 p-6 shadow-softlg backdrop-blur-sm sm:p-8">
               <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-[26px]">
                 Hvad kan din bil{" "}
                 <span className="text-[#ee7a1f]">sælges</span> for?
