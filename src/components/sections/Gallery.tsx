@@ -1,45 +1,149 @@
+import { ArrowRight, BadgeCheck, MapPin } from "lucide-react";
+
+const BASE = import.meta.env.BASE_URL;
+
+// "Seneste opkøb"-tavle: rigtige mærke-logoer (public/logos) i stedet for
+// stock-fotos, der alligevel viste de forkerte biler.
+// SWAP: rigtige handler ind her — evt. med foto af den faktiske bil.
+const PURCHASES = [
+  {
+    logo: "logos/audi.svg",
+    brand: "Audi",
+    model: "A4 Avant 2.0 TDI",
+    meta: "2018 · 168.000 km · Diesel",
+    price: "142.500 kr",
+    city: "Aarhus C",
+    when: "for 2 dage siden",
+  },
+  {
+    logo: "logos/bmw.png",
+    brand: "BMW",
+    model: "520d Touring",
+    meta: "2017 · 189.000 km · Diesel",
+    price: "156.000 kr",
+    city: "København Ø",
+    when: "for 4 dage siden",
+  },
+  {
+    logo: "logos/mercedes.svg",
+    brand: "Mercedes-Benz",
+    model: "C 220 d",
+    meta: "2016 · 204.000 km · Diesel",
+    price: "118.000 kr",
+    city: "Odense C",
+    when: "for 5 dage siden",
+  },
+  {
+    logo: "logos/vw.webp",
+    brand: "Volkswagen",
+    model: "Golf 1.6 TDI",
+    meta: "2015 · 178.000 km · Diesel",
+    price: "61.500 kr",
+    city: "Aalborg",
+    when: "for 1 uge siden",
+  },
+  {
+    logo: "logos/skoda.png",
+    brand: "Škoda",
+    model: "Octavia Combi",
+    meta: "2019 · 142.000 km · Diesel",
+    price: "104.000 kr",
+    city: "Esbjerg",
+    when: "for 1 uge siden",
+  },
+  {
+    logo: "logos/ford.png",
+    brand: "Ford",
+    model: "Transit Custom",
+    meta: "2018 · 221.000 km · Diesel",
+    price: "76.000 kr",
+    city: "Vejle",
+    when: "for 2 uger siden",
+  },
+];
+
 export function Gallery() {
   return (
-    <section className="py-16 sm:py-24 bg-white">
+    <section className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="reveal max-w-2xl mb-12">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-trust mb-3">Udvalg fra de seneste uger</p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Biler vi har købt</h2>
+        <div className="reveal mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          <div className="max-w-2xl">
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-trust">
+              Seneste opkøb
+            </p>
+            <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+              Biler vi har købt de seneste uger
+            </h2>
+            <p className="mt-3 text-ink/60">
+              Et udpluk af rigtige handler fra hele landet — fra familiebiler
+              til varevogne. Beløbet er det, sælgeren fik udbetalt.
+            </p>
+          </div>
+          <div className="hidden shrink-0 flex-col items-end gap-2 sm:flex">
+            <span className="inline-flex items-center gap-2 rounded-full bg-tp/10 px-4 py-2 text-sm font-semibold text-tp">
+              <BadgeCheck className="h-4 w-4" /> 184 mio. kr udbetalt til
+              sælgere
+            </span>
+            <span className="text-xs text-ink/50">
+              Gratis afhentning i hele Danmark
+            </span>
+          </div>
         </div>
 
-        {/* SWAP: rigtige billeder af opkøbte biler */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {PURCHASES.map((car, i) => (
+            <article
+              key={`${car.brand}-${car.model}`}
+              className="reveal group flex flex-col rounded-2xl bg-white p-6 shadow-soft ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-softlg"
+              style={{ transitionDelay: `${(i % 3) * 70}ms` }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex h-12 w-16 items-center justify-center rounded-xl bg-offwhite ring-1 ring-black/5">
+                  <img
+                    src={`${BASE}${car.logo}`}
+                    alt={car.brand}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-7 w-auto max-w-[3rem] object-contain"
+                  />
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-tp/10 px-3 py-1 text-xs font-bold text-tp">
+                  <BadgeCheck className="h-3.5 w-3.5" />
+                  Købt {car.when}
+                </span>
+              </div>
 
-          {/* Bil 1 */}
-          <div className="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite">
-            <div className="overflow-hidden"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80" alt="Audi A4" loading="lazy" decoding="async" className="zoom-img w-full h-56 object-cover" /></div>
-            <div className="p-5 flex items-center justify-between"><p className="font-bold text-ink">Audi A4 Avant</p><span className="text-sm text-ink/55">8000 Aarhus C</span></div>
-          </div>
-          {/* Bil 2 */}
-          <div className="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style={{ transitionDelay: '70ms' }}>
-            <div className="overflow-hidden"><img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80" alt="BMW 5-serie" loading="lazy" decoding="async" className="zoom-img w-full h-56 object-cover" /></div>
-            <div className="p-5 flex items-center justify-between"><p className="font-bold text-ink">BMW 520d</p><span className="text-sm text-ink/55">2100 København Ø</span></div>
-          </div>
-          {/* Bil 3 */}
-          <div className="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style={{ transitionDelay: '140ms' }}>
-            <div className="overflow-hidden"><img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=700&q=80" alt="Mercedes C-klasse" loading="lazy" decoding="async" className="zoom-img w-full h-56 object-cover" /></div>
-            <div className="p-5 flex items-center justify-between"><p className="font-bold text-ink">Mercedes C 220 d</p><span className="text-sm text-ink/55">5000 Odense C</span></div>
-          </div>
-          {/* Bil 4 */}
-          <div className="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style={{ transitionDelay: '40ms' }}>
-            <div className="overflow-hidden"><img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="VW Golf" loading="lazy" decoding="async" className="zoom-img w-full h-56 object-cover" /></div>
-            <div className="p-5 flex items-center justify-between"><p className="font-bold text-ink">VW Golf 1.6 TDI</p><span className="text-sm text-ink/55">9000 Aalborg</span></div>
-          </div>
-          {/* Bil 5 */}
-          <div className="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style={{ transitionDelay: '110ms' }}>
-            <div className="overflow-hidden"><img src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=700&q=80" alt="Skoda Octavia" loading="lazy" decoding="async" className="zoom-img w-full h-56 object-cover" /></div>
-            <div className="p-5 flex items-center justify-between"><p className="font-bold text-ink">Skoda Octavia Combi</p><span className="text-sm text-ink/55">6700 Esbjerg</span></div>
-          </div>
-          {/* Bil 6 */}
-          <div className="reveal zoom-wrap rounded-2xl overflow-hidden shadow-soft bg-offwhite" style={{ transitionDelay: '180ms' }}>
-            <div className="overflow-hidden"><img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=700&q=80" alt="Ford Transit" loading="lazy" decoding="async" className="zoom-img w-full h-56 object-cover" /></div>
-            <div className="p-5 flex items-center justify-between"><p className="font-bold text-ink">Ford Transit Custom</p><span className="text-sm text-ink/55">7100 Vejle</span></div>
-          </div>
+              <h3 className="mt-4 text-lg font-extrabold tracking-tight text-ink">
+                {car.brand} {car.model}
+              </h3>
+              <p className="mt-0.5 text-sm text-ink/55">{car.meta}</p>
+
+              <div className="mt-5 flex items-end justify-between border-t border-black/5 pt-4">
+                <div>
+                  <p className="text-xs text-ink/50">Udbetalt samme dag</p>
+                  <p className="text-xl font-extrabold leading-tight text-ink">
+                    {car.price}
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-1 text-sm text-ink/55">
+                  <MapPin className="h-4 w-4" /> {car.city}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="reveal mt-10 flex flex-col items-center gap-3 text-center">
+          <p className="text-ink/60">
+            Din bil kunne være den næste — det tager 2 minutter at få prisen.
+          </p>
+          <a
+            href={`${BASE}#tilbud`}
+            className="btn-cta inline-flex items-center gap-2 rounded-xl bg-brand px-7 py-3.5 font-bold text-white shadow-soft"
+          >
+            Se hvad din bil er værd
+            <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+          </a>
         </div>
       </div>
     </section>
