@@ -1,58 +1,99 @@
 import { Play } from "lucide-react";
+import { TrustStars } from "@/components/icons";
+
+// SWAP: rigtige videoanmeldelser (thumbnail + videolink) ind her
+const VIDEOS = [
+  {
+    name: "Jakob Mortensen",
+    city: "Roskilde",
+    duration: "1:24",
+    photo:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80",
+    quote:
+      "De bød 18.500 over forhandlerens tilbud — og hentede bilen to dage senere.",
+  },
+  {
+    name: "Mette Sørensen",
+    city: "Aarhus",
+    duration: "0:58",
+    photo:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80",
+    quote:
+      "Jeg havde aldrig solgt bil før. De guidede mig igennem det hele på ét opkald.",
+  },
+  {
+    name: "Anders Holm",
+    city: "Kolding",
+    duration: "1:47",
+    photo:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80",
+    quote: "Fra nummerplade til penge på kontoen på under 48 timer.",
+  },
+];
 
 export function VideoReviews() {
   return (
-    <section className="py-16 sm:py-24 bg-ink text-white">
+    <section className="bg-offwhite py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="reveal max-w-2xl mb-12">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand mb-3">Hør det fra dem selv</p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Videoanmeldelser fra rigtige sælgere</h2>
+        <div className="reveal mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          <div className="max-w-2xl">
+            <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-brand">
+              Hør det fra dem selv
+            </p>
+            <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+              Videoanmeldelser fra rigtige sælgere
+            </h2>
+            <p className="mt-3 text-ink/60">
+              Ingen manuskript, ingen skuespillere — bare tre sælgere, der
+              fortæller, hvordan deres handel gik.
+            </p>
+          </div>
+          <div className="hidden shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2 shadow-soft ring-1 ring-black/5 sm:inline-flex">
+            <TrustStars className="flex" />
+            <span className="text-sm font-semibold text-ink">4,8 ud af 5</span>
+          </div>
         </div>
 
-        {/* SWAP: rigtige videoanmeldelser (thumbnail + videolink) */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          {/* Video 1 */}
-          <figure className="reveal group">
-            <div className="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Jakob" loading="lazy" decoding="async" className="zoom-img w-full h-64 object-cover" />
-              <div className="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
-                <span className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
-                  <Play className="w-7 h-7 text-brand ml-1" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {VIDEOS.map((video, i) => (
+            <figure
+              key={video.name}
+              className="reveal group overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-softlg"
+              style={{ transitionDelay: `${i * 90}ms` }}
+            >
+              <div className="zoom-wrap relative cursor-pointer overflow-hidden">
+                <img
+                  src={video.photo}
+                  alt={`Videoanmeldelse fra ${video.name}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="zoom-img h-72 w-full object-cover"
+                />
+                {/* Gradient + play-knap med pulserende ring */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="relative flex h-16 w-16 items-center justify-center">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/40 [animation-duration:2.2s]" />
+                    <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/95 shadow-softlg transition-transform duration-300 group-hover:scale-110">
+                      <Play className="ml-1 h-7 w-7 text-brand" fill="currentColor" />
+                    </span>
+                  </span>
+                </div>
+                <span className="absolute right-3 top-3 rounded-md bg-ink/75 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                  {video.duration}
                 </span>
+                {/* Navn + by + stjerner på selve billedet */}
+                <figcaption className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                  <TrustStars className="mb-1.5 flex" />
+                  <p className="font-bold leading-tight">{video.name}</p>
+                  <p className="text-sm text-white/70">{video.city}</p>
+                </figcaption>
               </div>
-              <span className="absolute bottom-3 right-3 text-xs font-semibold bg-ink/70 rounded-md px-2 py-1">1:24</span>
-            </div>
-            <figcaption className="mt-3"><p className="font-semibold">Jakob Mortensen</p><p className="text-sm text-white/60">Roskilde</p></figcaption>
-          </figure>
-
-          {/* Video 2 */}
-          <figure className="reveal group" style={{ transitionDelay: '90ms' }}>
-            <div className="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Mette" loading="lazy" decoding="async" className="zoom-img w-full h-64 object-cover" />
-              <div className="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
-                <span className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
-                  <Play className="w-7 h-7 text-brand ml-1" />
-                </span>
-              </div>
-              <span className="absolute bottom-3 right-3 text-xs font-semibold bg-ink/70 rounded-md px-2 py-1">0:58</span>
-            </div>
-            <figcaption className="mt-3"><p className="font-semibold">Mette Sørensen</p><p className="text-sm text-white/60">Aarhus</p></figcaption>
-          </figure>
-
-          {/* Video 3 */}
-          <figure className="reveal group" style={{ transitionDelay: '180ms' }}>
-            <div className="zoom-wrap relative rounded-2xl overflow-hidden shadow-softlg cursor-pointer">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80" alt="Videoanmeldelse fra Anders" loading="lazy" decoding="async" className="zoom-img w-full h-64 object-cover" />
-              <div className="absolute inset-0 bg-ink/30 group-hover:bg-ink/40 transition-colors flex items-center justify-center">
-                <span className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-softlg group-hover:scale-110 transition-transform">
-                  <Play className="w-7 h-7 text-brand ml-1" />
-                </span>
-              </div>
-              <span className="absolute bottom-3 right-3 text-xs font-semibold bg-ink/70 rounded-md px-2 py-1">1:47</span>
-            </div>
-            <figcaption className="mt-3"><p className="font-semibold">Anders Holm</p><p className="text-sm text-white/60">Kolding</p></figcaption>
-          </figure>
+              <blockquote className="p-5 text-sm italic leading-relaxed text-ink/70">
+                &ldquo;{video.quote}&rdquo;
+              </blockquote>
+            </figure>
+          ))}
         </div>
       </div>
     </section>
