@@ -23,18 +23,18 @@ export function Hero({
 }) {
   return (
     <>
-      <section className="relative overflow-hidden bg-ink">
-        {/* Fuldt baggrundsbillede */}
+      <section className="relative overflow-hidden bg-[#c9d6e2]">
+        {/* Fuldt baggrundsbillede: lyst dagslys — bil på åben vej */}
         <img
-          src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=2000&q=80"
-          alt="Eksklusive biler i et mørkt showroom"
+          src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=2000&q=80"
+          alt="Bil på åben landevej i klart dagslys"
           fetchPriority="high"
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
-        {/* Mørke overlays for læsbarhed (mørkest i venstre side bag teksten) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-ink/40" />
+        {/* Lysere look: kun en blød mørk tone bag tekst-kolonnen for kontrast */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/35 via-transparent to-transparent" />
 
         <div className="relative mx-auto flex min-h-[600px] max-w-7xl items-center px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[700px] lg:px-8 lg:py-32">
           <div className="reveal max-w-xl">
