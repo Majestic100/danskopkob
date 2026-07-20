@@ -50,22 +50,35 @@ export function TestimonialsMarquee() {
   return (
     <TestimonialsSection
       badge={
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2">
-            <TrustpilotStar className="h-6 w-6" />
-            <span className="text-lg font-extrabold text-ink">Trustpilot</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <TrustStars className="flex" />
-            <span className="text-sm text-ink/70">
-              <strong className="text-ink">Fremragende</strong> · 4,8 ud af 5
-              · 1.247 anmeldelser
-            </span>
-          </div>
+        <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-soft ring-1 ring-black/5">
+          <TrustpilotStar className="h-5 w-5" />
+          <span className="text-sm font-extrabold text-ink">Trustpilot</span>
+          <TrustStars className="flex" />
+        </span>
+      }
+      title={
+        <>
+          Danskerne har talt:{" "}
+          <span className="text-brand">4,8 ud af 5</span> stjerner
+        </>
+      }
+      description="Ærlige ord fra rigtige sælgere — fra Esbjerg til København."
+      stats={
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          {[
+            { value: "4,8/5", label: "Gennemsnit på Trustpilot" },
+            { value: "1.247", label: "Verificerede anmeldelser" },
+            { value: "9/10", label: "Vil anbefale os til andre" },
+          ].map((stat) => (
+            <div key={stat.label} className="flex items-baseline gap-2">
+              <span className="text-2xl font-extrabold text-ink">
+                {stat.value}
+              </span>
+              <span className="text-sm text-ink/55">{stat.label}</span>
+            </div>
+          ))}
         </div>
       }
-      title="Danskere i hele landet har allerede solgt til os"
-      description="Ærlige ord fra rigtige sælgere — fra Esbjerg til København. Båndet kører selv; hold musen over for at læse i ro og mag."
       testimonials={TESTIMONIALS}
     />
   );

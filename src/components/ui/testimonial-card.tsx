@@ -1,3 +1,4 @@
+import { Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TrustStars } from "@/components/icons";
@@ -25,8 +26,9 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-// Tilpasset "testimonial-card": Trustpilot-stjerner + anmeldelses-overskrift,
-// og initial-avatar som i den øvrige anmeldelses-sektion (ingen stock-ansigter).
+// Tilpasset "testimonial-card": Trustpilot-stjerner, anmeldelses-overskrift,
+// stort citat-tegn og hover-løft. Initial-avatarer som i den øvrige
+// anmeldelses-sektion (ingen stock-ansigter).
 export function TestimonialCard({
   author,
   text,
@@ -40,15 +42,21 @@ export function TestimonialCard({
     <Card
       {...(href ? { href, target: "_blank", rel: "noreferrer" } : {})}
       className={cn(
-        "flex w-[300px] shrink-0 flex-col rounded-2xl sm:w-[340px]",
+        "relative flex w-[300px] shrink-0 flex-col rounded-2xl sm:w-[340px]",
         "bg-white p-5 text-start shadow-soft ring-1 ring-black/5 sm:p-6",
-        "transition-shadow duration-300 hover:shadow-softlg",
+        "transition-all duration-300 hover:-translate-y-1 hover:shadow-softlg",
         className,
       )}
     >
+      <Quote
+        aria-hidden
+        className="absolute right-5 top-5 h-8 w-8 -scale-x-100 text-brand/10"
+        strokeWidth={1}
+        fill="currentColor"
+      />
       <TrustStars className="mb-3 flex" />
       {title && (
-        <h3 className="mb-1.5 font-bold leading-snug text-ink">{title}</h3>
+        <h3 className="mb-1.5 pr-8 font-bold leading-snug text-ink">{title}</h3>
       )}
       <p className="text-sm leading-relaxed text-ink/70">{text}</p>
       <div className="mt-auto flex items-center gap-3 pt-5">
@@ -66,6 +74,9 @@ export function TestimonialCard({
           </p>
           <p className="text-xs text-ink/55">{author.handle}</p>
         </div>
+        <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-tp/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-tp">
+          Verificeret
+        </span>
       </div>
     </Card>
   );
