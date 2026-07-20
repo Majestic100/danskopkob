@@ -8,10 +8,11 @@ const USPS: { Icon: LucideIcon; text: string }[] = [
   { Icon: Check, text: "Helt uforpligtende" },
 ];
 
-// Samlet "trust-band": USP'er øverst + mærke-stribe nedenunder, ét mørkt felt.
+// Samlet "trust-band": USP'er øverst + mærke-stribe nedenunder — lyst, så
+// det matcher resten af siden.
 export function UspBar() {
   return (
-    <section className="bg-ink text-white">
+    <section className="border-y border-black/5 bg-offwhite">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8">
         <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
           {USPS.map((usp, i) => {
@@ -22,10 +23,10 @@ export function UspBar() {
                 className="reveal flex items-center gap-3"
                 style={{ transitionDelay: `${i * 80}ms` }}
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand/10">
                   <Icon className="h-5 w-5 text-brand" />
                 </div>
-                <p className="text-sm font-semibold leading-tight">
+                <p className="text-sm font-semibold leading-tight text-ink">
                   {usp.text}
                 </p>
               </div>
@@ -33,8 +34,8 @@ export function UspBar() {
           })}
         </div>
 
-        <div className="reveal mt-10 border-t border-white/10 pt-8">
-          <Logos3 dark />
+        <div className="reveal mt-10 border-t border-black/5 pt-8">
+          <Logos3 />
         </div>
       </div>
     </section>
