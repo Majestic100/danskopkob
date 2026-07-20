@@ -75,11 +75,17 @@
   .plate {
     display: flex;
     align-items: stretch;
-    border: 2.5px solid #e11d2a;
-    border-radius: 12px;
+    min-height: 64px;
+    border: 3px solid #e11d2a;
+    border-radius: 14px;
     overflow: hidden;
     background: #ffffff;
     box-shadow: 0 10px 30px -12px rgba(11, 11, 12, 0.45);
+  }
+  @media (min-width: 640px) {
+    .plate {
+      min-height: 72px;
+    }
   }
   .plate__eu {
     background: #003399;
@@ -88,13 +94,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    padding: 0 9px;
-    min-width: 46px;
+    gap: 3px;
+    padding: 0 12px;
+    min-width: 56px;
+  }
+  .plate__eu svg {
+    height: 1.1rem;
+    width: 1.1rem;
   }
   .plate__dk {
     font-weight: 700;
-    font-size: 13px;
+    font-size: 15px;
     letter-spacing: 1px;
   }
   .plate__input {
@@ -104,15 +114,21 @@
     outline: none;
     background: #fff;
     font-weight: 700;
-    font-size: 22px;
-    letter-spacing: 3px;
+    font-size: 26px;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    padding: 0 16px;
+    padding: 0 18px;
     color: #0b0b0c;
+  }
+  @media (min-width: 640px) {
+    .plate__input {
+      font-size: 30px;
+      padding: 0 22px;
+    }
   }
   .plate__input::placeholder {
     color: #b8bcc6;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
   }
   .plate__btn {
     flex-shrink: 0;
@@ -124,10 +140,16 @@
     background: #ee7a1f;
     color: #fff;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 17px;
     white-space: nowrap;
-    padding: 0 22px;
+    padding: 0 28px;
     transition: background-color 0.18s ease;
+  }
+  @media (min-width: 640px) {
+    .plate__btn {
+      font-size: 18px;
+      padding: 0 34px;
+    }
   }
   .plate__btn:hover {
     background: #e06c12;
