@@ -29,4 +29,4 @@ stedet, så striben aldrig ser brudt ud.
 
 Store raster-filer skaleres ned til ~240px højde for at holde siden let.
 
-Filerne serveres fra `/<base>/logos/<filnavn>` (base = `/danskopkob/`).
+Filerne serveres fra `/logos/<filnavn>`.

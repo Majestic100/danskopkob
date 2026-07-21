@@ -2,10 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "node:url";
 
-// Project-site på GitHub Pages serveres fra /danskopkob/.
-// Ved skift til eget domæne (root) sæt base til "/".
+// Sitet serveres på eget domæne (minbilpris.dk) fra roden.
 export default defineConfig({
-  base: "/danskopkob/",
+  base: "/",
   plugins: [react()],
   resolve: {
     alias: {
