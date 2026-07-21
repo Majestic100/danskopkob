@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { Header } from "@/components/sections/Header";
 import { Footer } from "@/components/sections/Footer";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { PreviewGate, usePreviewAccess } from "@/components/PreviewGate";
 import Home from "@/pages/Home";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
@@ -11,6 +12,7 @@ import SellCar from "@/pages/SellCar";
 
 export default function App() {
   const { pathname, hash } = useLocation();
+  const [unlocked, unlock] = usePreviewAccess();
 
   // Ved sideskift: scroll til top (medmindre der navigeres til et anker).
   useEffect(() => {
@@ -39,6 +41,9 @@ export default function App() {
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
   }, [pathname]);
+
+  // Lukket preview: hele sitet er bag adgangskode indtil lancering.
+  if (!unlocked) return <PreviewGate onUnlock={unlock} />;
 
   return (
     <>
