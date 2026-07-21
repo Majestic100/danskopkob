@@ -19,9 +19,11 @@ export default function App() {
     if (!hash) window.scrollTo(0, 0);
   }, [pathname, hash]);
 
-  // Scroll-reveal via IntersectionObserver — genkøres pr. side, så nye
-  // .reveal-elementer på undersider også animeres ind.
+  // Scroll-reveal via IntersectionObserver — genkøres pr. side OG når der
+  // låses op (ellers står alle .reveal-sektioner usynlige efter adgangskoden,
+  // fordi observeren blev sat op mens kun låseskærmen var på siden).
   useEffect(() => {
+    if (!unlocked) return;
     const els = document.querySelectorAll<HTMLElement>(".reveal");
     if (!("IntersectionObserver" in window)) {
       els.forEach((el) => el.classList.add("is-visible"));
@@ -40,7 +42,7 @@ export default function App() {
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, [pathname]);
+  }, [pathname, unlocked]);
 
   // Lukket preview: hele sitet er bag adgangskode indtil lancering.
   if (!unlocked) return <PreviewGate onUnlock={unlock} />;
