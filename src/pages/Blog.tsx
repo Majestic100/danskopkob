@@ -143,13 +143,13 @@ export default function Blog() {
             Indtast din nummerplade og få et gratis, uforpligtende tilbud
             inden for 24 timer.
           </p>
-          <a
-            href={`${import.meta.env.BASE_URL}#tilbud`}
+          <Link
+            to="/saelg-din-bil"
             className="btn-cta inline-flex items-center gap-2 rounded-xl bg-brand px-7 py-3.5 font-bold text-white shadow-soft"
           >
             Få dit tilbud nu
             <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-          </a>
+          </Link>
         </div>
       </section>
     </div>

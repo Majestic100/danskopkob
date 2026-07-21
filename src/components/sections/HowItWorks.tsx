@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { Link } from "react-router-dom";
 import {
   Car,
   MessageSquare,
@@ -154,13 +155,13 @@ export function HowItWorks() {
         </div>
 
         <div className="reveal mt-12 text-center">
-          <a
-            href="#tilbud"
+          <Link
+            to="/saelg-din-bil"
             className="btn-cta inline-flex items-center gap-2 rounded-xl bg-brand px-7 py-4 font-bold text-white shadow-soft"
           >
             Start med din nummerplade
             <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

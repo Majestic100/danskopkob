@@ -1,4 +1,5 @@
 import { Phone, PhoneOff, Check, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { DanishFlag } from "@/components/icons";
 
 interface Caller {
@@ -91,14 +92,14 @@ export function SupportTeam() {
               ))}
             </div>
 
-            <a
-              href="#tilbud"
+            <Link
+              to="/saelg-din-bil"
               className="btn-cta mt-8 inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white shadow-soft"
             >
               <Phone className="h-4 w-4" strokeWidth={2.2} />
               Skriv dig op — så ringer vi
               <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-            </a>
+            </Link>
           </div>
 
           {/* Højre: "indgående opkald"-kort + holdet */}

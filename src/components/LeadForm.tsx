@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { formatPlate, isValidEmail, isValidPlate } from "@/lib/form";
 
@@ -28,10 +29,13 @@ export function PlateEuBadge() {
 
 interface LeadFormProps {
   variant: "hero" | "cta";
-  onSuccess: (plate: string) => void;
 }
 
-export function LeadForm({ variant, onSuccess }: LeadFormProps) {
+// Alle indgange fører til salgsformularen på /saelg-din-bil — det man
+// allerede har tastet (plade, navn, telefon, email) sendes med som
+// query-params og prefilles dér.
+export function LeadForm({ variant }: LeadFormProps) {
+  const navigate = useNavigate();
   const [plate, setPlate] = useState("");
   const [name, setName] = useState("");
   const [tel, setTel] = useState("");
@@ -54,15 +58,12 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
       return;
     }
 
-    // GHL: her kobles formularen til GoHighLevel via webhook/embed.
-    onSuccess(plate.replace(/\s/g, ""));
-    setPlate("");
-    setName("");
-    setTel("");
-    setEmail("");
+    const params = new URLSearchParams({ plade: plate.replace(/\s/g, "") });
+    if (name.trim()) params.set("navn", name.trim());
+    if (tel.trim()) params.set("tel", tel.trim());
+    if (email.trim()) params.set("email", email.trim());
+    navigate(`/saelg-din-bil?${params.toString()}`);
   };
-
-  const euBadge = <PlateEuBadge />;
 
   const plateInput = (
     <input
@@ -88,7 +89,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
       <form className="w-full" noValidate onSubmit={handleSubmit}>
         {/* Integreret felt: EU-badge + input + knap i én rød-rammet pille */}
         <div className={cn("plate", invalid && "is-invalid")}>
-          {euBadge}
+          <PlateEuBadge />
           {plateInput}
           <button type="submit" className="plate__btn">
             Fortsæt
@@ -109,7 +110,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
     >
       <div className="mb-3">
         <div className={cn("plate", invalid && "is-invalid")}>
-          {euBadge}
+          <PlateEuBadge />
           {plateInput}
         </div>
       </div>
@@ -151,8 +152,8 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
         Få mit tilbud nu
       </button>
       <p className="mt-3 text-center text-xs text-white/50">
-        Ved at indsende accepterer du, at vi kontakter dig om dit tilbud. Helt
-        uforpligtende.
+        Du sendes videre til salgsformularen, hvor du kan tilføje detaljer om
+        bilen. Helt uforpligtende.
       </p>
     </form>
   );

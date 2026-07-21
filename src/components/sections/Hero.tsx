@@ -16,11 +16,7 @@ const HEADLINE: { text: string; shimmer?: boolean; suffix?: string }[] = [
   { text: "den" },
 ];
 
-export function Hero({
-  onLeadSuccess,
-}: {
-  onLeadSuccess: (plate: string) => void;
-}) {
+export function Hero() {
   return (
     <>
       <section className="relative overflow-hidden bg-[#c9d6e2]">
@@ -87,7 +83,7 @@ export function Hero({
                 timer.
               </p>
               <div className="mt-5">
-                <LeadForm variant="hero" onSuccess={onLeadSuccess} />
+                <LeadForm variant="hero" />
               </div>
             </div>
 

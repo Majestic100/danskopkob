@@ -1,4 +1,5 @@
 import { ArrowRight, BadgeCheck, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import { DanishFlag } from "@/components/icons";
 
 const BASE = import.meta.env.BASE_URL;
@@ -144,13 +145,13 @@ export function Gallery() {
           <p className="text-ink/60">
             Din bil kunne være den næste — det tager 2 minutter at få prisen.
           </p>
-          <a
-            href={`${BASE}#tilbud`}
+          <Link
+            to="/saelg-din-bil"
             className="btn-cta inline-flex items-center gap-2 rounded-xl bg-brand px-7 py-3.5 font-bold text-white shadow-soft"
           >
             Se hvad din bil er værd
             <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
