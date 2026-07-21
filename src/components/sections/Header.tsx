@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Phone, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -40,9 +40,32 @@ function NavItem({
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+
+  // Mobil: skjul headeren når der scrolles ned, vis den igen ved scroll op
+  // (eller nær toppen). På desktop er den altid synlig (lg:translate-y-0).
+  useEffect(() => {
+    lastY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const diff = y - lastY.current;
+      if (y < 24) setHidden(false);
+      else if (diff > 4) setHidden(true);
+      else if (diff < -4) setHidden(false);
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur transition-transform duration-300",
+        hidden && !open && "max-lg:-translate-y-full",
+      )}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between sm:h-20">
           {/* Logo */}
@@ -93,11 +116,14 @@ export function Header() {
         </div>
       </div>
 
-      {/* Mobil-menu */}
+      {/* Mobil-menu — loftet følger skærmhøjden, og indholdet kan scrolle,
+          så knappen nederst aldrig skæres af */}
       <div
         className={cn(
           "overflow-hidden border-t border-black/5 bg-white transition-[max-height] duration-300 lg:hidden",
-          open ? "max-h-96" : "max-h-0 border-t-0",
+          open
+            ? "max-h-[calc(100dvh-4rem)] overflow-y-auto"
+            : "max-h-0 border-t-0",
         )}
       >
         <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6">
