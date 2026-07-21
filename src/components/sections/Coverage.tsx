@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { DanishFlag } from "@/components/icons";
 import { DenmarkMap } from "@/components/DenmarkMap";
 
@@ -41,13 +42,13 @@ export function Coverage() {
               </li>
             </ul>
 
-            <a
-              href="#tilbud"
+            <Link
+              to="/saelg-din-bil"
               className="btn-cta mt-8 inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white shadow-soft"
             >
               Få mit tilbud
               <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-            </a>
+            </Link>
           </div>
 
           {/* Prikkort */}

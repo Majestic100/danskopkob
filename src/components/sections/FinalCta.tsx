@@ -1,11 +1,7 @@
 import { DanishFlag } from "@/components/icons";
 import { LeadForm } from "@/components/LeadForm";
 
-export function FinalCta({
-  onLeadSuccess,
-}: {
-  onLeadSuccess: (plate: string) => void;
-}) {
+export function FinalCta() {
   return (
     <section
       id="tilbud"
@@ -33,7 +29,7 @@ export function FinalCta({
         </div>
 
         <div className="reveal" style={{ transitionDelay: "80ms" }}>
-          <LeadForm variant="cta" onSuccess={onLeadSuccess} />
+          <LeadForm variant="cta" />
         </div>
       </div>
     </section>

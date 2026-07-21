@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { Hero } from "@/components/sections/Hero";
 import { UspBar } from "@/components/sections/UspBar";
@@ -13,13 +13,10 @@ import { SupportTeam } from "@/components/sections/SupportTeam";
 import { Faq } from "@/components/sections/Faq";
 import { TestimonialsMarquee } from "@/components/sections/TestimonialsMarquee";
 import { FinalCta } from "@/components/sections/FinalCta";
-import { ThanksModal } from "@/components/ThanksModal";
 import { MobileCtaBar } from "@/components/MobileCtaBar";
 import { SocialProofToasts } from "@/components/SocialProofToasts";
 
 export default function Home() {
-  const [thanksPlate, setThanksPlate] = useState<string | null>(null);
-
   useEffect(() => {
     document.title =
       "MinBilPris | Sælg din bil og tjen mere fordi vi eksporterer";
@@ -27,7 +24,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero onLeadSuccess={setThanksPlate} />
+      <Hero />
       <UspBar />
       <HowItWorks />
       <ExportAdvantage />
@@ -39,8 +36,7 @@ export default function Home() {
       <SupportTeam />
       <Faq />
       <TestimonialsMarquee />
-      <FinalCta onLeadSuccess={setThanksPlate} />
-      <ThanksModal plate={thanksPlate} onClose={() => setThanksPlate(null)} />
+      <FinalCta />
       <MobileCtaBar />
       <SocialProofToasts />
     </>

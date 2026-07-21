@@ -71,13 +71,13 @@ export function Header() {
             >
               <Phone className="h-4 w-4" /> 70 60 50 40
             </a>
-            <a
-              href={`${BASE}#tilbud`}
+            <Link
+              to="/saelg-din-bil"
               className="btn-cta hidden items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-soft sm:inline-flex"
             >
               Få tilbud
               <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-            </a>
+            </Link>
 
             {/* Hamburger (mobil) */}
             <button
@@ -116,14 +116,14 @@ export function Header() {
           >
             <Phone className="h-4 w-4" /> 70 60 50 40
           </a>
-          <a
-            href={`${BASE}#tilbud`}
+          <Link
+            to="/saelg-din-bil"
             onClick={() => setOpen(false)}
             className="btn-cta mt-2 flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3.5 font-bold text-white shadow-soft"
           >
             Få tilbud
             <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

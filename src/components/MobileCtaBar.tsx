@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,13 +21,13 @@ export function MobileCtaBar() {
         show ? "translate-y-0" : "translate-y-full",
       )}
     >
-      <a
-        href="#tilbud"
+      <Link
+        to="/saelg-din-bil"
         className="btn-cta flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-3.5 font-bold text-white shadow-soft"
       >
         Få dit uforpligtende tilbud
         <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-      </a>
+      </Link>
     </div>
   );
 }

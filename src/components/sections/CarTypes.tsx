@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const BASE = import.meta.env.BASE_URL;
@@ -56,10 +57,10 @@ export function CarTypes() {
             <div className="absolute bottom-0 left-0 p-7">
               <h3 className="text-2xl font-extrabold text-white">Sælg din personbil</h3>
               <p className="text-white/80 text-sm mt-2 max-w-sm">Fra små bybiler til stationcars og SUV'er. Vi vurderer alle mærker og årgange.</p>
-              <a href={`${BASE}#tilbud`} className="btn-cta inline-flex items-center gap-2 mt-4 bg-brand text-white text-sm font-bold rounded-xl px-5 py-3">
+              <Link to="/saelg-din-bil" className="btn-cta inline-flex items-center gap-2 mt-4 bg-brand text-white text-sm font-bold rounded-xl px-5 py-3">
                 Få tilbud på personbil
                 <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -70,10 +71,10 @@ export function CarTypes() {
             <div className="absolute bottom-0 left-0 p-7">
               <h3 className="text-2xl font-extrabold text-white">Sælg din varebil</h3>
               <p className="text-white/80 text-sm mt-2 max-w-sm">Håndværkerbiler, kassevogne og pickups. Også selvom de har mange kilometer på.</p>
-              <a href={`${BASE}#tilbud`} className="btn-cta inline-flex items-center gap-2 mt-4 bg-trust text-white text-sm font-bold rounded-xl px-5 py-3">
+              <Link to="/saelg-din-bil" className="btn-cta inline-flex items-center gap-2 mt-4 bg-trust text-white text-sm font-bold rounded-xl px-5 py-3">
                 Få tilbud på varebil
                 <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -48,8 +48,8 @@ export function Footer() {
             <p className="text-white/50 uppercase tracking-wider text-xs font-semibold mb-4">Sælg din bil</p>
             <ul className="space-y-2 text-sm text-white/70">
               <li><Link to="/saelg-din-bil" className="hover:text-white transition-colors">Udfyld salgsformular</Link></li>
-              <li><a href={`${BASE}#tilbud`} className="hover:text-white transition-colors">Personbil</a></li>
-              <li><a href={`${BASE}#tilbud`} className="hover:text-white transition-colors">Varebil</a></li>
+              <li><Link to="/saelg-din-bil" className="hover:text-white transition-colors">Personbil</Link></li>
+              <li><Link to="/saelg-din-bil" className="hover:text-white transition-colors">Varebil</Link></li>
               <li><a href={`${BASE}#anmeldelser`} className="hover:text-white transition-colors">Anmeldelser</a></li>
             </ul>
           </div>

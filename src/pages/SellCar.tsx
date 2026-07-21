@@ -66,9 +66,9 @@ const inputCls =
 export default function SellCar() {
   const [params] = useSearchParams();
 
-  const [navn, setNavn] = useState("");
-  const [email, setEmail] = useState("");
-  const [tel, setTel] = useState("");
+  const [navn, setNavn] = useState(params.get("navn") ?? "");
+  const [email, setEmail] = useState(params.get("email") ?? "");
+  const [tel, setTel] = useState(params.get("tel") ?? "");
   const [plade, setPlade] = useState(formatPlate(params.get("plade") ?? ""));
   const [km, setKm] = useState("");
   const [hvornaar, setHvornaar] = useState("");
@@ -284,7 +284,10 @@ export default function SellCar() {
               <div>
                 <FeltLabel label="Nummerplade" htmlFor="plade" />
                 <div
-                  className={cn("plate", errors.plade && "is-invalid")}
+                  className={cn(
+                    "plate plate--compact",
+                    errors.plade && "is-invalid",
+                  )}
                   style={{ boxShadow: "none" }}
                 >
                   <PlateEuBadge />

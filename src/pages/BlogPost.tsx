@@ -75,13 +75,13 @@ export default function BlogPost() {
               inden for 24 timer — betaling samme dag og gratis afhentning i
               hele Danmark.
             </p>
-            <a
-              href={`${import.meta.env.BASE_URL}#tilbud`}
+            <Link
+              to="/saelg-din-bil"
               className="btn-cta mt-6 inline-flex items-center gap-2 rounded-xl bg-brand px-7 py-3.5 font-bold text-white shadow-soft"
             >
               Få dit tilbud nu
               <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
-            </a>
+            </Link>
           </div>
         </div>
       </article>
