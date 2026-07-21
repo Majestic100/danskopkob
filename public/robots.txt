@@ -1,0 +1,3 @@
+# Lukket preview — fjern denne blokering (og noindex i index.html) ved lancering.
+User-agent: *
+Disallow: /
