@@ -1,18 +1,29 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { formatPlate, isValidEmail, isValidPlate } from "@/lib/form";
 
-function formatPlate(v: string) {
-  return v
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "")
-    .slice(0, 7);
-}
-function isValidPlate(v: string) {
-  return /^[A-Z]{2}[0-9]{4,5}$/.test(v.replace(/\s/g, "").toUpperCase());
-}
-function isValidEmail(v: string) {
-  if (!v) return true; // email er valgfri i dette udkast
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+// EU-badge: blå plade med kreds af gule EU-stjerner + DK. Genbruges af
+// salgsformularen på /saelg-din-bil.
+export function PlateEuBadge() {
+  return (
+    <div className="plate__eu">
+      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true">
+        {Array.from({ length: 12 }).map((_, i) => {
+          const angle = (i / 12) * 2 * Math.PI - Math.PI / 2;
+          return (
+            <circle
+              key={i}
+              cx={12 + 7 * Math.cos(angle)}
+              cy={12 + 7 * Math.sin(angle)}
+              r={1.1}
+              fill="#FFCC00"
+            />
+          );
+        })}
+      </svg>
+      <span className="plate__dk">DK</span>
+    </div>
+  );
 }
 
 interface LeadFormProps {
@@ -38,7 +49,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
       setError("Indtast en gyldig dansk nummerplade, fx AB 12 345.");
       return;
     }
-    if (!isValidEmail(email)) {
+    if (email && !isValidEmail(email)) {
       setError("Indtast en gyldig emailadresse.");
       return;
     }
@@ -51,26 +62,7 @@ export function LeadForm({ variant, onSuccess }: LeadFormProps) {
     setEmail("");
   };
 
-  // EU-badge: blå plade med kreds af gule EU-stjerner + DK
-  const euBadge = (
-    <div className="plate__eu">
-      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true">
-        {Array.from({ length: 12 }).map((_, i) => {
-          const angle = (i / 12) * 2 * Math.PI - Math.PI / 2;
-          return (
-            <circle
-              key={i}
-              cx={12 + 7 * Math.cos(angle)}
-              cy={12 + 7 * Math.sin(angle)}
-              r={1.1}
-              fill="#FFCC00"
-            />
-          );
-        })}
-      </svg>
-      <span className="plate__dk">DK</span>
-    </div>
-  );
+  const euBadge = <PlateEuBadge />;
 
   const plateInput = (
     <input

@@ -7,6 +7,7 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import Home from "@/pages/Home";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import SellCar from "@/pages/SellCar";
 
 export default function App() {
   const { pathname, hash } = useLocation();
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/saelg-din-bil" element={<SellCar />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

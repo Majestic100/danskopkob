@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Check } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Check } from "lucide-react";
 
 // Tak-modal med dialog-semantik, fokus-fælde og fokus-retur.
 export function ThanksModal({
@@ -74,12 +75,24 @@ export function ThanksModal({
           <strong className="text-ink">{plate}</strong> og vender tilbage med
           dit uforpligtende tilbud inden for få timer.
         </p>
+        <p className="mt-3 text-sm text-ink/55">
+          Vil du have et endnu skarpere tilbud? Fortæl os mere om bilen —
+          kilometertal, stand og billeder.
+        </p>
+        <Link
+          to={`/saelg-din-bil?plade=${encodeURIComponent(plate ?? "")}`}
+          onClick={onClose}
+          className="btn-cta mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white shadow-soft"
+        >
+          Giv os flere detaljer
+          <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+        </Link>
         <button
           ref={closeBtnRef}
           onClick={onClose}
-          className="btn-cta mt-6 w-full rounded-xl bg-brand px-6 py-3.5 font-bold text-white shadow-soft"
+          className="mt-2 w-full rounded-xl px-6 py-3 font-semibold text-ink/60 transition-colors hover:text-ink"
         >
-          Luk
+          Nej tak, luk
         </button>
       </div>
     </div>
