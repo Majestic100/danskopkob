@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 // Adgangskoden til preview'et. Skift den her (og send den nye til dem, der
 // skal have adgang). Direkte-link: <adresse>/?adgang=<kode>
-const ADGANGSKODE = "minbilpris2026";
+const ADGANGSKODE = "2026";
 const STORAGE_KEY = "mbp-preview-adgang";
 
 // Låseskærm mens sitet er i lukket preview. Fjernes når sitet skal gå
