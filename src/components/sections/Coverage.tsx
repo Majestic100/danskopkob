@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { DanishFlag } from "@/components/icons";
 import { DenmarkMap } from "@/components/DenmarkMap";
 
-const CITIES = ["København", "Aarhus", "Odense", "Aalborg", "Esbjerg"];
 
 export function Coverage() {
   return (
@@ -26,21 +25,6 @@ export function Coverage() {
               koster aldrig noget. Vores chauffører kører ud til både byer og
               landområder.
             </p>
-
-            <ul className="mt-6 grid grid-cols-2 gap-3">
-              {CITIES.map((city) => (
-                <li
-                  key={city}
-                  className="flex items-center gap-2 text-sm font-semibold text-ink"
-                >
-                  <span className="h-2 w-2 rounded-full bg-brand" /> {city}
-                </li>
-              ))}
-              <li className="flex items-center gap-2 text-sm font-semibold text-ink/60">
-                <span className="h-2 w-2 rounded-full bg-trust" /> og alt
-                derimellem
-              </li>
-            </ul>
 
             <Link
               to="/saelg-din-bil"

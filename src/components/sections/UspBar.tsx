@@ -4,7 +4,7 @@ import { Logos3 } from "@/components/ui/logos3";
 const USPS: { Icon: LucideIcon; text: string }[] = [
   { Icon: Truck, text: "Gratis afhentning i hele Danmark" },
   { Icon: Clock, text: "Tilbud inden for få timer" },
-  { Icon: CreditCard, text: "Betaling samme dag" },
+  { Icon: CreditCard, text: "Betaling inden afhentning" },
   { Icon: Check, text: "Helt uforpligtende" },
 ];
 

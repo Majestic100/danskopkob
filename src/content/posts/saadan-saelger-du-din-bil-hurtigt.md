@@ -41,7 +41,7 @@ En eksportopkøber sælger ikke bilen videre i Danmark — den ryger til markede
 
 1. Du indtaster din nummerplade og får et tilbud inden for 24 timer
 2. Accepterer du, aftales gratis afhentning — i hele landet
-3. Pengene står på din konto **samme dag**, som bilen hentes
+3. Pengene sendes som straksoverførsel og står på din konto, **før** bilen hentes
 
 Ingen fremvisninger, ingen annoncer, ingen efterfølgende reklamationer — afmelding og papirarbejde klares for dig.
 
