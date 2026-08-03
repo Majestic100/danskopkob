@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TrustpilotStar, TrustStars } from "@/components/icons";
 
 interface Review {
@@ -62,6 +64,34 @@ const REVIEWS: Review[] = [
 ];
 
 export function Reviews() {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [aktiv, setAktiv] = useState(0);
+
+  // Holder prikkerne synkroniseret med både swipe og pile-knapper.
+  useEffect(() => {
+    const row = rowRef.current;
+    if (!row) return;
+    const onScroll = () => {
+      const kort = row.querySelector("article");
+      if (!kort) return;
+      const trin = kort.getBoundingClientRect().width + 16; // kort + gap
+      setAktiv(Math.round(row.scrollLeft / trin));
+    };
+    row.addEventListener("scroll", onScroll, { passive: true });
+    return () => row.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const gaaTil = (retning: -1 | 1) => {
+    const row = rowRef.current;
+    if (!row) return;
+    const kort = row.querySelector("article");
+    if (!kort) return;
+    row.scrollBy({
+      left: retning * (kort.getBoundingClientRect().width + 16),
+      behavior: "smooth",
+    });
+  };
+
   return (
     <section id="anmeldelser" className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -81,17 +111,41 @@ export function Reviews() {
           <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
             Det siger vores sælgere
           </h2>
-          <p className="mt-2 text-sm text-ink/50 sm:hidden">
-            Swipe for at læse flere →
-          </p>
+          {/* Pile + tæller: gør det tydeligt, at der er flere kort (mobil) */}
+          <div className="mt-4 flex items-center gap-3 sm:hidden">
+            <button
+              type="button"
+              onClick={() => gaaTil(-1)}
+              aria-label="Forrige anmeldelse"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-ink/5 text-ink transition-colors active:bg-ink/10 disabled:opacity-30"
+              disabled={aktiv === 0}
+            >
+              <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+            </button>
+            <span className="min-w-[4.5rem] text-sm font-semibold text-ink/60">
+              {Math.min(aktiv + 1, REVIEWS.length)} af {REVIEWS.length}
+            </span>
+            <button
+              type="button"
+              onClick={() => gaaTil(1)}
+              aria-label="Næste anmeldelse"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-soft transition-colors active:bg-brand/90 disabled:opacity-30"
+              disabled={aktiv >= REVIEWS.length - 1}
+            >
+              <ChevronRight className="h-5 w-5" strokeWidth={2.5} />
+            </button>
+          </div>
         </div>
 
         {/* Mobil: vandret swipe (kortere side). Desktop: grid som før. */}
-        <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+        <div
+          ref={rowRef}
+          className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3"
+        >
           {REVIEWS.map((r, i) => (
             <article
               key={r.name}
-              className="reveal flex w-[85vw] max-w-[330px] shrink-0 snap-center flex-col rounded-2xl bg-offwhite p-6 shadow-soft sm:w-auto sm:max-w-none"
+              className="reveal flex w-[78vw] max-w-[320px] shrink-0 snap-start flex-col rounded-2xl bg-offwhite p-6 shadow-soft sm:w-auto sm:max-w-none"
               style={{ transitionDelay: `${(i % 3) * 80}ms` }}
             >
               <TrustStars className="mb-4 flex" />
