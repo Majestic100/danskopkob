@@ -198,6 +198,20 @@
     padding: 0 12px;
   }
 
+  /* Kort i en SwipeRow: fast bredde + snap på mobil, fri i grid fra sm */
+  .swipe-card {
+    width: 78vw;
+    max-width: 320px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 640px) {
+    .swipe-card {
+      width: auto;
+      max-width: none;
+    }
+  }
+
   /* Skjul scrollbaren på vandrette swipe-rækker (mobil) */
   .no-scrollbar {
     -ms-overflow-style: none;
