@@ -1,90 +1,121 @@
 import { TrustpilotStar, TrustStars } from "@/components/icons";
 
+interface Review {
+  title: string;
+  text: string;
+  initials: string;
+  name: string;
+  city: string;
+  accent: "trust" | "brand";
+}
+
+// SWAP: rigtige kundeanmeldelser ind her
+const REVIEWS: Review[] = [
+  {
+    title: "Fik 22.000 mere end forventet",
+    text: "Jeg havde fået bud fra to forhandlere i forvejen, men tilbuddet her var markant højere. Bilen blev hentet to dage efter, og pengene stod på kontoen, før de kørte. Kan klart anbefales.",
+    initials: "MK",
+    name: "Martin Kjær",
+    city: "Aarhus",
+    accent: "trust",
+  },
+  {
+    title: "Nemt fra start til slut",
+    text: "Skrev nummerpladen ind om formiddagen og havde et tilbud før frokost. Alt foregik gnidningsfrit, og chaufføren der hentede bilen var flink og professionel.",
+    initials: "LN",
+    name: "Louise Nielsen",
+    city: "Odense",
+    accent: "brand",
+  },
+  {
+    title: "Skeptisk, men blev positivt overrasket",
+    text: "Jeg var lidt skeptisk over for at sælge til en opkøber, men det viste sig at være den bedste beslutning. De var ærlige om processen hele vejen, og prisen holdt det de lovede. Ingen overraskelser.",
+    initials: "PA",
+    name: "Peter Andersen",
+    city: "Aalborg",
+    accent: "trust",
+  },
+  {
+    title: "Hurtig afhentning helt ude på landet",
+    text: "Vi bor et godt stykke uden for Esbjerg og havde regnet med besvær. Men de kom hele vejen ud uden ekstra omkostninger. Super service.",
+    initials: "HT",
+    name: "Hanne Thomsen",
+    city: "Esbjerg",
+    accent: "brand",
+  },
+  {
+    title: "Solgte min varebil på en dag",
+    text: "Havde en ældre Transporter stående efter jeg lukkede mit firma. De gav et fair bud med det samme, og hele handlen var afsluttet inden for 24 timer. Anbefales til andre håndværkere.",
+    initials: "SØ",
+    name: "Søren Østergaard",
+    city: "Vejle",
+    accent: "trust",
+  },
+  {
+    title: "God kommunikation hele vejen",
+    text: "Det jeg satte mest pris på var, at jeg altid vidste hvad der skete. Jeg fik besked på sms både før og efter afhentning. Tryg oplevelse, og en pris jeg ikke kunne finde andre steder.",
+    initials: "CB",
+    name: "Camilla Bach",
+    city: "København",
+    accent: "brand",
+  },
+];
+
 export function Reviews() {
   return (
-    <section id="anmeldelser" className="py-16 sm:py-24 bg-white">
+    <section id="anmeldelser" className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="reveal flex flex-col items-center text-center mb-12">
+        <div className="reveal mb-8 flex flex-col items-center text-center sm:mb-12">
           {/* Trustpilot-logo (inline SVG) + score */}
-          <div className="flex items-center gap-2 mb-3">
-            <TrustpilotStar className="w-6 h-6" />
+          <div className="mb-3 flex items-center gap-2">
+            <TrustpilotStar className="h-6 w-6" />
             <span className="text-xl font-extrabold text-ink">Trustpilot</span>
           </div>
           <div className="flex items-center gap-3">
             <TrustStars size="lg" className="flex" />
-            <span className="text-sm text-ink/70"><strong className="text-ink">4,8</strong> ud af 5 · 1.247 anmeldelser</span>
+            <span className="text-sm text-ink/70">
+              <strong className="text-ink">4,8</strong> ud af 5 · 1.247
+              anmeldelser
+            </span>
           </div>
-          <h2 className="mt-6 text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Det siger vores sælgere</h2>
+          <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+            Det siger vores sælgere
+          </h2>
+          <p className="mt-2 text-sm text-ink/50 sm:hidden">
+            Swipe for at læse flere →
+          </p>
         </div>
 
-        {/* SWAP: rigtige kundeanmeldelser ind her */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          {/* Anmeldelse 1 */}
-          <div className="reveal bg-offwhite rounded-2xl p-6 shadow-soft">
-            <TrustStars className="flex mb-4" />
-            <h3 className="font-bold text-ink mb-2">Fik 22.000 mere end forventet</h3>
-            <p className="text-sm text-ink/70 leading-relaxed">Jeg havde fået bud fra to forhandlere i forvejen, men tilbuddet her var markant højere. Bilen blev hentet to dage efter, og pengene stod på kontoen samme aften. Kan klart anbefales.</p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-trust/10 text-trust font-bold flex items-center justify-center text-sm">MK</div>
-              <div><p className="text-sm font-semibold text-ink leading-tight">Martin Kjær</p><p className="text-xs text-ink/55">Aarhus</p></div>
-            </div>
-          </div>
-
-          {/* Anmeldelse 2 */}
-          <div className="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style={{ transitionDelay: '80ms' }}>
-            <TrustStars className="flex mb-4" />
-            <h3 className="font-bold text-ink mb-2">Nemt fra start til slut</h3>
-            <p className="text-sm text-ink/70 leading-relaxed">Skrev nummerpladen ind om formiddagen og havde et tilbud før frokost. Alt foregik gnidningsfrit, og chaufføren der hentede bilen var flink og professionel.</p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-sm">LN</div>
-              <div><p className="text-sm font-semibold text-ink leading-tight">Louise Nielsen</p><p className="text-xs text-ink/55">Odense</p></div>
-            </div>
-          </div>
-
-          {/* Anmeldelse 3 */}
-          <div className="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style={{ transitionDelay: '160ms' }}>
-            <TrustStars className="flex mb-4" />
-            <h3 className="font-bold text-ink mb-2">Skeptisk, men blev positivt overrasket</h3>
-            <p className="text-sm text-ink/70 leading-relaxed">Jeg var lidt skeptisk over for at sælge til en eksportør, men det viste sig at være den bedste beslutning. De var ærlige om processen hele vejen, og prisen holdt det de lovede. Ingen overraskelser.</p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-trust/10 text-trust font-bold flex items-center justify-center text-sm">PA</div>
-              <div><p className="text-sm font-semibold text-ink leading-tight">Peter Andersen</p><p className="text-xs text-ink/55">Aalborg</p></div>
-            </div>
-          </div>
-
-          {/* Anmeldelse 4 */}
-          <div className="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style={{ transitionDelay: '40ms' }}>
-            <TrustStars className="flex mb-4" />
-            <h3 className="font-bold text-ink mb-2">Hurtig afhentning helt ude på landet</h3>
-            <p className="text-sm text-ink/70 leading-relaxed">Vi bor et godt stykke uden for Esbjerg og havde regnet med besvær. Men de kom hele vejen ud uden ekstra omkostninger. Super service.</p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-sm">HT</div>
-              <div><p className="text-sm font-semibold text-ink leading-tight">Hanne Thomsen</p><p className="text-xs text-ink/55">Esbjerg</p></div>
-            </div>
-          </div>
-
-          {/* Anmeldelse 5 */}
-          <div className="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style={{ transitionDelay: '120ms' }}>
-            <TrustStars className="flex mb-4" />
-            <h3 className="font-bold text-ink mb-2">Solgte min varebil på en dag</h3>
-            <p className="text-sm text-ink/70 leading-relaxed">Havde en ældre Transporter stående efter jeg lukkede mit firma. De gav et fair bud med det samme, og hele handlen var afsluttet inden for 24 timer. Anbefales til andre håndværkere.</p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-trust/10 text-trust font-bold flex items-center justify-center text-sm">SØ</div>
-              <div><p className="text-sm font-semibold text-ink leading-tight">Søren Østergaard</p><p className="text-xs text-ink/55">Vejle</p></div>
-            </div>
-          </div>
-
-          {/* Anmeldelse 6 */}
-          <div className="reveal bg-offwhite rounded-2xl p-6 shadow-soft" style={{ transitionDelay: '200ms' }}>
-            <TrustStars className="flex mb-4" />
-            <h3 className="font-bold text-ink mb-2">God kommunikation hele vejen</h3>
-            <p className="text-sm text-ink/70 leading-relaxed">Det jeg satte mest pris på var, at jeg altid vidste hvad der skete. Jeg fik besked på sms både før og efter afhentning. Tryg oplevelse, og en pris jeg ikke kunne finde andre steder.</p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-sm">CB</div>
-              <div><p className="text-sm font-semibold text-ink leading-tight">Camilla Bach</p><p className="text-xs text-ink/55">København</p></div>
-            </div>
-          </div>
+        {/* Mobil: vandret swipe (kortere side). Desktop: grid som før. */}
+        <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+          {REVIEWS.map((r, i) => (
+            <article
+              key={r.name}
+              className="reveal flex w-[85vw] max-w-[330px] shrink-0 snap-center flex-col rounded-2xl bg-offwhite p-6 shadow-soft sm:w-auto sm:max-w-none"
+              style={{ transitionDelay: `${(i % 3) * 80}ms` }}
+            >
+              <TrustStars className="mb-4 flex" />
+              <h3 className="mb-2 font-bold text-ink">{r.title}</h3>
+              <p className="text-sm leading-relaxed text-ink/70">{r.text}</p>
+              <div className="mt-auto flex items-center gap-3 pt-5">
+                <div
+                  className={
+                    r.accent === "trust"
+                      ? "flex h-9 w-9 items-center justify-center rounded-full bg-trust/10 text-sm font-bold text-trust"
+                      : "flex h-9 w-9 items-center justify-center rounded-full bg-brand/10 text-sm font-bold text-brand"
+                  }
+                >
+                  {r.initials}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold leading-tight text-ink">
+                    {r.name}
+                  </p>
+                  <p className="text-xs text-ink/55">{r.city}</p>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
