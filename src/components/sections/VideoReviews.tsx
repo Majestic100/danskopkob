@@ -1,5 +1,6 @@
 import { Play } from "lucide-react";
 import { TrustStars } from "@/components/icons";
+import { SwipeRow } from "@/components/SwipeRow";
 
 // SWAP: rigtige videoanmeldelser (thumbnail + videolink) ind her.
 // Tre videoer med hvert sit budskab: hastighed, merpris og hvor nemt det er.
@@ -62,11 +63,11 @@ export function VideoReviews() {
           </div>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <SwipeRow count={VIDEOS.length}>
           {VIDEOS.map((video, i) => (
             <figure
               key={video.name}
-              className="reveal group overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-softlg"
+              className="swipe-card reveal group overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-softlg"
               style={{ transitionDelay: `${i * 90}ms` }}
             >
               <div className="zoom-wrap relative cursor-pointer overflow-hidden">
@@ -110,7 +111,7 @@ export function VideoReviews() {
               </div>
             </figure>
           ))}
-        </div>
+        </SwipeRow>
       </div>
     </section>
   );
