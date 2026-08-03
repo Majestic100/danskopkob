@@ -1,4 +1,4 @@
-import { Phone, PhoneOff, Check, ArrowRight } from "lucide-react";
+import { Phone, Check, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DanishFlag } from "@/components/icons";
 
@@ -102,75 +102,62 @@ export function SupportTeam() {
             </Link>
           </div>
 
-          {/* Højre: "indgående opkald"-kort + holdet */}
+          {/* Højre: rent rådgiver-kort (erstatter det tidligere fake
+              "indgående opkald"-mockup — enklere og mere troværdigt) */}
           <div className="reveal" style={{ transitionDelay: "120ms" }}>
-            <div className="relative mx-auto max-w-sm rounded-3xl bg-ink p-6 text-white shadow-softlg ring-1 ring-white/10">
-              <div className="flex items-center justify-between text-xs">
-                <span className="inline-flex items-center gap-1.5 text-white/60">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-tp" />
-                  Indgående opkald
-                </span>
-                <span className="inline-flex items-center gap-1.5 text-white/40">
-                  <DanishFlag className="h-2.5 w-4 rounded-[1px]" />
-                  MinBilPris
-                </span>
-              </div>
-
-              <div className="mt-8 flex flex-col items-center text-center">
-                <div className="relative">
-                  <span className="absolute -inset-2 animate-ping rounded-full ring-2 ring-tp/40" />
-                  <img
-                    src={featured.photo}
-                    alt={featured.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="relative h-24 w-24 rounded-full object-cover ring-4 ring-white/10"
-                  />
-                </div>
-                <p className="mt-4 text-xl font-bold">{featured.name}</p>
-                <p className="text-sm text-white/55">Bilkonsulent</p>
-                <p className="mt-3 text-sm text-white/70">
-                  Ringer dig op om din{" "}
-                  <span className="font-semibold text-white">VW Passat</span>
-                </p>
-              </div>
-
-              <div className="mt-8 flex items-center justify-center gap-12">
-                <div className="flex flex-col items-center gap-2">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand">
-                    <PhoneOff className="h-6 w-6" strokeWidth={2.2} />
+            <div className="mx-auto max-w-sm rounded-3xl bg-white p-7 shadow-softlg ring-1 ring-black/5">
+              <div className="flex items-center gap-4">
+                <img
+                  src={featured.photo}
+                  alt={featured.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-16 w-16 rounded-full object-cover ring-2 ring-black/5"
+                />
+                <div>
+                  <p className="text-lg font-extrabold leading-tight text-ink">
+                    {featured.name}
+                  </p>
+                  <p className="text-sm text-ink/55">Bilkonsulent</p>
+                  <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-tp">
+                    <span className="h-1.5 w-1.5 rounded-full bg-tp" />
+                    Klar ved telefonen nu
                   </span>
-                  <span className="text-xs text-white/50">Afvis</span>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <span className="flex h-14 w-14 animate-pulse items-center justify-center rounded-full bg-tp shadow-[0_0_0_8px_rgba(0,182,122,0.15)]">
-                    <Phone className="h-6 w-6" strokeWidth={2.2} />
-                  </span>
-                  <span className="text-xs text-white/50">Besvar</span>
                 </div>
               </div>
-            </div>
 
-            {/* Holdet af faste konsulenter */}
-            <div className="mt-6">
-              <p className="text-center text-xs font-medium text-ink/55">
-                Du får en fast kontaktperson — ikke et tilfældigt callcenter
+              <a
+                href="tel:+4570605040"
+                className="btn-cta mt-6 flex items-center justify-center gap-2 rounded-xl bg-ink px-5 py-3.5 font-bold text-white"
+              >
+                <Phone className="h-4 w-4" strokeWidth={2.2} />
+                70 60 50 40
+              </a>
+              <p className="mt-2 text-center text-xs text-ink/50">
+                Hverdage 8–20 · weekend 10–16
               </p>
-              <div className="mt-3 flex items-center justify-center gap-5">
-                {CALLERS.map((c) => (
-                  <div key={c.name} className="flex flex-col items-center">
-                    <img
-                      src={c.photo}
-                      alt={c.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-12 w-12 rounded-full object-cover shadow-soft ring-2 ring-white"
-                    />
-                    <span className="mt-1.5 text-[11px] font-semibold text-ink">
-                      {c.name.split(" ")[0]}
-                    </span>
-                  </div>
-                ))}
+
+              {/* Holdet af faste konsulenter */}
+              <div className="mt-6 border-t border-black/5 pt-5">
+                <p className="text-center text-xs font-medium text-ink/55">
+                  Du får en fast kontaktperson — ikke et tilfældigt callcenter
+                </p>
+                <div className="mt-3 flex items-center justify-center gap-5">
+                  {CALLERS.map((c) => (
+                    <div key={c.name} className="flex flex-col items-center">
+                      <img
+                        src={c.photo}
+                        alt={c.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-11 w-11 rounded-full object-cover shadow-soft ring-2 ring-white"
+                      />
+                      <span className="mt-1.5 text-[11px] font-semibold text-ink">
+                        {c.name.split(" ")[0]}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

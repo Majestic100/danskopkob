@@ -63,8 +63,9 @@ export function Hero() {
               ))}
             </h1>
             <p className="mt-5 max-w-lg text-lg text-white/75">
-              Vi køber din brugte bil og eksporterer den ud af landet — derfor
-              kan vi ofte betale dig mere end det danske marked.
+              Vi køber din brugte bil og sælger den videre gennem vores faste
+              forhandler-samarbejder i hele Europa — derfor kan vi ofte betale
+              dig mere end det danske marked.
             </p>
 
             {/* Lead-kort à la skitsen: mørkt kort med overskrift + plade-felt */}

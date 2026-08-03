@@ -1,84 +1,159 @@
-import { Truck } from "lucide-react";
+import { useState } from "react";
+import { Clock, MapPin } from "lucide-react";
+
+// SWAP: læg rigtige fotos af de opkøbte biler i public/biler/ og skriv
+// filnavnet i `photo` herunder. Mangler filen, vises et neutralt felt med
+// bilens navn i stedet — aldrig et brækket billede.
+const BASE = import.meta.env.BASE_URL;
+
+interface Case {
+  model: string;
+  meta: string;
+  city: string;
+  hours: string; // fra kontakt til salg
+  timeline: string; // fra udfyldt formular til betalt og afhentet
+  market: string;
+  offer: string;
+  diff: string;
+  photo?: string;
+}
+
+// SWAP: rigtige case-tal og fotos
+const CASES: Case[] = [
+  {
+    model: "VW Passat 2.0 TDI",
+    meta: "2017 · 168.000 km",
+    city: "Aarhus",
+    hours: "2 timer fra kontakt til salg",
+    timeline: "Formular kl. 09:14 → betalt og afhentet næste dag kl. 10:20",
+    market: "112.000 kr",
+    offer: "131.000 kr",
+    diff: "+19.000 kr",
+  },
+  {
+    model: "BMW 320d Touring",
+    meta: "2019 · 121.000 km",
+    city: "København",
+    hours: "4 timer fra kontakt til salg",
+    timeline: "Formular kl. 11:40 → betalt og afhentet dagen efter kl. 13:05",
+    market: "198.000 kr",
+    offer: "226.500 kr",
+    diff: "+28.500 kr",
+  },
+  {
+    model: "Mercedes Vito 114",
+    meta: "2018 · 204.000 km",
+    city: "Esbjerg",
+    hours: "3 timer fra kontakt til salg",
+    timeline: "Formular kl. 08:05 → betalt og afhentet samme dag kl. 16:30",
+    market: "94.000 kr",
+    offer: "109.000 kr",
+    diff: "+15.000 kr",
+  },
+];
+
+function CarPhoto({ src, alt }: { src?: string; alt: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) {
+    return (
+      <div className="flex h-44 w-full items-center justify-center bg-gradient-to-br from-ink/[0.06] to-ink/[0.02]">
+        <span className="px-4 text-center text-sm font-semibold text-ink/35">
+          {alt}
+        </span>
+      </div>
+    );
+  }
+  return (
+    <img
+      src={`${BASE}${src}`}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
+      className="zoom-img h-44 w-full object-cover"
+    />
+  );
+}
 
 export function ExportAdvantage() {
   return (
-    <section className="py-16 sm:py-24 bg-offwhite">
+    <section className="bg-offwhite py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="reveal max-w-2xl mb-12">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-trust mb-3">Derfor får du mere</p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink">Du tjener mere, fordi vi eksporterer</h2>
-          <p className="mt-4 text-ink/70 text-lg">
-            På flere bilmodeller er efterspørgslen højere i udlandet end i Danmark. Vi sælger bilen videre på de markeder, hvor den er mest værd, og den fortjeneste deler vi med dig. Derfor lander vores tilbud ofte højere end det, du får ved et almindeligt dansk salg.
+        <div className="reveal mb-12 max-w-2xl">
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-trust">
+            Derfor får du mere
+          </p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+            Vi sælger din bil videre — til hele Europa
+          </h2>
+          <p className="mt-4 text-lg text-ink/70">
+            Vi har faste samarbejdsaftaler med bilforhandlere i hele Europa. På
+            mange modeller er efterspørgslen — og prisen — højere hos dem end på
+            det danske marked. Vi sælger bilen dér, hvor den er mest værd, og
+            den forskel deler vi med dig. Derfor lander vores tilbud ofte over
+            det, du får ved et almindeligt dansk salg.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Case 1 */}
-          {/* SWAP: rigtige case-tal */}
-          <div className="reveal bg-white rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-ink/5 flex items-center justify-center">
-                <Truck className="w-6 h-6 text-ink" />
+        <div className="grid gap-6 md:grid-cols-3">
+          {CASES.map((c, i) => (
+            <article
+              key={c.model}
+              className="reveal zoom-wrap overflow-hidden rounded-2xl bg-white shadow-soft transition-shadow hover:shadow-softlg"
+              style={{ transitionDelay: `${i * 90}ms` }}
+            >
+              <div className="relative overflow-hidden">
+                <CarPhoto src={c.photo} alt={c.model} />
+                <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-ink shadow-sm backdrop-blur">
+                  <MapPin className="h-3.5 w-3.5 text-brand" /> {c.city}
+                </span>
               </div>
-              <div>
-                <p className="font-bold text-ink leading-tight">VW Passat 2.0 TDI</p>
-                <p className="text-xs text-ink/60">2017 · 168.000 km</p>
-              </div>
-            </div>
-            <dl className="space-y-2 text-sm">
-              <div className="flex justify-between"><dt className="text-ink/60">Dansk markedspris</dt><dd className="font-semibold text-ink/70 line-through">112.000 kr</dd></div>
-              <div className="flex justify-between"><dt className="text-ink/60">Dit tilbud hos os</dt><dd className="font-bold text-ink">131.000 kr</dd></div>
-            </dl>
-            <div className="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
-              <span className="text-lg font-extrabold text-tp">+19.000 kr</span>
-              <span className="block text-xs text-ink/60">mere til dig</span>
-            </div>
-          </div>
 
-          {/* Case 2 */}
-          <div className="reveal bg-white rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style={{ transitionDelay: '90ms' }}>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-ink/5 flex items-center justify-center">
-                <Truck className="w-6 h-6 text-ink" />
-              </div>
-              <div>
-                <p className="font-bold text-ink leading-tight">BMW 320d Touring</p>
-                <p className="text-xs text-ink/60">2019 · 121.000 km</p>
-              </div>
-            </div>
-            <dl className="space-y-2 text-sm">
-              <div className="flex justify-between"><dt className="text-ink/60">Dansk markedspris</dt><dd className="font-semibold text-ink/70 line-through">198.000 kr</dd></div>
-              <div className="flex justify-between"><dt className="text-ink/60">Dit tilbud hos os</dt><dd className="font-bold text-ink">226.500 kr</dd></div>
-            </dl>
-            <div className="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
-              <span className="text-lg font-extrabold text-tp">+28.500 kr</span>
-              <span className="block text-xs text-ink/60">mere til dig</span>
-            </div>
-          </div>
+              <div className="p-6">
+                <p className="font-bold leading-tight text-ink">{c.model}</p>
+                <p className="text-xs text-ink/60">{c.meta}</p>
 
-          {/* Case 3 */}
-          <div className="reveal bg-white rounded-2xl p-6 shadow-soft hover:shadow-softlg transition-shadow" style={{ transitionDelay: '180ms' }}>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-ink/5 flex items-center justify-center">
-                <Truck className="w-6 h-6 text-ink" />
+                <dl className="mt-5 space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <dt className="text-ink/60">Dansk markedspris</dt>
+                    <dd className="font-semibold text-ink/70 line-through">
+                      {c.market}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-ink/60">Dit tilbud hos os</dt>
+                    <dd className="font-bold text-ink">{c.offer}</dd>
+                  </div>
+                </dl>
+
+                <div className="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
+                  <span className="text-lg font-extrabold text-tp">
+                    {c.diff}
+                  </span>
+                  <span className="block text-xs text-ink/60">mere til dig</span>
+                </div>
+
+                <div className="mt-4 space-y-2 border-t border-black/5 pt-4">
+                  <p className="flex items-start gap-2 text-xs font-semibold text-ink/70">
+                    <Clock
+                      className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand"
+                      strokeWidth={2.2}
+                    />
+                    {c.hours}
+                  </p>
+                  <p className="text-xs leading-relaxed text-ink/50">
+                    {c.timeline}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="font-bold text-ink leading-tight">Mercedes Vito 114</p>
-                <p className="text-xs text-ink/60">2018 · 204.000 km</p>
-              </div>
-            </div>
-            <dl className="space-y-2 text-sm">
-              <div className="flex justify-between"><dt className="text-ink/60">Dansk markedspris</dt><dd className="font-semibold text-ink/70 line-through">94.000 kr</dd></div>
-              <div className="flex justify-between"><dt className="text-ink/60">Dit tilbud hos os</dt><dd className="font-bold text-ink">109.000 kr</dd></div>
-            </dl>
-            <div className="mt-4 rounded-xl bg-tp/10 px-4 py-3 text-center">
-              <span className="text-lg font-extrabold text-tp">+15.000 kr</span>
-              <span className="block text-xs text-ink/60">mere til dig</span>
-            </div>
-          </div>
+            </article>
+          ))}
         </div>
 
-        <p className="reveal mt-6 text-xs text-ink/50">Tallene er eksempler og afhænger af bilens stand, model, kilometerstand og udstyr. Dit konkrete tilbud beregnes individuelt.</p>
+        <p className="reveal mt-6 text-xs text-ink/50">
+          Tallene er eksempler og afhænger af bilens stand, model,
+          kilometerstand og udstyr. Dit konkrete tilbud beregnes individuelt.
+        </p>
       </div>
     </section>
   );

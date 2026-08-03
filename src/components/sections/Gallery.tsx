@@ -103,7 +103,7 @@ export function Gallery() {
               <div className="flex flex-wrap-reverse items-start justify-between gap-x-3 gap-y-2">
                 <div>
                   <p className="whitespace-nowrap text-xs text-ink/50">
-                    Udbetalt samme dag
+                    Betalt før afhentning
                   </p>
                   <p className="whitespace-nowrap text-2xl font-extrabold leading-tight text-ink">
                     {car.price}

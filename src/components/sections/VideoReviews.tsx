@@ -1,33 +1,41 @@
 import { Play } from "lucide-react";
 import { TrustStars } from "@/components/icons";
 
-// SWAP: rigtige videoanmeldelser (thumbnail + videolink) ind her
+// SWAP: rigtige videoanmeldelser (thumbnail + videolink) ind her.
+// Tre videoer med hvert sit budskab: hastighed, merpris og hvor nemt det er.
 const VIDEOS = [
   {
     name: "Jakob Mortensen",
     city: "Roskilde",
     duration: "1:24",
+    theme: "Hvor hurtigt det gik",
+    headline: "Solgt og betalt på 26 timer",
     photo:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80",
     quote:
-      "De bød 18.500 over forhandlerens tilbud — og hentede bilen to dage senere.",
+      "Jeg udfyldte formularen tirsdag formiddag. Onsdag stod pengene på kontoen, før de kørte med bilen.",
   },
   {
     name: "Mette Sørensen",
     city: "Aarhus",
     duration: "0:58",
+    theme: "Hvor meget mere hun fik",
+    headline: "18.500 kr mere end forhandleren",
     photo:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80",
     quote:
-      "Jeg havde aldrig solgt bil før. De guidede mig igennem det hele på ét opkald.",
+      "Jeg havde et bud fra min lokale forhandler. Tilbuddet her lå 18.500 kr over — for præcis samme bil.",
   },
   {
     name: "Anders Holm",
     city: "Kolding",
     duration: "1:47",
+    theme: "Hvor nemt det var",
+    headline: "Jeg skulle ikke gøre noget selv",
     photo:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80",
-    quote: "Fra nummerplade til penge på kontoen på under 48 timer.",
+    quote:
+      "Ingen annoncer, ingen fremvisninger, intet papirarbejde. De klarede afmeldingen og hentede bilen hjemme hos mig.",
   },
 ];
 
@@ -82,6 +90,9 @@ export function VideoReviews() {
                 <span className="absolute right-3 top-3 rounded-md bg-ink/75 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
                   {video.duration}
                 </span>
+                <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand shadow-sm backdrop-blur">
+                  {video.theme}
+                </span>
                 {/* Navn + by + stjerner på selve billedet */}
                 <figcaption className="absolute bottom-0 left-0 right-0 p-5 text-white">
                   <TrustStars className="mb-1.5 flex" />
@@ -89,9 +100,14 @@ export function VideoReviews() {
                   <p className="text-sm text-white/70">{video.city}</p>
                 </figcaption>
               </div>
-              <blockquote className="p-5 text-sm italic leading-relaxed text-ink/70">
-                &ldquo;{video.quote}&rdquo;
-              </blockquote>
+              <div className="p-5">
+                <p className="font-extrabold leading-snug text-ink">
+                  {video.headline}
+                </p>
+                <blockquote className="mt-1.5 text-sm italic leading-relaxed text-ink/65">
+                  &ldquo;{video.quote}&rdquo;
+                </blockquote>
+              </div>
             </figure>
           ))}
         </div>
