@@ -103,8 +103,13 @@ export function SupportTeam() {
           </div>
 
           {/* Højre: rent rådgiver-kort (erstatter det tidligere fake
-              "indgående opkald"-mockup — enklere og mere troværdigt) */}
-          <div className="reveal" style={{ transitionDelay: "120ms" }}>
+              "indgående opkald"-mockup). Skjult på mobil, hvor det blot
+              forlængede siden — telefonnummeret er i forvejen i menuen,
+              den faste bund-CTA og footeren. */}
+          <div
+            className="reveal hidden lg:block"
+            style={{ transitionDelay: "120ms" }}
+          >
             <div className="mx-auto max-w-sm rounded-3xl bg-white p-7 shadow-softlg ring-1 ring-black/5">
               <div className="flex items-center gap-4">
                 <img

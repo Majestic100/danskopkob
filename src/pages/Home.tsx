@@ -11,7 +11,6 @@ import { Coverage } from "@/components/sections/Coverage";
 import { CarTypes } from "@/components/sections/CarTypes";
 import { SupportTeam } from "@/components/sections/SupportTeam";
 import { Faq } from "@/components/sections/Faq";
-import { TestimonialsMarquee } from "@/components/sections/TestimonialsMarquee";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { MobileCtaBar } from "@/components/MobileCtaBar";
 import { SocialProofToasts } from "@/components/SocialProofToasts";
@@ -35,7 +34,6 @@ export default function Home() {
       <CarTypes />
       <SupportTeam />
       <Faq />
-      <TestimonialsMarquee />
       <FinalCta />
       <MobileCtaBar />
       <SocialProofToasts />

@@ -388,8 +388,7 @@
   }
   .animate-ping,
   .animate-pulse,
-  .animate-bounce,
-  .animate-marquee {
+  .animate-bounce {
     animation: none !important;
   }
 }
