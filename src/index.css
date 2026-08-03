@@ -198,6 +198,15 @@
     padding: 0 12px;
   }
 
+  /* Skjul scrollbaren på vandrette swipe-rækker (mobil) */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   /* ---- FAQ accordion ---- */
   .faq-panel {
     max-height: 0;
