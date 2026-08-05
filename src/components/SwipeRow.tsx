@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const GAP = 16; // svarer til gap-4 i rækken
 
 interface SwipeRowProps {
-  /** Antal kort — bruges til "x af y"-tælleren */
+  /** Antal kort — bruges til prikkerne */
   count: number;
   /** Tailwind-klasser for grid-opsætningen fra sm og op */
   gridClassName?: string;
@@ -19,8 +19,11 @@ interface SwipeRowProps {
  *
  * Baggrund: lange kort-lister (anmeldelser, videoer) fyldte flere tusinde
  * pixels på telefon, når kortene lå under hinanden. Her ligger de i en
- * snap-scroll-række i stedet. Pile + tæller er nødvendige, fordi et rent
- * swipe-hint er for let at overse — brugeren skal kunne SE, at der er mere.
+ * snap-scroll-række i stedet.
+ *
+ * Betjeningen er bevidst diskret og symmetrisk: to ens pile omkring en
+ * række prikker. Tidligere var "næste" en stor rød cirkel ved siden af en
+ * grå — det så skævt ud. Prikkerne viser position og kan klikkes.
  *
  * Kortene skal selv have `swipe-card`-klassen (bredde + snap).
  */
@@ -33,54 +36,74 @@ export function SwipeRow({
   const rowRef = useRef<HTMLDivElement>(null);
   const [aktiv, setAktiv] = useState(0);
 
+  const trinBredde = () => {
+    const row = rowRef.current;
+    const kort = row?.firstElementChild as HTMLElement | null;
+    return kort ? kort.getBoundingClientRect().width + GAP : 0;
+  };
+
   useEffect(() => {
     const row = rowRef.current;
     if (!row) return;
     const onScroll = () => {
-      const kort = row.firstElementChild as HTMLElement | null;
-      if (!kort) return;
-      const trin = kort.getBoundingClientRect().width + GAP;
-      setAktiv(Math.round(row.scrollLeft / trin));
+      const trin = trinBredde();
+      if (trin) setAktiv(Math.round(row.scrollLeft / trin));
     };
     row.addEventListener("scroll", onScroll, { passive: true });
     return () => row.removeEventListener("scroll", onScroll);
   }, []);
 
-  const gaaTil = (retning: -1 | 1) => {
-    const row = rowRef.current;
-    if (!row) return;
-    const kort = row.firstElementChild as HTMLElement | null;
-    if (!kort) return;
-    row.scrollBy({
-      left: retning * (kort.getBoundingClientRect().width + GAP),
+  const gaaTil = (retning: -1 | 1) =>
+    rowRef.current?.scrollBy({
+      left: retning * trinBredde(),
       behavior: "smooth",
     });
-  };
+
+  const gaaTilIndex = (i: number) =>
+    rowRef.current?.scrollTo({ left: i * trinBredde(), behavior: "smooth" });
+
+  const knapCls =
+    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-ink shadow-sm ring-1 ring-black/10 transition active:scale-95 disabled:opacity-30 disabled:shadow-none";
 
   return (
     <>
-      {/* Pile + tæller — kun på mobil, hvor rækken kan scrolles */}
-      <div className="mb-4 flex items-center gap-3 sm:hidden">
+      {/* Betjening — kun på mobil, hvor rækken kan scrolles */}
+      <div className="mb-4 flex items-center justify-center gap-4 sm:hidden">
         <button
           type="button"
           onClick={() => gaaTil(-1)}
           aria-label="Forrige"
           disabled={aktiv === 0}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-ink/5 text-ink transition-colors active:bg-ink/10 disabled:opacity-30"
+          className={knapCls}
         >
-          <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+          <ChevronLeft className="h-4 w-4" strokeWidth={2.5} />
         </button>
-        <span className="min-w-[4.5rem] text-sm font-semibold text-ink/60">
-          {Math.min(aktiv + 1, count)} af {count}
-        </span>
+
+        <div className="flex items-center gap-1.5" role="tablist">
+          {Array.from({ length: count }).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              role="tab"
+              aria-label={`Gå til ${i + 1} af ${count}`}
+              aria-selected={i === aktiv}
+              onClick={() => gaaTilIndex(i)}
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300",
+                i === aktiv ? "w-5 bg-brand" : "w-1.5 bg-ink/20",
+              )}
+            />
+          ))}
+        </div>
+
         <button
           type="button"
           onClick={() => gaaTil(1)}
           aria-label="Næste"
           disabled={aktiv >= count - 1}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-soft transition-colors active:bg-brand/90 disabled:opacity-30"
+          className={knapCls}
         >
-          <ChevronRight className="h-5 w-5" strokeWidth={2.5} />
+          <ChevronRight className="h-4 w-4" strokeWidth={2.5} />
         </button>
       </div>
 
