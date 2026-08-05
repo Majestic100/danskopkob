@@ -6,7 +6,9 @@ import { HowItWorks } from "@/components/sections/HowItWorks";
 import { ExportAdvantage } from "@/components/sections/ExportAdvantage";
 import { Reviews } from "@/components/sections/Reviews";
 import { VideoReviews } from "@/components/sections/VideoReviews";
-import { Gallery } from "@/components/sections/Gallery";
+// PARKERET: "Biler vi har købt" (Gallery) er taget af siden efter aftale.
+// Komponenten ligger stadig i src/components/sections/Gallery.tsx — tænd den
+// igen ved at gen-importere den og sætte <Gallery /> ind under <VideoReviews />.
 import { Coverage } from "@/components/sections/Coverage";
 import { CarTypes } from "@/components/sections/CarTypes";
 import { SupportTeam } from "@/components/sections/SupportTeam";
@@ -29,7 +31,6 @@ export default function Home() {
       <ExportAdvantage />
       <Reviews />
       <VideoReviews />
-      <Gallery />
       <Coverage />
       <CarTypes />
       <SupportTeam />
