@@ -42,19 +42,22 @@ const VIDEOS = [
 
 export function VideoReviews() {
   return (
-    <section className="bg-offwhite py-16 sm:py-24">
+    <section className="bg-offwhite py-10 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="reveal mb-12 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+        <div className="reveal mb-5 flex flex-col items-start justify-between gap-6 sm:mb-12 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
-            <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-brand">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-brand sm:mb-3 sm:text-sm">
               Hør det fra dem selv
             </p>
-            <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-ink sm:text-4xl">
               Videoanmeldelser fra rigtige sælgere
             </h2>
-            <p className="mt-3 text-ink/60">
-              Ingen manuskript, ingen skuespillere — bare tre sælgere, der
-              fortæller, hvordan deres handel gik.
+            <p className="mt-2 text-sm text-ink/60 sm:mt-3 sm:text-base">
+              Tre sælgere fortæller, hvordan deres handel gik.
+              <span className="hidden sm:inline">
+                {" "}
+                Ingen manuskript, ingen skuespillere.
+              </span>
             </p>
           </div>
           <div className="hidden shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2 shadow-soft ring-1 ring-black/5 sm:inline-flex">
@@ -76,15 +79,15 @@ export function VideoReviews() {
                   alt={`Videoanmeldelse fra ${video.name}`}
                   loading="lazy"
                   decoding="async"
-                  className="zoom-img h-72 w-full object-cover"
+                  className="zoom-img h-52 w-full object-cover sm:h-72"
                 />
                 {/* Gradient + play-knap med pulserende ring */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="relative flex h-16 w-16 items-center justify-center">
+                  <span className="relative flex h-14 w-14 items-center justify-center sm:h-16 sm:w-16">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/40 [animation-duration:2.2s]" />
-                    <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white/95 shadow-softlg transition-transform duration-300 group-hover:scale-110">
-                      <Play className="ml-1 h-7 w-7 text-brand" fill="currentColor" />
+                    <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-white/95 shadow-softlg transition-transform duration-300 group-hover:scale-110 sm:h-16 sm:w-16">
+                      <Play className="ml-1 h-6 w-6 text-brand sm:h-7 sm:w-7" fill="currentColor" />
                     </span>
                   </span>
                 </div>
@@ -95,13 +98,13 @@ export function VideoReviews() {
                   {video.theme}
                 </span>
                 {/* Navn + by + stjerner på selve billedet */}
-                <figcaption className="absolute bottom-0 left-0 right-0 p-5 text-white">
+                <figcaption className="absolute bottom-0 left-0 right-0 p-4 text-white sm:p-5">
                   <TrustStars className="mb-1.5 flex" />
                   <p className="font-bold leading-tight">{video.name}</p>
                   <p className="text-sm text-white/70">{video.city}</p>
                 </figcaption>
               </div>
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <p className="font-extrabold leading-snug text-ink">
                   {video.headline}
                 </p>
