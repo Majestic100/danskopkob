@@ -14,7 +14,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             {/* SWAP: rigtigt logo */}
             <span className="text-2xl font-extrabold tracking-tight">MinBil<span className="text-brand">Pris</span></span>
-            <p className="mt-4 text-white/60 text-sm max-w-xs">Vi opkøber og eksporterer brugte biler i hele Danmark og betaler dig mere end det danske marked.</p>
+            <p className="mt-4 text-white/60 text-sm max-w-xs">Vi opkøber og eksporterer brugte biler i hele Danmark og betaler ofte mere end det danske marked.</p>
 
             <div className="mt-6 space-y-2 text-sm">
               <p className="text-white/50 uppercase tracking-wider text-xs font-semibold mb-2">Kundeservice</p>

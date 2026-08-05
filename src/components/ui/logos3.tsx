@@ -54,7 +54,7 @@ function BrandLogo({ brand }: { brand: Brand }) {
 // bilmærker vi opkøber. Beholder Carousel + embla AutoScroll-mekanikken.
 // `dark` skifter tekst-/fade-farver, så den kan ligge på mørk baggrund.
 const Logos3 = ({
-  heading = "Vi køber alle bilmærker — uanset model, årgang og stand",
+  heading = "Vi køber alle bilmærker, uanset model, årgang og stand",
   dark = false,
   brands = [
     { id: "vw", name: "Volkswagen", logo: "logos/vw.webp" },

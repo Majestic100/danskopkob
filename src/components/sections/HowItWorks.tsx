@@ -25,15 +25,15 @@ const STEPS: Step[] = [
     n: "02",
     ChipIcon: Clock,
     title: "Få et tilbud",
-    desc: "Vi vurderer bilen og ringer dig op med et konkret tilbud — typisk inden for få timer.",
+    desc: "Vi vurderer bilen og ringer dig op med et konkret tilbud, typisk inden for få timer.",
     chip: "Kl. 11:02 · tilbud",
     chipValue: "131.000 kr",
   },
   {
     n: "03",
     ChipIcon: Check,
-    title: "Betaling — og så henter vi bilen",
-    desc: "Siger du ja, sender vi pengene som straksoverførsel. Beløbet står på din konto, før vi kører med bilen — og afhentningen er gratis i hele landet.",
+    title: "Betaling og afhentning",
+    desc: "Siger du ja, sender vi pengene som straksoverførsel. Beløbet står på din konto, før vi kører med bilen.",
     chip: "Næste dag kl. 10:20 · betalt og afhentet ·",
     chipValue: "131.000 kr",
   },
@@ -51,9 +51,7 @@ export function HowItWorks() {
             Sådan fungerer det
           </h2>
           <p className="mt-4 text-ink/70">
-            Fra udfyldt formular til penge på kontoen — ofte på under et døgn.
-            Og du får altid pengene, <strong className="text-ink">før</strong>{" "}
-            bilen forlader din adresse.
+            Fra udfyldt formular til penge på kontoen, ofte på under et døgn.
           </p>
         </div>
 
@@ -115,7 +113,7 @@ export function HowItWorks() {
         <div className="reveal mt-10 flex flex-col items-center gap-4">
           <span className="inline-flex items-center gap-2 rounded-full bg-tp/10 px-4 py-2 text-sm font-semibold text-tp">
             <ShieldCheck className="h-4 w-4" strokeWidth={2.2} />
-            Straksoverførsel — pengene er på din konto, før vi kører
+            Pengene står på din konto, før vi kører
           </span>
           <Link
             to="/saelg-din-bil"

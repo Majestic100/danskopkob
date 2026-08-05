@@ -74,7 +74,7 @@ export function CarTypes() {
             Vi køber både person- og varebiler
           </h2>
           <p className="mt-2 text-sm text-ink/70 sm:mt-4 sm:text-base">
-            Vælg din biltype — vi giver et konkurrencedygtigt tilbud på begge.
+            Vælg din biltype og få et tilbud.
           </p>
         </div>
 
@@ -156,10 +156,6 @@ export function CarTypes() {
           ))}
         </div>
 
-        {/* Understøttende tekst, der før stod i overskriften */}
-        <p className="reveal mt-4 text-center text-xs text-ink/50 md:hidden">
-          Uanset om du sælger familiens bil eller firmaets transporter.
-        </p>
       </div>
     </section>
   );

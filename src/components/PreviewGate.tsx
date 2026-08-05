@@ -92,7 +92,7 @@ export function PreviewGate({ onUnlock }: { onUnlock: () => void }) {
           />
           {fejl && (
             <p className="mt-2 text-sm font-medium text-brand">
-              Forkert adgangskode — prøv igen.
+              Forkert adgangskode. Prøv igen.
             </p>
           )}
           <button

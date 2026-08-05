@@ -83,7 +83,7 @@ export default function SellCar() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    document.title = "Sælg din bil | MinBilPris — udfyld salgsformularen";
+    document.title = "Sælg din bil | MinBilPris";
   }, []);
 
   useEffect(
@@ -167,8 +167,8 @@ export default function SellCar() {
             <ol className="mx-auto mt-6 max-w-sm space-y-3 text-left">
               {[
                 "Vi gennemgår bilens oplysninger og markedet",
-                "En dansk rådgiver ringer dig op — typisk inden for 15 min.",
-                "Siger du ja, betaler vi — og henter bilen gratis bagefter",
+                "En dansk rådgiver ringer dig op, typisk inden for 15 min.",
+                "Siger du ja, betaler vi og henter bilen gratis",
               ].map((trinTekst, i) => (
                 <li key={trinTekst} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xs font-extrabold text-brand">
@@ -214,7 +214,7 @@ export default function SellCar() {
             style={{ transitionDelay: "80ms" }}
           >
             {trin === 1
-              ? "Nummerplade og kontaktoplysninger — så ringer vi med et uforpligtende tilbud."
+              ? "Nummerplade og kontaktoplysninger, så ringer vi med et uforpligtende tilbud."
               : "Vi har dine oplysninger. Alt herunder er frivilligt, men jo mere vi ved, desto skarpere bliver tilbuddet."}
           </p>
         </div>
@@ -555,7 +555,7 @@ export default function SellCar() {
                   type="submit"
                   className="rounded-xl px-4 py-3 font-semibold text-ink/55 transition-colors hover:text-ink"
                 >
-                  Spring over — ring mig bare op
+                  Spring over, ring mig bare op
                 </button>
               </div>
             </form>
@@ -589,7 +589,7 @@ export default function SellCar() {
               </ul>
               <p className="mt-4 flex items-start gap-2 rounded-xl bg-tp/5 px-3 py-2.5 text-xs font-semibold text-tp">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
-                Straksoverførsel — beløbet står på kontoen, før bilen køres væk
+                Beløbet står på kontoen, før bilen køres væk
               </p>
             </div>
 

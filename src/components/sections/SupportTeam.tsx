@@ -32,9 +32,9 @@ const CALLERS: Caller[] = [
 
 const BULLETS = [
   "Dansktalende rådgivere",
-  "Fast kontaktperson — ikke et callcenter",
+  "Én fast kontaktperson hele vejen",
   "Ringer typisk inden for 15 minutter",
-  "Ærlig og helt uforpligtende rådgivning",
+  "Helt uforpligtende rådgivning",
 ];
 
 const STATS = [
@@ -60,11 +60,10 @@ export function SupportTeam() {
               Et rigtigt menneske ringer dig op
             </h2>
             <p className="mt-4 text-lg text-ink/70">
-              Når du skriver dig op, ringer en af vores faste danske
-              bilkonsulenter dig personligt op — typisk inden for 15 minutter i
-              åbningstiden. Ingen robotter, intet anonymt callcenter. Du får én
-              fast kontaktperson, der kender din bil og guider dig hele vejen,
-              til pengene står på kontoen.
+              Når du skriver dig op, ringer en af vores danske bilkonsulenter
+              dig op, typisk inden for 15 minutter i åbningstiden. Du får én
+              fast kontaktperson, der følger din handel, til pengene står på
+              kontoen.
             </p>
 
             <ul className="mt-6 space-y-3">
@@ -97,7 +96,7 @@ export function SupportTeam() {
               className="btn-cta mt-8 inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white shadow-soft"
             >
               <Phone className="h-4 w-4" strokeWidth={2.2} />
-              Skriv dig op — så ringer vi
+              Skriv dig op, så ringer vi
               <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
             </Link>
           </div>
@@ -145,7 +144,7 @@ export function SupportTeam() {
               {/* Holdet af faste konsulenter */}
               <div className="mt-6 border-t border-black/5 pt-5">
                 <p className="text-center text-xs font-medium text-ink/55">
-                  Du får en fast kontaktperson — ikke et tilfældigt callcenter
+                  Du får en fast kontaktperson gennem hele handlen
                 </p>
                 <div className="mt-3 flex items-center justify-center gap-5">
                   {CALLERS.map((c) => (

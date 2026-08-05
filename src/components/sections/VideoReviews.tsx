@@ -25,7 +25,7 @@ const VIDEOS = [
     photo:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=80",
     quote:
-      "Jeg havde et bud fra min lokale forhandler. Tilbuddet her lå 18.500 kr over — for præcis samme bil.",
+      "Jeg havde et bud fra min lokale forhandler. Tilbuddet her lå 18.500 kr højere for præcis samme bil.",
   },
   {
     name: "Anders Holm",
@@ -36,7 +36,7 @@ const VIDEOS = [
     photo:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=80",
     quote:
-      "Ingen annoncer, ingen fremvisninger, intet papirarbejde. De klarede afmeldingen og hentede bilen hjemme hos mig.",
+      "Jeg slap for annoncer og fremvisninger. De klarede afmelding og papirer og hentede bilen hjemme hos mig.",
   },
 ];
 
@@ -54,10 +54,6 @@ export function VideoReviews() {
             </h2>
             <p className="mt-2 text-sm text-ink/60 sm:mt-3 sm:text-base">
               Tre sælgere fortæller, hvordan deres handel gik.
-              <span className="hidden sm:inline">
-                {" "}
-                Ingen manuskript, ingen skuespillere.
-              </span>
             </p>
           </div>
           <div className="hidden shrink-0 items-center gap-2 rounded-full bg-white px-4 py-2 shadow-soft ring-1 ring-black/5 sm:inline-flex">
