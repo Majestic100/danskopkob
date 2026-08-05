@@ -84,14 +84,12 @@ export function ExportAdvantage() {
             Derfor får du mere
           </p>
           <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
-            Vi sælger din bil videre — til hele Europa
+            Vi sælger din bil videre til hele Europa
           </h2>
           <p className="mt-4 text-lg text-ink/70">
-            Vi har faste samarbejdsaftaler med bilforhandlere i hele Europa. På
-            mange modeller er efterspørgslen — og prisen — højere hos dem end på
-            det danske marked. Vi sælger bilen dér, hvor den er mest værd, og
-            den forskel deler vi med dig. Derfor lander vores tilbud ofte over
-            det, du får ved et almindeligt dansk salg.
+            Vi har faste aftaler med bilforhandlere i hele Europa, og mange
+            modeller er mere værd hos dem end på det danske marked. Vi sælger
+            bilen dér, hvor prisen er højest, og deler forskellen med dig.
           </p>
         </div>
 
@@ -151,8 +149,8 @@ export function ExportAdvantage() {
         </div>
 
         <p className="reveal mt-6 text-xs text-ink/50">
-          Tallene er eksempler og afhænger af bilens stand, model,
-          kilometerstand og udstyr. Dit konkrete tilbud beregnes individuelt.
+          Tallene er eksempler. Dit tilbud afhænger af bilens model, stand,
+          kilometerstand og udstyr.
         </p>
       </div>
     </section>

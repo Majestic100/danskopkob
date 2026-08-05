@@ -78,8 +78,8 @@ export function Gallery() {
               Biler vi har købt de seneste uger
             </h2>
             <p className="mt-3 text-ink/60">
-              Et udpluk af rigtige handler fra hele landet — fra familiebiler
-              til varevogne. Beløbet er det, sælgeren fik udbetalt.
+              Et udpluk af rigtige handler fra hele landet. Beløbet er det,
+              sælgeren fik udbetalt.
             </p>
           </div>
           <div className="hidden shrink-0 flex-col items-end gap-2 sm:flex">
@@ -143,7 +143,7 @@ export function Gallery() {
 
         <div className="reveal mt-10 flex flex-col items-center gap-3 text-center">
           <p className="text-ink/60">
-            Din bil kunne være den næste — det tager 2 minutter at få prisen.
+            Din bil kunne være den næste. Det tager 2 minutter at få prisen.
           </p>
           <Link
             to="/saelg-din-bil"

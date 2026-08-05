@@ -21,9 +21,8 @@ export function Coverage() {
               Vi henter din bil gratis, uanset hvor du bor
             </h2>
             <p className="mt-4 text-lg text-ink/70">
-              Fra Skagen til Gedser. Vi dækker hele Danmark, og afhentningen
-              koster aldrig noget. Vores chauffører kører ud til både byer og
-              landområder.
+              Vi dækker hele Danmark, fra Skagen til Gedser, og afhentningen
+              koster aldrig noget.
             </p>
 
             <Link

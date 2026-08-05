@@ -94,7 +94,7 @@ function PostCard({ post, delay }: { post: Post; delay: number }) {
 
 export default function Blog() {
   useEffect(() => {
-    document.title = "Blog | MinBilPris — guides om bilsalg, priser og eksport";
+    document.title = "Blog | MinBilPris";
   }, []);
 
   const [featured, ...rest] = POSTS;
@@ -114,8 +114,8 @@ export default function Blog() {
             className="reveal mx-auto mt-4 max-w-2xl text-lg text-ink/60"
             style={{ transitionDelay: "80ms" }}
           >
-            Guides, priser og indsigt fra folk, der køber biler hver eneste
-            dag — så du kan sælge din bil klogere og til en bedre pris.
+            Guides og priser fra folk, der køber biler hver dag, så du kan
+            sælge din bil til en bedre pris.
           </p>
         </div>
       </section>

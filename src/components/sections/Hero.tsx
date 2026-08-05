@@ -65,9 +65,8 @@ export function Hero() {
               ))}
             </h1>
             <p className="mt-5 max-w-lg text-lg text-white/75">
-              Vi køber din brugte bil og sælger den videre gennem vores faste
-              forhandler-samarbejder i hele Europa — derfor kan vi ofte betale
-              dig mere end det danske marked.
+              Vi køber din bil og sælger den videre til forhandlere i hele
+              Europa. Derfor kan vi ofte betale mere end det danske marked.
             </p>
 
             {/* Lead-kort à la skitsen: mørkt kort med overskrift + plade-felt */}
@@ -80,10 +79,9 @@ export function Hero() {
                 Gør som{" "}
                 <strong className="font-semibold text-white/85">
                   50.000 bilejere
-                </strong>{" "}
-                og indtast din nummerplade herunder for at få et gratis og
-                uforpligtende tilbud på din bil. Du får tilbuddet inden for 24
-                timer.
+                </strong>
+                : indtast din nummerplade og få et gratis, uforpligtende
+                tilbud inden for 24 timer.
               </p>
               <div className="mt-5">
                 <LeadForm variant="hero" />

@@ -14,7 +14,7 @@ interface Review {
 const REVIEWS: Review[] = [
   {
     title: "Fik 22.000 mere end forventet",
-    text: "Jeg havde bud fra to forhandlere i forvejen — tilbuddet her lå markant højere. Pengene stod på kontoen, før de kørte med bilen.",
+    text: "Jeg havde bud fra to forhandlere i forvejen. Tilbuddet her lå markant højere, og pengene stod på kontoen, før de kørte med bilen.",
     initials: "MK",
     name: "Martin Kjær",
     city: "Aarhus",
@@ -38,7 +38,7 @@ const REVIEWS: Review[] = [
   },
   {
     title: "Hurtig afhentning helt ude på landet",
-    text: "Vi bor langt uden for Esbjerg og havde regnet med besvær. De kom hele vejen ud — uden ekstra omkostninger.",
+    text: "Vi bor langt uden for Esbjerg og havde regnet med besvær. De kom hele vejen ud uden ekstra omkostninger.",
     initials: "HT",
     name: "Hanne Thomsen",
     city: "Esbjerg",
@@ -54,7 +54,7 @@ const REVIEWS: Review[] = [
   },
   {
     title: "God kommunikation hele vejen",
-    text: "Jeg vidste altid, hvad der skete — sms både før og efter afhentning. Tryg oplevelse og en pris, jeg ikke fandt andre steder.",
+    text: "Jeg vidste altid, hvad der skete, med sms både før og efter afhentning. Tryg oplevelse og en pris, jeg ikke fandt andre steder.",
     initials: "CB",
     name: "Camilla Bach",
     city: "København",

@@ -72,8 +72,7 @@ export default function BlogPost() {
             </h2>
             <p className="mt-2 max-w-lg text-white/65">
               Indtast din nummerplade og få et gratis, uforpligtende tilbud
-              inden for 24 timer — pengene på din konto, før vi henter bilen,
-              og gratis afhentning i hele Danmark.
+              inden for 24 timer.
             </p>
             <Link
               to="/saelg-din-bil"

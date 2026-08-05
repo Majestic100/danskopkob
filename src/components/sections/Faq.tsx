@@ -5,23 +5,23 @@ import { cn } from "@/lib/utils";
 const FAQS = [
   {
     q: "Hvorfor får jeg en bedre pris hos jer?",
-    a: "Fordi vi eksporterer bilerne til markeder, hvor de er mere værd end i Danmark. Vores fortjeneste ligger i eksporten, og derfor kan vi tilbyde dig en højere pris end et almindeligt dansk videresalg.",
+    a: "Fordi vi eksporterer bilerne til markeder, hvor de er mere værd end i Danmark. Fortjenesten ligger i eksporten, så vi kan byde højere end et almindeligt dansk videresalg.",
   },
   {
     q: "Hvor hurtigt får jeg et tilbud?",
-    a: "Som regel inden for få timer på hverdage. Du indtaster din nummerplade og dine kontaktoplysninger, og så vender vi tilbage med et konkret tilbud hurtigst muligt.",
+    a: "Som regel inden for få timer på hverdage.",
   },
   {
     q: "Koster afhentning noget?",
-    a: "Nej. Afhentning er gratis i hele Danmark, uanset om bilen står i en storby eller langt ude på landet. Der er ingen skjulte gebyrer.",
+    a: "Nej. Afhentning er gratis i hele Danmark, og der er ingen skjulte gebyrer.",
   },
   {
     q: "Hvordan får jeg pengene?",
-    a: "Pengene overføres direkte til din bankkonto, typisk samme dag som vi henter bilen. Du modtager hele det aftalte beløb uden fradrag.",
+    a: "Som straksoverførsel til din bankkonto. Beløbet står på kontoen, før vi kører med bilen, og du får hele det aftalte beløb uden fradrag.",
   },
   {
     q: "Hvilke biler køber I?",
-    a: "Vi køber både person- og varebiler af stort set alle mærker, årgange og kilometerstande. Også biler med fejl, høj kilometerstand eller manglende syn er velkomne. Indtast din nummerplade, så vurderer vi den.",
+    a: "Både person- og varebiler af stort set alle mærker og årgange. Biler med fejl, høj kilometerstand eller manglende syn er også velkomne.",
   },
 ];
 
