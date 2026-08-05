@@ -32,7 +32,9 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink/75 via-ink/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/35 via-transparent to-transparent" />
 
-        <div className="relative mx-auto flex min-h-[600px] max-w-7xl items-center px-4 py-20 sm:px-6 sm:py-28 lg:min-h-[700px] lg:px-8 lg:py-32">
+        {/* Mindre bundpadding på mobil — der stod ~80px tom mørk plads
+            under Trustpilot-linjen, før det hvide USP-bånd begyndte */}
+        <div className="relative mx-auto flex min-h-[560px] max-w-7xl items-center px-4 pb-10 pt-16 sm:min-h-[600px] sm:px-6 sm:py-28 lg:min-h-[700px] lg:px-8 lg:py-32">
           <div className="reveal w-full min-w-0 max-w-xl">
             <div className="mb-5 flex items-center gap-3">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 py-1.5 pl-1.5 pr-3 backdrop-blur">
