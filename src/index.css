@@ -221,6 +221,25 @@
     display: none;
   }
 
+  /* ---- Bilkort under nummerpladen ---- */
+  /* Kortet skifter højde undervejs: først "Henter…", så den færdige bil. Uden
+     en overgang ville felterne nedenunder hoppe to gange, mens brugeren
+     stadig taster. grid-template-rows fra 0fr til 1fr folder ud til præcis
+     den højde, indholdet nu engang får, uden at højden skal kendes på
+     forhånd — modsat en max-height, der skal gættes for højt. */
+  .bil-kort {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.28s ease;
+  }
+  .bil-kort.is-open {
+    grid-template-rows: 1fr;
+  }
+  .bil-kort > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+
   /* ---- FAQ accordion ---- */
   .faq-panel {
     max-height: 0;
@@ -380,6 +399,9 @@
   }
   .map-pulse {
     animation: none;
+  }
+  .bil-kort {
+    transition: none;
   }
   .dk-flow {
     animation: none;
