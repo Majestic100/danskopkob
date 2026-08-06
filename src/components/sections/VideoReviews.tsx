@@ -63,11 +63,12 @@ export function VideoReviews() {
         </div>
 
         <SwipeRow count={VIDEOS.length}>
-          {VIDEOS.map((video, i) => (
+          {/* Ingen reveal-animation på kortene: de forskudte forsinkelser fik
+              kortene til at hænge i forskellige højder under scroll */}
+          {VIDEOS.map((video) => (
             <figure
               key={video.name}
-              className="swipe-card reveal group overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-softlg"
-              style={{ transitionDelay: `${i * 90}ms` }}
+              className="swipe-card group overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-softlg"
             >
               <div className="zoom-wrap relative cursor-pointer overflow-hidden">
                 <img

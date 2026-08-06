@@ -87,11 +87,12 @@ export function Reviews() {
         </div>
 
         <SwipeRow count={REVIEWS.length}>
-          {REVIEWS.map((r, i) => (
+          {/* Ingen reveal-animation på kortene: de forskudte forsinkelser fik
+              kortene til at hænge i forskellige højder under scroll */}
+          {REVIEWS.map((r) => (
             <article
               key={r.name}
-              className="swipe-card reveal flex flex-col rounded-2xl bg-offwhite p-5 shadow-soft sm:p-6"
-              style={{ transitionDelay: `${(i % 3) * 80}ms` }}
+              className="swipe-card flex flex-col rounded-2xl bg-offwhite p-5 shadow-soft sm:p-6"
             >
               <TrustStars className="mb-3 flex" />
               <h3 className="mb-2 font-bold text-ink">{r.title}</h3>
