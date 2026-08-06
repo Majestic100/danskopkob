@@ -30,11 +30,14 @@ export default function Home() {
       <HowItWorks />
       <ExportAdvantage />
       <Reviews />
-      <VideoReviews />
       <Coverage />
       <CarTypes />
       <SupportTeam />
       <Faq />
+      {/* Videoanmeldelserne lå før lige under de skrevne anmeldelser. Her
+          bryder de op i siden og lander som sidste tryghedssignal, inden
+          man bliver bedt om nummerpladen. */}
+      <VideoReviews />
       <FinalCta />
       <MobileCtaBar />
       <SocialProofToasts />
