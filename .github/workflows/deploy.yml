@@ -69,3 +69,12 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Standardgrænsen er 10 minutter, og den er for kort, når Pages har
+          # travlt med andet — fx at udstede TLS-certifikat til domænet. Den
+          # 6. august nåede et deploy status deployment_in_progress og blev
+          # så afbrudt af grænsen, selvom det var på vej igennem.
+          #
+          # 20 minutter koster ingenting, når det går hurtigt, og redder
+          # deployet når det ikke gør.
+          timeout: 1200000
