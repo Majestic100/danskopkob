@@ -17,6 +17,13 @@ const DEBOUNCE_MS = 500;
 /** Klienten giver op før serverens egen grænse, så UI'et ikke hænger. */
 const CLIENT_TIMEOUT_MS = 12_000;
 
+/**
+ * Tom betyder samme domæne som sitet (Vercel). Sættes til en fuld adresse,
+ * hvis serverlaget ligger for sig, fx en Cloudflare Worker på
+ * api.minbilpris.dk. Se src/vite-env.d.ts.
+ */
+const API_BASE = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
+
 export interface VehicleSummary {
   brand?: string;
   model?: string;
@@ -89,7 +96,7 @@ export function useVehicleLookup(input: string): LookupState {
 
     try {
       const response = await fetch(
-        `/api/vehicle/${encodeURIComponent(plate)}`,
+        `${API_BASE}/api/vehicle/${encodeURIComponent(plate)}`,
         { signal: controller.signal, headers: { Accept: "application/json" } },
       );
 

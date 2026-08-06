@@ -34,8 +34,38 @@ Logikken ligger i `src/server/` og er skrevet mod web-standard
 
 | Hosting | Adapter | Noter |
 | --- | --- | --- |
+| Cloudflare Workers | `worker/index.ts` | Sitet bliver på GitHub Pages. Worker deployes separat. Kræver CORS, som allerede er sat op i adapteren. |
 | Vercel | `api/vehicle/[regnr].ts` | Sitet flyttes fra GitHub Pages. `/api/*` ligger på samme domæne, så ingen CORS. |
-| Cloudflare Workers | `worker/index.ts` | Sitet bliver på GitHub Pages. Worker deployes separat, fx `api.minbilpris.dk`. Kræver CORS, som allerede er sat op i adapteren. |
+
+#### Cloudflare Workers
+
+Sitet bliver, hvor det er. Kun serverlaget flytter.
+
+```bash
+npx wrangler login
+npx wrangler secret put MOTORAPI_TOKEN   # indsæt tokenet, når den spørger
+npx wrangler deploy                      # udskriver workerens adresse
+```
+
+Sæt derefter `VITE_API_BASE_URL` til den adresse, workeren fik, og byg
+frontenden igen. Adressen skal også stå i `ALLOWED_ORIGINS` i
+`worker/index.ts`, hvis sitet ligger på et andet domæne end dem, der allerede
+er på listen.
+
+#### Vercel
+
+Hele sitet flytter, og `/api/*` ligger så samme sted. `vercel.json` er sat op.
+
+```bash
+npx vercel link
+npx vercel env add MOTORAPI_TOKEN production
+npx vercel --prod
+```
+
+`VITE_API_BASE_URL` skal ikke sættes: frontenden kalder samme domæne. Til
+gengæld skal DNS for `minbilpris.dk` pege på Vercel i stedet for GitHub Pages,
+og `.github/workflows/deploy.yml` bør slås fra, så de to ikke overskriver
+hinanden.
 
 ### Miljøvariabler
 
@@ -46,8 +76,11 @@ Kopiér `.env.example` til `.env` og udfyld. `.env` er git-ignoreret.
 | `MOTORAPI_TOKEN` | ja | Sendes som `X-AUTH-TOKEN`. Kun serverside. |
 | `MOTORAPI_BASE_URL` | nej | Standard `https://v1.motorapi.dk`. |
 | `MOTORAPI_QUOTA_RESERVE` | nej | Antal kald der holdes i reserve. Standard 5. |
+| `VITE_API_BASE_URL` | nej | Hvor serverlaget ligger, set fra browseren. Tom = samme domæne. |
 
-I produktion sættes de i hostingens miljø, ikke i en fil.
+`MOTORAPI_TOKEN` er en hemmelighed og sættes i produktion i hostingens miljø,
+aldrig i en fil i git. `VITE_API_BASE_URL` er derimod en byggetids-variabel,
+der bages ind i klient-bundlen — der må kun stå adresser, aldrig noget hemmeligt.
 
 ### Sådan er kvoten beskyttet
 

@@ -1,0 +1,32 @@
+# Cloudflare Worker med serverlaget til nummerplade-opslag.
+#
+# Bruges, hvis sitet bliver liggende på GitHub Pages. Workeren deployes for sig
+# og kaldes af browseren på tværs af domæner; CORS er sat op i worker/index.ts.
+#
+# Deploy:
+#   npx wrangler login
+#   npx wrangler secret put MOTORAPI_TOKEN    # indsæt tokenet, når den spørger
+#   npx wrangler deploy
+#
+# Tokenet sættes som secret og står derfor bevidst ikke i denne fil. Alt her
+# ender i git.
+
+name = "minbilpris-api"
+main = "worker/index.ts"
+compatibility_date = "2025-01-01"
+
+# Uden en route svarer workeren på <name>.<konto>.workers.dev. Det er nok til
+# at teste. Sæt VITE_API_BASE_URL til den adresse, når frontenden bygges.
+#
+# Med eget domæne (kræver at minbilpris.dk ligger i Cloudflare):
+# routes = [
+#   { pattern = "api.minbilpris.dk/*", custom_domain = true }
+# ]
+
+[vars]
+# Ikke-hemmelige indstillinger. Tokenet hører til under `wrangler secret`.
+MOTORAPI_BASE_URL = "https://v1.motorapi.dk"
+MOTORAPI_QUOTA_RESERVE = "5"
+
+[observability]
+enabled = true
