@@ -27,7 +27,21 @@ export interface VehicleSummary {
   raw?: Record<string, unknown>;
 }
 
-export type LookupStatus = "idle" | "loading" | "found" | "not_found" | "error";
+/**
+ * "not_found"      serveren svarede, og der er ingen bil på den plade.
+ * "unavailable"    vi kunne ikke spørge. Rate limit, timeout, eller intet
+ *                  serverlag deployet endnu. Vises ikke for brugeren.
+ *
+ * Forskellen er vigtig: "ingen bil på pladen" er en oplysning, brugeren kan
+ * bruge til noget. "vores API svarede ikke" er vores problem, og at vise det
+ * som "vi kunne ikke finde bilen" ville være direkte forkert.
+ */
+export type LookupStatus =
+  | "idle"
+  | "loading"
+  | "found"
+  | "not_found"
+  | "unavailable";
 
 export interface LookupState {
   status: LookupStatus;
@@ -79,24 +93,36 @@ export function useVehicleLookup(input: string): LookupState {
         { signal: controller.signal, headers: { Accept: "application/json" } },
       );
 
-      // Alt andet end 200 behandles ens: intet kort, manuel udfyldning.
-      // Årsagen ligger i serverloggen, ikke i brugerens ansigt.
+      // Alt andet end 200 er vores eget problem, ikke brugerens. Det gælder
+      // også 404 fra statisk hosting, hvor /api/* slet ikke findes og
+      // SPA-fallbacken svarer med HTML.
       if (!response.ok) {
-        const next: LookupState = {
-          status: response.status === 400 ? "not_found" : "error",
+        setState({
+          status: "unavailable",
           vehicle: null,
           plate,
           fetchedAt: null,
-        };
-        setState(next);
+        });
         return;
       }
 
-      const body = (await response.json()) as {
+      let body: {
         found?: boolean;
         vehicle?: VehicleSummary | null;
         fetchedAt?: string;
       };
+      try {
+        body = await response.json();
+      } catch {
+        // 200 med HTML i stedet for JSON: også statisk hosting uden serverlag.
+        setState({
+          status: "unavailable",
+          vehicle: null,
+          plate,
+          fetchedAt: null,
+        });
+        return;
+      }
 
       const next: LookupState =
         body.found && body.vehicle
@@ -111,9 +137,8 @@ export function useVehicleLookup(input: string): LookupState {
       cache.current.set(plate, next);
       setState(next);
     } catch {
-      // Timeout, netværksfejl, eller siden findes ikke (fx statisk hosting
-      // uden serverlag). Alle ender samme sted: manuel udfyldning.
-      setState({ status: "error", vehicle: null, plate, fetchedAt: null });
+      // Timeout eller netværksfejl. Samme stille fallback.
+      setState({ status: "unavailable", vehicle: null, plate, fetchedAt: null });
     } finally {
       clearTimeout(timer);
     }

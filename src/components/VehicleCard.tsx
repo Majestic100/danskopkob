@@ -1,8 +1,13 @@
 // Kortet der viser, hvad vi fandt på nummerpladen.
 //
-// Tre synlige tilstande: henter, fundet og ikke fundet. Fejl vises aldrig som
-// fejl — hverken rate limit, timeout eller manglende serverlag. Brugeren skal
-// ikke forholde sig til vores infrastruktur, og formularen kan sendes uanset.
+// Tre synlige tilstande: henter, fundet og ikke fundet.
+//
+// "unavailable" viser med vilje ingenting. Kunne vi ikke spørge — rate limit,
+// timeout, eller intet serverlag deployet endnu — er det vores problem, ikke
+// brugerens. At skrive "vi kunne ikke finde bilen" i det tilfælde ville være
+// forkert: vi har jo ikke kigget efter. Så længe sitet ligger på GitHub Pages
+// uden serverlag, er det den tilstand alle opslag ender i, og formularen ser
+// derfor ud præcis som før.
 //
 // De skjulte felter sender de hentede data med ved submit, sammen med
 // nummerpladen og et tidsstempel for hvornår data blev hentet.
@@ -16,7 +21,7 @@ interface VehicleCardProps {
 }
 
 export function VehicleCard({ state }: VehicleCardProps) {
-  if (state.status === "idle") return null;
+  if (state.status === "idle" || state.status === "unavailable") return null;
 
   if (state.status === "loading") {
     return (
@@ -27,7 +32,7 @@ export function VehicleCard({ state }: VehicleCardProps) {
     );
   }
 
-  // "not_found" og "error" ser ens ud med vilje. Se kommentaren øverst.
+  // Herfra er vi enten "found" eller "not_found": serveren har svaret.
   if (state.status !== "found" || !state.vehicle) {
     return (
       <div className="mt-3 rounded-xl bg-ink/[0.04] px-4 py-3.5">
