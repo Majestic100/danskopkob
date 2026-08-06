@@ -1,15 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Fast bund-CTA på mobil, der glider op når man har scrollet forbi hero'en.
+// Bund-CTA på mobil: glider op når man scroller ned forbi hero'en, og ned
+// igen når man scroller opad. Modsat headeren, der vises ved scroll op —
+// så er der aldrig to bjælker om pladsen på samme tid.
 export function MobileCtaBar() {
   const [show, setShow] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 640);
-    onScroll();
+    lastY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const diff = y - lastY.current;
+      if (y <= 640) setShow(false);
+      else if (diff > 4) setShow(true);
+      else if (diff < -4) setShow(false);
+      lastY.current = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
