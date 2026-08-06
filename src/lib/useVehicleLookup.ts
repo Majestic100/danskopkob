@@ -37,6 +37,14 @@ export interface VehicleSummary {
   mileageDate?: string;
   status?: string;
   vin?: string;
+  hp?: number;
+  litres?: number;
+  type?: string;
+  doors?: number;
+  seats?: number;
+  nextInspection?: string;
+  inspectionResult?: string;
+  isLeasing?: boolean;
   raw?: Record<string, unknown>;
 }
 
