@@ -3,17 +3,21 @@
 // Tre synlige tilstande: henter, fundet og ikke fundet.
 //
 // "unavailable" viser med vilje ingenting. Kunne vi ikke spørge — rate limit,
-// timeout, eller intet serverlag deployet endnu — er det vores problem, ikke
-// brugerens. At skrive "vi kunne ikke finde bilen" i det tilfælde ville være
-// forkert: vi har jo ikke kigget efter. Så længe sitet ligger på GitHub Pages
-// uden serverlag, er det den tilstand alle opslag ender i, og formularen ser
-// derfor ud præcis som før.
+// timeout, eller intet serverlag — er det vores problem, ikke brugerens. At
+// skrive "vi kunne ikke finde bilen" ville være forkert: vi har jo ikke kigget
+// efter.
+//
+// Kortet ligger i en beholder, der folder sig ud i stedet for at springe frem.
+// Uden den ville Navn, Email og knappen hoppe nedad to gange: én gang når
+// "Henter…" dukker op, og én gang når den bliver til den færdige bil. Selve
+// udfoldningen ligger i .bil-kort i index.css.
 //
 // De skjulte felter sender de hentede data med ved submit, sammen med
 // nummerpladen og et tidsstempel for hvornår data blev hentet.
 
 import { Car, Loader2 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import type { LookupState } from "@/lib/useVehicleLookup";
 
 interface VehicleCardProps {
@@ -33,8 +37,19 @@ function formatDato(iso: string): string {
 }
 
 export function VehicleCard({ state }: VehicleCardProps) {
-  if (state.status === "idle" || state.status === "unavailable") return null;
+  const åben = state.status === "loading" || state.status === "found" ||
+    state.status === "not_found";
 
+  return (
+    <div className={cn("bil-kort", åben && "is-open")}>
+      <div>
+        <Indhold state={state} />
+      </div>
+    </div>
+  );
+}
+
+function Indhold({ state }: VehicleCardProps) {
   if (state.status === "loading") {
     return (
       <div className="mt-3 flex items-center gap-3 rounded-xl bg-trust/5 px-4 py-3.5">
@@ -44,8 +59,7 @@ export function VehicleCard({ state }: VehicleCardProps) {
     );
   }
 
-  // Herfra er vi enten "found" eller "not_found": serveren har svaret.
-  if (state.status !== "found" || !state.vehicle) {
+  if (state.status === "not_found") {
     return (
       <div className="mt-3 rounded-xl bg-ink/[0.04] px-4 py-3.5">
         <p className="text-sm text-ink/70">
@@ -56,6 +70,8 @@ export function VehicleCard({ state }: VehicleCardProps) {
     );
   }
 
+  if (state.status !== "found" || !state.vehicle) return null;
+
   const { brand, model, variant, year, fuel, colour, mileage, mileageDate } =
     state.vehicle;
   const overskrift = [brand, model].filter(Boolean).join(" ") || "Din bil";
@@ -64,7 +80,7 @@ export function VehicleCard({ state }: VehicleCardProps) {
   ) as string[];
 
   return (
-    <div className="mt-3 rounded-xl bg-tp/[0.07] p-4">
+    <div className="mt-3 rounded-xl bg-tp/5 p-4">
       <div className="flex items-start gap-3">
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white">
           <Car className="h-5 w-5 text-tp" strokeWidth={2} />
