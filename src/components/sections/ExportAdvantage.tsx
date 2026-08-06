@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Clock, MapPin } from "lucide-react";
 
-// SWAP: læg rigtige fotos af de opkøbte biler i public/biler/ og skriv
-// filnavnet i `photo` herunder. Mangler filen, vises et neutralt felt med
-// bilens navn i stedet — aldrig et brækket billede.
+// Fotos af de opkøbte biler ligger i public/biler/. Skal en bil skiftes ud,
+// læg filen dér og skriv filnavnet i `photo` herunder. Mangler filen, vises
+// et neutralt felt med bilens navn i stedet, aldrig et brækket billede.
 const BASE = import.meta.env.BASE_URL;
 
 interface Case {
@@ -18,7 +18,7 @@ interface Case {
   photo?: string;
 }
 
-// SWAP: rigtige case-tal og fotos
+// SWAP: rigtige case-tal
 const CASES: Case[] = [
   {
     model: "VW Passat 2.0 TDI",
@@ -29,6 +29,7 @@ const CASES: Case[] = [
     market: "112.000 kr",
     offer: "131.000 kr",
     diff: "+19.000 kr",
+    photo: "biler/vw-passat-20-tdi.webp",
   },
   {
     model: "BMW 320d Touring",
@@ -39,6 +40,7 @@ const CASES: Case[] = [
     market: "198.000 kr",
     offer: "226.500 kr",
     diff: "+28.500 kr",
+    photo: "biler/bmw-320d-touring.webp",
   },
   {
     model: "Mercedes Vito 114",
@@ -49,6 +51,7 @@ const CASES: Case[] = [
     market: "94.000 kr",
     offer: "109.000 kr",
     diff: "+15.000 kr",
+    photo: "biler/mercedes-vito-114.webp",
   },
 ];
 
