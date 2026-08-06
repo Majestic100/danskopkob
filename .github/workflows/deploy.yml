@@ -11,10 +11,18 @@ permissions:
   pages: write
   id-token: write
 
-# Tillad kun ét samtidigt deploy
+# Tillad kun ét samtidigt deploy, men lad et påbegyndt deploy gøre sig færdigt.
+#
+# cancel-in-progress skal være false her. Et Pages-deploy står i kø hos GitHub,
+# ofte i flere minutter, og med true aflyser hvert nyt push det forrige, mens
+# det stadig venter. To pushes tæt på hinanden betyder så, at ingen af dem når
+# frem: det første bliver aflyst, og det andet arver køen. Det er præcis, hvad
+# der skete for #56 og #57, hvor deployet endte med "Deployment cancelled".
+#
+# Det er også derfor GitHubs egen skabelon til Pages sætter den til false.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
