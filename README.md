@@ -77,14 +77,16 @@ https://<din-adresse>.workers.dev/api/vehicle/AB12345
 
 Kommer der JSON tilbage med bildata, virker serverlaget.
 
-**6. Peg sitet på serverlaget.** Opret en fil ved navn `.env` i projektmappen
-med adressen fra trin 4:
+**6. Peg sitet på serverlaget.** Adressen sættes som `VITE_API_BASE_URL` i
+build-trinnet i `.github/workflows/deploy.yml`, fordi den skal bages ind i
+klient-bundlen, når GitHub Actions bygger sitet. En `.env`-fil på din egen
+maskine rækker ikke — den følger ikke med til GitHub.
+
+Til lokal udvikling kan du lægge den samme linje i en `.env`-fil:
 
 ```
-VITE_API_BASE_URL=https://<din-adresse>.workers.dev
+VITE_API_BASE_URL=https://minbilpris-api.sinan1.workers.dev
 ```
-
-Kør `npm run build`, commit, og push. Næste deploy af sitet slår opslaget til.
 
 **7. Kun hvis du senere lægger API'et på eget domæne:** tilføj sitets adresse
 til `ALLOWED_ORIGINS` i `worker/index.ts`, så browseren har lov at kalde det.
