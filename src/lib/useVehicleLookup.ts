@@ -24,6 +24,7 @@ const CLIENT_TIMEOUT_MS = 12_000;
  */
 const API_BASE = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
 
+/** Spejler VehicleSummary i src/server/motorapi/fieldMap.ts. */
 export interface VehicleSummary {
   brand?: string;
   model?: string;
@@ -31,6 +32,11 @@ export interface VehicleSummary {
   year?: number;
   fuel?: string;
   colour?: string;
+  firstRegistration?: string;
+  mileage?: number;
+  mileageDate?: string;
+  status?: string;
+  vin?: string;
   raw?: Record<string, unknown>;
 }
 

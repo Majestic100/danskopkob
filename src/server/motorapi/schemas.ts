@@ -1,24 +1,16 @@
 // Zod-schemas for MotorAPI.
 //
-// VIGTIGT OM VERIFIKATIONSSTATUS
+// VERIFIKATIONSSTATUS
 //
-// Kun /usage er specificeret eksakt i dokumentationen, og kun det schema er
-// derfor stramt. Felterne i køretøjssvarene er IKKE dokumenteret, og der ligger
-// endnu ingen samples/*.json i repoet at udlede dem fra. Derfor:
+//   VERIFICERET    /usage (mod dokumentationen) og VehicleSchema (mod et
+//                  rigtigt svar fra GET /vehicles/{reg-nr}, hentet 2026-08-06).
+//   UVERIFICERET   /environment og /equipment. Ingen af dem er kaldt endnu.
 //
-//   VERIFICERET    UsageSchema. Struktur taget direkte fra dokumentationen.
-//   UVERIFICERET   Alt om køretøjer. Schemaerne herunder validerer kun, at
-//                  svaret er et objekt (henholdsvis et array af objekter), og
-//                  lader alle felter passere urørt.
-//
-// Det er et bevidst valg frem for at gætte feltnavne. Et for stramt schema
-// ville afvise gyldige svar og tage nummerplade-opslaget ned; et gættet
-// feltnavn ville se verificeret ud i koden uden at være det. Kortet i
-// browseren læser derfor felter gennem kandidatlisterne i fieldMap.ts, hvor
-// det står tydeligt, hvad der mangler bekræftelse.
-//
-// NÅR SAMPLES ANKOMMER: erstat passthrough-schemaerne her med rigtige felter,
-// og skriv kandidatlisterne i fieldMap.ts om til de faktiske navne.
+// Selv de verificerede køretøjsfelter er skrevet tolerant: alt er optional, og
+// passthrough() bevarer felter, vi ikke kender. Ét svar viser, hvilke felter
+// der findes for én bil, ikke hvilke der altid findes. En elbil har ikke
+// motorvolumen, en varebil har andre vægtfelter, og et afmeldt køretøj kan
+// mangle syn. Et strammere schema ville afvise dem og tage opslaget ned.
 
 import { z } from "zod";
 
@@ -45,19 +37,90 @@ export const UsageSchema = z.object({
 export type Usage = z.infer<typeof UsageSchema>;
 
 /**
- * UVERIFICERET. Et køretøj er indtil videre "et objekt med ukendte felter".
- * passthrough() bevarer alt, så intet går tabt på vej til browseren.
+ * Synsoplysninger. `mileage` er kilometerstanden aflæst ved synet og er
+ * dermed historisk — den siger noget om bilen på `date`, ikke i dag.
  */
-export const VehicleSchema = z.object({}).passthrough();
+const MotInfoSchema = z
+  .object({
+    type: z.string().nullish(),
+    date: z.string().nullish(),
+    result: z.string().nullish(),
+    status: z.string().nullish(),
+    status_date: z.string().nullish(),
+    mileage: z.number().nullish(),
+    next_inspection_date: z.string().nullish(),
+  })
+  .passthrough();
+
+/**
+ * VERIFICERET mod et rigtigt svar. Feltnavnene er engelske og i snake_case,
+ * også selvom værdierne er danske ("Registreret", "Personbil", "Diesel").
+ *
+ * Bemærk to fælder, som det rigtige svar afslørede:
+ *
+ *   model_year kan være 0. Ikke null, ikke fraværende — nul. Årgangen skal
+ *   derfor udledes af first_registration, som er den dato, bilen kom på
+ *   vejen første gang.
+ *
+ *   Tekstfelter kan indeholde "Ukendt" eller tom streng i stedet for null.
+ *   De skal behandles som fraværende, ikke vises som en værdi.
+ *
+ * Begge håndteres i fieldMap.ts.
+ */
+export const VehicleSchema = z
+  .object({
+    registration_number: z.string().nullish(),
+    status: z.string().nullish(),
+    status_date: z.string().nullish(),
+    type: z.string().nullish(),
+    use: z.string().nullish(),
+    first_registration: z.string().nullish(),
+    vin: z.string().nullish(),
+
+    make: z.string().nullish(),
+    model: z.string().nullish(),
+    variant: z.string().nullish(),
+    model_type: z.string().nullish(),
+    model_year: z.number().nullish(),
+    color: z.string().nullish(),
+    chassis_type: z.string().nullish(),
+    doors: z.number().nullish(),
+    seats: z.number().nullish(),
+
+    fuel_type: z.string().nullish(),
+    is_hybrid: z.boolean().nullish(),
+    hybrid_type: z.string().nullish(),
+    engine_cylinders: z.number().nullish(),
+    engine_volume: z.number().nullish(),
+    engine_power: z.number().nullish(),
+
+    own_weight: z.number().nullish(),
+    cerb_weight: z.number().nullish(),
+    total_weight: z.number().nullish(),
+    axels: z.number().nullish(),
+    pulling_axels: z.number().nullish(),
+    coupling: z.boolean().nullish(),
+    trailer_maxweight_nobrakes: z.number().nullish(),
+    trailer_maxweight_withbrakes: z.number().nullish(),
+
+    mot_info: MotInfoSchema.nullish(),
+    is_leasing: z.boolean().nullish(),
+    leasing_from: z.string().nullish(),
+    leasing_to: z.string().nullish(),
+
+    registration_zipcode: z.string().nullish(),
+    vehicle_id: z.number().nullish(),
+  })
+  .passthrough();
+
 export type Vehicle = z.infer<typeof VehicleSchema>;
 
 /**
- * UVERIFICERET. GET /vehicles returnerer en liste. Dokumentationen siger, at
- * et tomt array betyder "ingen resultater", hvilket ikke er en fejl.
+ * GET /vehicles returnerer en liste. Dokumentationen siger, at et tomt array
+ * betyder "ingen resultater", hvilket ikke er en fejl.
  *
- * Nogle API'er pakker lister ind i et objekt ({ data: [...] }), og det er
- * ikke oplyst, om MotorAPI gør det. Begge former accepteres derfor og
- * normaliseres til et array af unwrapVehicleList().
+ * UVERIFICERET: det er ikke bekræftet, om listen kommer bar eller pakket ind
+ * i { data: [...] }. Begge former accepteres og normaliseres til et array.
  */
 export const VehicleListSchema = z.union([
   z.array(VehicleSchema),
@@ -68,11 +131,11 @@ export function unwrapVehicleList(parsed: z.infer<typeof VehicleListSchema>) {
   return Array.isArray(parsed) ? parsed : parsed.data;
 }
 
-/** UVERIFICERET. Miljødata: emissioner, brændstoftype m.m. */
+/** UVERIFICERET. Endpointet er ikke kaldt endnu. */
 export const EnvironmentSchema = z.object({}).passthrough();
 export type VehicleEnvironment = z.infer<typeof EnvironmentSchema>;
 
-/** UVERIFICERET. Registreret udstyr. */
+/** UVERIFICERET. Endpointet er ikke kaldt endnu. */
 export const EquipmentSchema = z
   .union([z.array(z.unknown()), z.object({}).passthrough()])
   .transform((v) => (Array.isArray(v) ? { items: v } : v));

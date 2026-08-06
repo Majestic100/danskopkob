@@ -34,6 +34,14 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          # Adressen på serverlaget, der slår nummerplader op. Den bages ind i
+          # klient-bundlen ved build, og derfor skal den sættes her og ikke i
+          # en .env-fil, som GitHub Actions ikke har adgang til.
+          #
+          # Det er en adresse, ikke en hemmelighed, så den må gerne stå her.
+          # Selve MOTORAPI_TOKEN ligger hos Cloudflare og rører aldrig sitet.
+          VITE_API_BASE_URL: https://minbilpris-api.sinan1.workers.dev
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

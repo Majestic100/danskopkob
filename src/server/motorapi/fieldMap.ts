@@ -1,21 +1,19 @@
-// Oversættelse fra MotorAPI's rå felter til de felter, bilkortet viser.
+// Oversættelse fra MotorAPI's rå felter til det, bilkortet viser.
 //
-// STATUS: UVERIFICERET. Feltnavnene i MotorAPI's køretøjssvar er ikke
-// dokumenterede, og der ligger endnu ingen samples/*.json at udlede dem fra.
+// STATUS: VERIFICERET mod et rigtigt svar fra GET /vehicles/{reg-nr},
+// hentet 2026-08-06. Feltnavnene herunder er de faktiske, ikke gæt.
 //
-// Derfor slår hver visningsværdi op i en liste af kandidat-navne og bruger den
-// første, der findes i svaret. Det er ikke elegant, men det er ærligt: koden
-// påstår ikke at kende feltnavnene, og opslaget falder blødt tilbage til
-// "ukendt" i stedet for at vise tom luft, hvis ingen kandidat rammer.
+// Data kommer fra Motorregistret, og registerdata er ujævne. To fælder, som
+// det rigtige svar afslørede, og som resten af filen er bygget op om:
 //
-// NÅR SAMPLES ANKOMMER
-//   1. Kør `npm run motorapi:fields -- samples/vehicle.json` for at se, hvilke
-//      nøgler der faktisk findes i svaret.
-//   2. Erstat kandidatlisterne herunder med det ene rigtige feltnavn.
-//   3. Stram VehicleSchema i schemas.ts til de rigtige felter.
-//   4. Ret VERIFICERET-noten i README.
+//   model_year kan være 0. Ikke null, ikke fraværende — nul. Årgangen udledes
+//   derfor primært af first_registration, som er datoen bilen kom på vejen.
+//   model_year bruges kun som reserve, og kun hvis værdien er troværdig.
+//
+//   Tekstfelter kan indeholde "Ukendt" eller tom streng i stedet for null.
+//   Uden filtrering ville kortet skrive "Ukendt" som om det var en farve.
 
-/** Felter bilkortet viser, i den rækkefølge de vises. */
+/** Felter bilkortet viser. */
 export interface VehicleSummary {
   brand?: string;
   model?: string;
@@ -23,58 +21,52 @@ export interface VehicleSummary {
   year?: number;
   fuel?: string;
   colour?: string;
-  /** Alt vi fik fra API'et, så intet går tabt undervejs. */
+
+  /** Førstegangsregistrering, ISO-dato. Kilden til `year`. */
+  firstRegistration?: string;
+  /** Kilometerstand aflæst ved sidste syn. Historisk, ikke nuværende. */
+  mileage?: number;
+  /** Datoen kilometerstanden blev aflæst, så tallet kan sættes i kontekst. */
+  mileageDate?: string;
+  /** "Registreret" eller "Afmeldt". */
+  status?: string;
+  vin?: string;
+
+  /** Alt vi fik fra API'et, så intet går tabt. */
   raw: Record<string, unknown>;
 }
 
 /**
- * Kandidat-navne pr. visningsfelt. Dansk først, da MotorAPI er et dansk API
- * bygget på Motorregistrets termer, derefter almindelige engelske varianter.
+ * Registerdata bruger pladsholdere i stedet for tomme værdier. De her skal
+ * behandles som "ved ikke", ikke vises som indhold.
  */
-const CANDIDATES: Record<
-  Exclude<keyof VehicleSummary, "raw">,
-  readonly string[]
-> = {
-  brand: ["maerke", "mærke", "brand", "make", "manufacturer"],
-  model: ["model", "modelNavn", "model_name"],
-  variant: ["variant", "version", "type", "modelVariant", "model_variant"],
-  year: [
-    "aargang",
-    "årgang",
-    "modelaar",
-    "modelår",
-    "year",
-    "model_year",
-    "first_registration_year",
-  ],
-  fuel: ["braendstof", "brændstof", "fuel", "fuel_type", "drivkraft"],
-  colour: ["farve", "colour", "color"],
-};
+const PLACEHOLDERS = new Set(["ukendt", "uoplyst", "ingen", "-", ""]);
 
-/** Slå et felt op på tværs af kandidatnavne, uanset store/små bogstaver. */
-function pick(source: Record<string, unknown>, keys: readonly string[]) {
-  const lowered = new Map(
-    Object.entries(source).map(([k, v]) => [k.toLowerCase(), v]),
-  );
-  for (const key of keys) {
-    const value = lowered.get(key.toLowerCase());
-    if (value !== null && value !== undefined && value !== "") return value;
-  }
-  return undefined;
+function text(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed || PLACEHOLDERS.has(trimmed.toLowerCase())) return undefined;
+  return trimmed;
 }
 
-function asText(value: unknown): string | undefined {
-  if (typeof value === "string") return value.trim() || undefined;
-  if (typeof value === "number") return String(value);
-  return undefined;
+/** 0 bruges som "ikke oplyst" i flere talfelter, så det tæller ikke med. */
+function positive(value: unknown): number | undefined {
+  return typeof value === "number" && value > 0 ? value : undefined;
 }
 
-function asYear(value: unknown): number | undefined {
-  const text = asText(value);
-  if (!text) return undefined;
-  // Fanger både "2017" og datoformater som "2017-04-12".
-  const match = text.match(/\b(19|20)\d{2}\b/);
-  return match ? Number(match[0]) : undefined;
+/**
+ * Træk årstallet ud af en dato som "2010-09-17+02:00".
+ *
+ * Formatet er dato plus tidszone uden klokkeslæt, hvilket Date fortolker
+ * upålideligt på tværs af browsere. Årstallet læses derfor direkte fra de
+ * første fire cifre i stedet.
+ */
+function yearFromDate(value: unknown): number | undefined {
+  const raw = text(value);
+  const match = raw?.match(/^(\d{4})/);
+  if (!match) return undefined;
+  const year = Number(match[1]);
+  return year >= 1900 && year <= 2100 ? year : undefined;
 }
 
 /**
@@ -83,28 +75,33 @@ function asYear(value: unknown): number | undefined {
  */
 export function toVehicleSummary(raw: unknown): VehicleSummary {
   if (typeof raw !== "object" || raw === null) return { raw: {} };
-  const source = raw as Record<string, unknown>;
+  const v = raw as Record<string, unknown>;
 
-  // Nogle API'er lægger køretøjet i en indpakning. Findes en oplagt sådan
-  // nøgle, læses felterne derfra i stedet.
-  const inner =
-    (source.vehicle as Record<string, unknown> | undefined) ??
-    (source.data as Record<string, unknown> | undefined) ??
-    source;
-  const fields = typeof inner === "object" && inner !== null ? inner : source;
+  const mot = (v.mot_info ?? null) as Record<string, unknown> | null;
+
+  // Førstegangsregistrering først. model_year er kun en reserve, fordi den
+  // kan være 0, og yearFromDate afviser den så.
+  const year = yearFromDate(v.first_registration) ?? positive(v.model_year);
 
   return {
-    brand: asText(pick(fields, CANDIDATES.brand)),
-    model: asText(pick(fields, CANDIDATES.model)),
-    variant: asText(pick(fields, CANDIDATES.variant)),
-    year: asYear(pick(fields, CANDIDATES.year)),
-    fuel: asText(pick(fields, CANDIDATES.fuel)),
-    colour: asText(pick(fields, CANDIDATES.colour)),
-    raw: source,
+    brand: text(v.make),
+    model: text(v.model),
+    variant: text(v.variant),
+    year: year && year >= 1900 ? year : undefined,
+    fuel: text(v.fuel_type),
+    colour: text(v.color),
+
+    firstRegistration: text(v.first_registration),
+    mileage: mot ? positive(mot.mileage) : undefined,
+    mileageDate: mot ? text(mot.date) : undefined,
+    status: text(v.status),
+    vin: text(v.vin),
+
+    raw: v,
   };
 }
 
-/** Sandt hvis vi fandt nok til at kortet siger noget meningsfuldt. */
+/** Sandt hvis vi fandt nok til, at kortet siger noget meningsfuldt. */
 export function hasUsableSummary(summary: VehicleSummary): boolean {
   return Boolean(summary.brand || summary.model || summary.year);
 }

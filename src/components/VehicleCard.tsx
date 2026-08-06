@@ -20,6 +20,18 @@ interface VehicleCardProps {
   state: LookupState;
 }
 
+/** "2024-10-30" → "oktober 2024". Dag og måned er for præcist til formålet. */
+function formatDato(iso: string): string {
+  const match = iso.match(/^(\d{4})-(\d{2})/);
+  if (!match) return "";
+  const maaneder = [
+    "januar", "februar", "marts", "april", "maj", "juni",
+    "juli", "august", "september", "oktober", "november", "december",
+  ];
+  const navn = maaneder[Number(match[2]) - 1];
+  return navn ? `${navn} ${match[1]}` : match[1];
+}
+
 export function VehicleCard({ state }: VehicleCardProps) {
   if (state.status === "idle" || state.status === "unavailable") return null;
 
@@ -44,7 +56,8 @@ export function VehicleCard({ state }: VehicleCardProps) {
     );
   }
 
-  const { brand, model, variant, year, fuel, colour } = state.vehicle;
+  const { brand, model, variant, year, fuel, colour, mileage, mileageDate } =
+    state.vehicle;
   const overskrift = [brand, model].filter(Boolean).join(" ") || "Din bil";
   const detaljer = [variant, year ? String(year) : null, fuel, colour].filter(
     Boolean,
@@ -61,6 +74,14 @@ export function VehicleCard({ state }: VehicleCardProps) {
           {detaljer.length > 0 && (
             <p className="mt-0.5 text-sm text-ink/65">{detaljer.join(" · ")}</p>
           )}
+          {/* Kilometerstanden er aflæst ved synet og er altså historisk.
+              Datoen står med, så tallet ikke forveksles med det nuværende. */}
+          {mileage && (
+            <p className="mt-0.5 text-sm text-ink/65">
+              {mileage.toLocaleString("da-DK")} km ved sidste syn
+              {mileageDate ? ` ${formatDato(mileageDate)}` : ""}
+            </p>
+          )}
           <p className="mt-1.5 text-xs text-ink/45">
             Hentet fra Motorregistret. Ret gerne, hvis noget ikke passer.
           </p>
@@ -76,6 +97,15 @@ export function VehicleCard({ state }: VehicleCardProps) {
       <input type="hidden" name="bil_farve" value={colour ?? ""} />
       <input type="hidden" name="bil_nummerplade" value={state.plate ?? ""} />
       <input type="hidden" name="bil_hentet" value={state.fetchedAt ?? ""} />
+      <input type="hidden" name="bil_vin" value={state.vehicle.vin ?? ""} />
+      <input type="hidden" name="bil_status" value={state.vehicle.status ?? ""} />
+      <input
+        type="hidden"
+        name="bil_foerste_reg"
+        value={state.vehicle.firstRegistration ?? ""}
+      />
+      <input type="hidden" name="bil_km_ved_syn" value={mileage ?? ""} />
+      <input type="hidden" name="bil_km_syn_dato" value={mileageDate ?? ""} />
     </div>
   );
 }
