@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "motorapi:fields": "node scripts/inspect-sample.mjs"
+    "motorapi:fields": "node scripts/inspect-sample.mjs",
+    "api:check": "wrangler deploy --dry-run",
+    "api:deploy": "wrangler deploy"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
@@ -38,6 +40,7 @@
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.119.0"
   }
 }

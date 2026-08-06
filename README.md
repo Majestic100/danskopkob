@@ -37,20 +37,57 @@ Logikken ligger i `src/server/` og er skrevet mod web-standard
 | Cloudflare Workers | `worker/index.ts` | Sitet bliver på GitHub Pages. Worker deployes separat. Kræver CORS, som allerede er sat op i adapteren. |
 | Vercel | `api/vehicle/[regnr].ts` | Sitet flyttes fra GitHub Pages. `/api/*` ligger på samme domæne, så ingen CORS. |
 
-#### Cloudflare Workers
+#### Cloudflare Workers, trin for trin
 
-Sitet bliver, hvor det er. Kun serverlaget flytter.
+Sitet bliver, hvor det er. Kun serverlaget flytter. Hele opsætningen tager
+omkring et kvarter og kræver ikke, at man kan kode.
+
+**1. Opret en gratis Cloudflare-konto** på [dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up).
+Der skal ikke oplyses betalingskort. Den gratis plan giver 100.000 kald om
+dagen, hvilket er rigeligt.
+
+**2. Log ind fra maskinen.** Kommandoen åbner en browser, hvor du godkender.
 
 ```bash
 npx wrangler login
-npx wrangler secret put MOTORAPI_TOKEN   # indsæt tokenet, når den spørger
-npx wrangler deploy                      # udskriver workerens adresse
 ```
 
-Sæt derefter `VITE_API_BASE_URL` til den adresse, workeren fik, og byg
-frontenden igen. Adressen skal også stå i `ALLOWED_ORIGINS` i
-`worker/index.ts`, hvis sitet ligger på et andet domæne end dem, der allerede
-er på listen.
+**3. Læg tokenet ind som en hemmelighed.** Den spørger efter værdien og viser
+den ikke på skærmen. Tokenet havner hos Cloudflare, ikke i koden.
+
+```bash
+npx wrangler secret put MOTORAPI_TOKEN
+```
+
+**4. Deploy.**
+
+```bash
+npm run api:deploy
+```
+
+Til sidst skriver den en adresse, der ender på `.workers.dev`. Den skal du
+bruge i næste trin, så gem den.
+
+**5. Tjek at det virker.** Åbn adressen i en browser med din egen nummerplade
+sat ind til sidst:
+
+```
+https://<din-adresse>.workers.dev/api/vehicle/AB12345
+```
+
+Kommer der JSON tilbage med bildata, virker serverlaget.
+
+**6. Peg sitet på serverlaget.** Opret en fil ved navn `.env` i projektmappen
+med adressen fra trin 4:
+
+```
+VITE_API_BASE_URL=https://<din-adresse>.workers.dev
+```
+
+Kør `npm run build`, commit, og push. Næste deploy af sitet slår opslaget til.
+
+**7. Kun hvis du senere lægger API'et på eget domæne:** tilføj sitets adresse
+til `ALLOWED_ORIGINS` i `worker/index.ts`, så browseren har lov at kalde det.
 
 #### Vercel
 
