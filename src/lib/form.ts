@@ -1,14 +1,15 @@
 // Delte formular-helpers (bruges af både LeadForm og salgsformularen).
 
-export function formatPlate(v: string) {
-  return v
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "")
-    .slice(0, 7);
-}
+// Plade-logikken ligger i lib/plate.ts, fordi serverlaget bruger den samme.
+// To sæt regler ville før eller siden komme ud af trit, og så ville browseren
+// sende opslag af sted, som serveren afviser (eller omvendt).
+import { normalizePlate } from "./plate";
 
-export function isValidPlate(v: string) {
-  return /^[A-Z]{2}[0-9]{4,5}$/.test(v.replace(/\s/g, "").toUpperCase());
+export { isValidPlate } from "./plate";
+
+/** Til visning i inputfeltet: normaliseret og skåret til pladens 7 tegn. */
+export function formatPlate(v: string) {
+  return normalizePlate(v).slice(0, 7);
 }
 
 export function isValidEmail(v: string) {

@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { DanishFlag, TrustpilotStar, TrustStars } from "@/components/icons";
 import { PlateEuBadge } from "@/components/LeadForm";
+import { VehicleCard } from "@/components/VehicleCard";
+import { useVehicleLookup } from "@/lib/useVehicleLookup";
 import {
   formatPlate,
   isValidEmail,
@@ -81,6 +83,10 @@ export default function SellCar() {
   const [sendt, setSendt] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Opslaget starter af sig selv, når pladen er tastet færdig. Resultatet er
+  // rent additivt: formularen kan sendes, uanset hvad opslaget ender med.
+  const opslag = useVehicleLookup(plade);
 
   useEffect(() => {
     document.title = "Sælg din bil | MinBilPris";
@@ -284,7 +290,7 @@ export default function SellCar() {
                       id="plade"
                       type="text"
                       className="plate__input"
-                      placeholder="EF 11223"
+                      placeholder="AB 12 345"
                       maxLength={7}
                       size={7}
                       autoComplete="off"
@@ -297,6 +303,7 @@ export default function SellCar() {
                       {errors.plade}
                     </p>
                   )}
+                  <VehicleCard state={opslag} />
                 </div>
 
                 <div className="sm:col-span-2">
