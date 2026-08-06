@@ -152,25 +152,38 @@ faktisk vises.
 
 | Del | Status |
 | --- | --- |
+| `GET /vehicles/{reg-nr}` og dets felter | **Verificeret** mod et rigtigt svar, 2026-08-06. Se `samples/vehicle.json`. |
+| Feltnavne på bilkortet | **Verificeret.** `make`, `model`, `variant`, `fuel_type`, `color`, `first_registration`. |
 | `/usage`-schema | **Verificeret** mod strukturen i dokumentationen. |
 | Statuskoder (200/401/404/429/5xx) | **Verificeret** mod dokumentationen. |
-| Endpoint-stier og `X-AUTH-TOKEN` | **Verificeret** mod dokumentationen. |
-| Felter i køretøjssvar | **Ikke verificeret.** Ingen samples, og API'et er ikke kaldt. |
+| Endpoint-stier og `X-AUTH-TOKEN` | **Verificeret** i praksis — workeren kalder API'et. |
+| `GET /vehicles` (listen) | **Ikke verificeret.** Endpointet er ikke kaldt. |
 | Om lister pakkes ind i `{ data: [...] }` | **Ikke verificeret.** Begge former håndteres. |
-| Feltnavne på bilkortet | **Ikke verificeret.** Læses gennem kandidatlister i `fieldMap.ts`. |
+| `/environment` og `/equipment` | **Ikke verificeret.** Ingen af dem er kaldt. |
 
-Køretøjs-schemaerne i `schemas.ts` er derfor bevidst tolerante: de validerer, at
-svaret er et objekt, og lader alle felter passere. Det er valgt frem for at
-gætte feltnavne, som ville se verificerede ud i koden uden at være det.
+Feltnavnene er engelske og i snake_case, selvom værdierne er danske
+(`"Registreret"`, `"Personbil"`, `"Diesel"`).
 
-**Sådan låses datamodellen fast, når der findes eksempelsvar:**
+**To fælder, som det rigtige svar afslørede**, og som koden er bygget op om:
+
+- `model_year` kan være `0`. Ikke `null`, ikke fraværende — nul. Årgangen
+  udledes derfor af `first_registration`, og `model_year` bruges kun som
+  reserve, når værdien er troværdig.
+- Tekstfelter kan indeholde `"Ukendt"` eller tom streng i stedet for `null`.
+  Uden filtrering ville kortet vise "Ukendt" som om det var en farve.
+
+Schemaet er stadig tolerant med vilje: alle felter er valgfrie, og ukendte
+felter bevares. Ét svar viser, hvilke felter der findes for én bil, ikke hvilke
+der altid findes — en elbil har ingen motorvolumen, og et afmeldt køretøj kan
+mangle syn.
+
+**Sådan hentes et nyt eksempelsvar:**
 
 ```bash
-mkdir -p samples
 curl -H "X-AUTH-TOKEN: $MOTORAPI_TOKEN" \
   https://v1.motorapi.dk/vehicles/AB12345 > samples/vehicle.json
-npm run motorapi:fields -- samples/vehicle.json   # viser de faktiske nøgler
+npm run motorapi:fields -- samples/vehicle.json   # lister nøglerne fladt ud
 ```
 
-Derefter: erstat kandidatlisterne i `src/server/motorapi/fieldMap.ts` med de
-rigtige navne, stram `VehicleSchema` i `schemas.ts`, og ret tabellen ovenfor.
+Nummerplade og VIN i `samples/` er erstattet med pladsholdere, fordi repoet er
+offentligt.

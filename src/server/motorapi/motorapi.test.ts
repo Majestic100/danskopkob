@@ -15,6 +15,7 @@ import {
 } from "./errors";
 import { toVehicleSummary } from "./fieldMap";
 import { QuotaGuard } from "./quota";
+import { VehicleSchema } from "./schemas";
 import { MotorApiService } from "./service";
 
 const TOKEN = "test-token";
@@ -149,7 +150,7 @@ describe("MotorApiService.getVehicle", () => {
   });
 
   it("normaliserer input før kaldet", async () => {
-    const fetchImpl = mockFetch(() => jsonResponse({ maerke: "VW" }));
+    const fetchImpl = mockFetch(() => jsonResponse({ make: "VW" }));
     const service = makeService(fetchImpl);
 
     await service.getVehicle(" ab-12 345 ");
@@ -160,7 +161,7 @@ describe("MotorApiService.getVehicle", () => {
   });
 
   it("cacher svaret, så samme plade kun koster ét kald", async () => {
-    const fetchImpl = mockFetch(() => jsonResponse({ maerke: "VW" }));
+    const fetchImpl = mockFetch(() => jsonResponse({ make: "VW" }));
     const service = makeService(fetchImpl);
 
     await service.getVehicle("AB12345");
@@ -177,7 +178,7 @@ describe("MotorApiService.getVehicle", () => {
     const fetchImpl = mockFetch(async () => {
       vehicleCalls += 1;
       await new Promise((r) => setTimeout(r, 10));
-      return jsonResponse({ maerke: "VW" });
+      return jsonResponse({ make: "VW" });
     });
     const service = makeService(fetchImpl);
 
@@ -208,7 +209,7 @@ describe("MotorApiService.listVehicles", () => {
 
   it("pakker { data: [...] } ud til et array", async () => {
     const fetchImpl = mockFetch(() =>
-      jsonResponse({ data: [{ maerke: "VW" }] }),
+      jsonResponse({ data: [{ make: "VW" }] }),
     );
     const service = makeService(fetchImpl);
 
@@ -312,36 +313,123 @@ describe("TtlCache", () => {
   });
 });
 
-describe("toVehicleSummary", () => {
-  // UVERIFICERET: feltnavnene her er kandidater, ikke bekræftede navne fra
-  // MotorAPI. Testen viser, at opslaget rammer på tværs af kandidatlisten.
-  it("læser danske feltnavne", () => {
-    const summary = toVehicleSummary({
-      maerke: "Volkswagen",
-      model: "Passat",
-      variant: "2.0 TDI",
-      aargang: "2017",
-      braendstof: "Diesel",
-      farve: "Sort",
-    });
+/**
+ * Rigtigt svar fra GET /vehicles/{reg-nr}, hentet 2026-08-06.
+ *
+ * Bevaret ordret, inklusive de skæve værdier: model_year er 0, color er
+ * "Ukendt", og chassis_type er tom. Netop dem gør fixturen værdifuld — de
+ * viser, hvordan registerdata faktisk ser ud, ikke hvordan man håber.
+ */
+const VW_POLO = {
+  registration_number: "AB12345",
+  status: "Registreret",
+  status_date: "2011-06-07T00:00:00.000+02:00",
+  type: "Personbil",
+  use: "Privat personkørsel",
+  first_registration: "2010-09-17+02:00",
+  vin: "WVWZZZ0000Y000000",
+  own_weight: null,
+  cerb_weight: 1215,
+  total_weight: 1650,
+  axels: 2,
+  pulling_axels: 1,
+  seats: 1,
+  coupling: false,
+  trailer_maxweight_nobrakes: null,
+  trailer_maxweight_withbrakes: null,
+  doors: null,
+  make: "VOLKSWAGEN",
+  model: "POLO",
+  variant: "1,6 TDI",
+  model_type: "6R",
+  model_year: 0,
+  color: "Ukendt",
+  chassis_type: "",
+  engine_cylinders: 0,
+  engine_volume: 1598,
+  engine_power: 66,
+  fuel_type: "Diesel",
+  is_hybrid: false,
+  hybrid_type: "mild",
+  registration_zipcode: "",
+  vehicle_id: 1027901201016889,
+  mot_info: {
+    type: "PeriodiskSyn",
+    date: "2024-10-30",
+    result: "Godkendt",
+    status: "Aktiv",
+    status_date: "2024-10-30",
+    mileage: 247000,
+    next_inspection_date: "2026-10-30",
+  },
+  is_leasing: false,
+  leasing_from: null,
+  leasing_to: null,
+};
 
-    expect(summary.brand).toBe("Volkswagen");
-    expect(summary.year).toBe(2017);
+describe("toVehicleSummary", () => {
+  it("læser de verificerede feltnavne fra et rigtigt svar", () => {
+    const summary = toVehicleSummary(VW_POLO);
+
+    expect(summary.brand).toBe("VOLKSWAGEN");
+    expect(summary.model).toBe("POLO");
+    expect(summary.variant).toBe("1,6 TDI");
     expect(summary.fuel).toBe("Diesel");
+    expect(summary.vin).toBe("WVWZZZ0000Y000000");
+    expect(summary.status).toBe("Registreret");
   });
 
-  it("læser engelske feltnavne", () => {
-    const summary = toVehicleSummary({ brand: "BMW", model_year: "2019" });
-    expect(summary.brand).toBe("BMW");
+  it("udleder årgang af first_registration, ikke af model_year", () => {
+    // model_year er 0 for denne bil. Læste vi den, ville kortet vise "0".
+    expect(toVehicleSummary(VW_POLO).year).toBe(2010);
+  });
+
+  it('behandler "Ukendt" som fraværende i stedet for som en farve', () => {
+    expect(toVehicleSummary(VW_POLO).colour).toBeUndefined();
+  });
+
+  it("tager kilometerstand og aflæsningsdato med fra synet", () => {
+    const summary = toVehicleSummary(VW_POLO);
+    expect(summary.mileage).toBe(247000);
+    expect(summary.mileageDate).toBe("2024-10-30");
+  });
+
+  it("falder tilbage til model_year, når den er troværdig", () => {
+    const summary = toVehicleSummary({ make: "BMW", model_year: 2019 });
     expect(summary.year).toBe(2019);
   });
 
-  it("trækker årstal ud af en dato", () => {
-    expect(toVehicleSummary({ aargang: "2018-04-12" }).year).toBe(2018);
+  it("afviser årstal uden for et rimeligt interval", () => {
+    expect(toVehicleSummary({ first_registration: "1823-01-01" }).year)
+      .toBeUndefined();
+    expect(toVehicleSummary({ model_year: 0 }).year).toBeUndefined();
+  });
+
+  it("bevarer hele det rå svar", () => {
+    expect(toVehicleSummary(VW_POLO).raw).toEqual(VW_POLO);
   });
 
   it("klarer et tomt svar uden at kaste", () => {
     expect(toVehicleSummary(null).raw).toEqual({});
     expect(toVehicleSummary({}).brand).toBeUndefined();
+  });
+});
+
+describe("VehicleSchema", () => {
+  it("accepterer det rigtige svar uændret", () => {
+    const parsed = VehicleSchema.safeParse(VW_POLO);
+    expect(parsed.success).toBe(true);
+  });
+
+  it("accepterer et svar med felter vi ikke kender", () => {
+    const parsed = VehicleSchema.safeParse({ ...VW_POLO, nyt_felt: "værdi" });
+    expect(parsed.success).toBe(true);
+    // passthrough: ukendte felter skal bevares, ikke smides væk.
+    expect(parsed.success && parsed.data.nyt_felt).toBe("værdi");
+  });
+
+  it("accepterer et sparsomt svar, hvor de fleste felter mangler", () => {
+    // En elbil har ingen motorvolumen, et afmeldt køretøj måske intet syn.
+    expect(VehicleSchema.safeParse({ make: "TESLA" }).success).toBe(true);
   });
 });

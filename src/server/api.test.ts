@@ -54,8 +54,15 @@ describe("regnrFromPath", () => {
 
 describe("handleVehicleLookup", () => {
   it("svarer 200 med bildata ved succes", async () => {
+    // Feltnavnene er de verificerede fra et rigtigt MotorAPI-svar.
     stubFetch(() =>
-      jsonResponse({ maerke: "Volkswagen", model: "Passat", aargang: "2017" }),
+      jsonResponse({
+        make: "VOLKSWAGEN",
+        model: "POLO",
+        variant: "1,6 TDI",
+        first_registration: "2010-09-17+02:00",
+        fuel_type: "Diesel",
+      }),
     );
 
     const response = await handleVehicleLookup("AB12345", freshEnv());
@@ -63,8 +70,8 @@ describe("handleVehicleLookup", () => {
 
     const body = await response.json();
     expect(body.found).toBe(true);
-    expect(body.vehicle.brand).toBe("Volkswagen");
-    expect(body.vehicle.year).toBe(2017);
+    expect(body.vehicle.brand).toBe("VOLKSWAGEN");
+    expect(body.vehicle.year).toBe(2010);
     expect(typeof body.fetchedAt).toBe("string");
   });
 
@@ -145,7 +152,7 @@ describe("handleVehicleLookup", () => {
   it("videresender aldrig upstream-headers", async () => {
     stubFetch(
       () =>
-        new Response(JSON.stringify({ maerke: "VW" }), {
+        new Response(JSON.stringify({ make: "VW" }), {
           status: 200,
           headers: {
             "Content-Type": "application/json",
