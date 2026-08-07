@@ -25,6 +25,21 @@ interface VehicleCardProps {
   state: LookupState;
 }
 
+/**
+ * Registerdata bruger pladsholdere som "Ukendt" i stedet for tomme felter.
+ * Serverlaget frasorterer dem, men sitet og serverlaget udgives hver for sig,
+ * og kortet kan derfor stå over for et ældre deploy, der stadig sender dem
+ * med. Værnet gentages derfor her: en manglende oplysning er bedre end en,
+ * der siger "Ukendt".
+ */
+const PLADSHOLDERE = new Set(["ukendt", "uoplyst", "ingen", "-"]);
+
+function oplysning(value: string | undefined): string | null {
+  const trimmed = value?.trim();
+  if (!trimmed || PLADSHOLDERE.has(trimmed.toLowerCase())) return null;
+  return trimmed;
+}
+
 /** "2024-10-30" → "oktober 2024". Dag og måned er for præcist til formålet. */
 function formatDato(iso: string): string {
   const match = iso.match(/^(\d{4})-(\d{2})/);
@@ -79,9 +94,12 @@ function Indhold({ state }: VehicleCardProps) {
   } = state.vehicle;
 
   const overskrift = [brand, model].filter(Boolean).join(" ") || "Din bil";
-  const detaljer = [variant, year ? String(year) : null, fuel, colour].filter(
-    Boolean,
-  ) as string[];
+  const detaljer = [
+    oplysning(variant),
+    year ? String(year) : null,
+    oplysning(fuel),
+    oplysning(colour),
+  ].filter(Boolean) as string[];
 
   // Nøgletal, brugeren genkender sin egen bil på. Kun dem vi rent faktisk
   // har — en manglende chip er bedre end en, der siger "ukendt".

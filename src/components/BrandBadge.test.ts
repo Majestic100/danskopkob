@@ -1,6 +1,25 @@
 import { describe, expect, it } from "vitest";
 
-import { brandLabel } from "./BrandBadge";
+import { brandLabel, brandLogo } from "./BrandBadge";
+
+describe("brandLogo", () => {
+  it("finder logofilen for kendte mærker", () => {
+    expect(brandLogo("VOLKSWAGEN")).toBe("logos/vw.webp");
+    expect(brandLogo("TESLA")).toBe("logos/tesla.png");
+  });
+
+  it("klarer blandede bogstaver, mellemrum og synonymer", () => {
+    expect(brandLogo(" volvo ")).toBe("logos/volvo.png");
+    expect(brandLogo("Mercedes-Benz")).toBe("logos/mercedes.svg");
+    expect(brandLogo("Skoda")).toBe("logos/skoda.png");
+    expect(brandLogo("ŠKODA")).toBe("logos/skoda.png");
+  });
+
+  it("svarer undefined for mærker uden logofil", () => {
+    // Så falder badgen tilbage til tekst i stedet for et brudt billede.
+    expect(brandLogo("LADA")).toBeUndefined();
+  });
+});
 
 describe("brandLabel", () => {
   it("bruger kendte kortnavne", () => {
