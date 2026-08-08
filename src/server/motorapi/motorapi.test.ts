@@ -405,6 +405,36 @@ describe("toVehicleSummary", () => {
     expect(toVehicleSummary({ model_year: 0 }).year).toBeUndefined();
   });
 
+  it("regner kW om til hestekræfter", () => {
+    // 66 kW × 1,35962 = 89,7 → 90 hk. Motorregistret oplyser kW, men det er
+    // hestekræfter, folk kender deres bil på.
+    expect(toVehicleSummary(VW_POLO).hp).toBe(90);
+  });
+
+  it("regner kubikcentimeter om til liter", () => {
+    expect(toVehicleSummary(VW_POLO).litres).toBe(1.6);
+  });
+
+  it("tager næste syn og køretøjstype med", () => {
+    const summary = toVehicleSummary(VW_POLO);
+    expect(summary.nextInspection).toBe("2026-10-30");
+    expect(summary.inspectionResult).toBe("Godkendt");
+    expect(summary.type).toBe("Personbil");
+  });
+
+  it("markerer leasing, så det kan tages op inden der gives tilbud", () => {
+    expect(toVehicleSummary(VW_POLO).isLeasing).toBe(false);
+    expect(toVehicleSummary({ is_leasing: true }).isLeasing).toBe(true);
+  });
+
+  it("udelader motortal, når de er nul", () => {
+    // engine_cylinders er 0 i det rigtige svar. Samme mønster kan ramme
+    // effekt og volumen, fx på ældre eller udenlandske køretøjer.
+    const summary = toVehicleSummary({ engine_power: 0, engine_volume: 0 });
+    expect(summary.hp).toBeUndefined();
+    expect(summary.litres).toBeUndefined();
+  });
+
   it("bevarer hele det rå svar", () => {
     expect(toVehicleSummary(VW_POLO).raw).toEqual(VW_POLO);
   });

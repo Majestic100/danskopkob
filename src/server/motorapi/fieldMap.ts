@@ -32,6 +32,21 @@ export interface VehicleSummary {
   status?: string;
   vin?: string;
 
+  /** Hestekræfter. API'et oplyser kW, som er det Motorregistret bruger. */
+  hp?: number;
+  /** Motorvolumen i liter, fx 1.6. API'et oplyser kubikcentimeter. */
+  litres?: number;
+  /** "Personbil", "Varebil" m.m. */
+  type?: string;
+  doors?: number;
+  seats?: number;
+  /** Næste syn, ISO-dato. Betyder noget for, hvad bilen er værd. */
+  nextInspection?: string;
+  /** Resultatet af sidste syn, fx "Godkendt". */
+  inspectionResult?: string;
+  /** En leaset bil kan ejeren ikke uden videre sælge. Værd at vide tidligt. */
+  isLeasing?: boolean;
+
   /** Alt vi fik fra API'et, så intet går tabt. */
   raw: Record<string, unknown>;
 }
@@ -52,6 +67,22 @@ function text(value: unknown): string | undefined {
 /** 0 bruges som "ikke oplyst" i flere talfelter, så det tæller ikke med. */
 function positive(value: unknown): number | undefined {
   return typeof value === "number" && value > 0 ? value : undefined;
+}
+
+/**
+ * Motorregistret oplyser motoreffekt i kW, men i Danmark taler man om
+ * hestekræfter. 1 kW er 1,35962 hk. Rundes til nærmeste hele: decimaler på en
+ * 90-hestes motor er hverken interessante eller troværdige.
+ */
+function kwToHp(value: unknown): number | undefined {
+  const kw = positive(value);
+  return kw ? Math.round(kw * 1.35962) : undefined;
+}
+
+/** 1598 kubikcentimeter → 1,6 liter. */
+function ccToLitres(value: unknown): number | undefined {
+  const cc = positive(value);
+  return cc ? Math.round(cc / 100) / 10 : undefined;
 }
 
 /**
@@ -96,6 +127,15 @@ export function toVehicleSummary(raw: unknown): VehicleSummary {
     mileageDate: mot ? text(mot.date) : undefined,
     status: text(v.status),
     vin: text(v.vin),
+
+    hp: kwToHp(v.engine_power),
+    litres: ccToLitres(v.engine_volume),
+    type: text(v.type),
+    doors: positive(v.doors),
+    seats: positive(v.seats),
+    nextInspection: mot ? text(mot.next_inspection_date) : undefined,
+    inspectionResult: mot ? text(mot.result) : undefined,
+    isLeasing: v.is_leasing === true,
 
     raw: v,
   };
