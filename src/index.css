@@ -246,10 +246,13 @@
     overflow: hidden;
     transition: max-height 0.4s ease;
   }
-  .faq-item.open .faq-panel {
+  /* Åben/lukket aflæses af aria-expanded på knappen, ikke af en klasse på
+     .faq-item: elementets klasseliste skal stå urørt, fordi scroll-reveal
+     sætter "is-visible" på det uden om React. */
+  .faq-trigger[aria-expanded="true"] + .faq-panel {
     max-height: 500px;
   }
-  .faq-item.open .faq-icon {
+  .faq-trigger[aria-expanded="true"] .faq-icon {
     transform: rotate(45deg);
   }
   .faq-icon {

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 const FAQS = [
   {
@@ -43,10 +42,12 @@ export function Faq() {
             return (
               <div
                 key={i}
-                className={cn(
-                  "faq-item reveal overflow-hidden rounded-2xl bg-offwhite",
-                  isOpen && "open",
-                )}
+                // Klassen skal være den samme ved hvert render: scroll-reveal
+                // sætter "is-visible" direkte på elementet uden om React, og
+                // skriver React className om (fx en "open"-klasse ved klik),
+                // ryger den klasse — og spørgsmålet bliver usynligt igen.
+                // Åben/lukket styres derfor af aria-expanded på knappen.
+                className="faq-item reveal overflow-hidden rounded-2xl bg-offwhite"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <button
