@@ -141,10 +141,6 @@ function Indhold({ state }: VehicleCardProps) {
               {nextInspection && `Næste syn ${formatDato(nextInspection)}`}
             </p>
           )}
-
-          <p className="mt-1.5 text-xs text-ink/45">
-            Hentet fra Motorregistret. Ret gerne, hvis noget ikke passer.
-          </p>
         </div>
       </div>
 
